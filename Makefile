@@ -1,9 +1,10 @@
 CCC=g++
 CFLAGS=-Wall -Wextra -pedantic -g
-#SRCS := $(wildcard *.cc)
 
 # Lägg till o-filer som ni vill ska skapas i denna listan!
 OBJS =
+
+#SRCS := $(wildcard *.cc)
 #HEADERS := $(SRCS:%.cc=%.h)
 #OBJS
 .PHONY: clean, test
