@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include <string>
 
-class Projectile
+class Projectile : public Entity
 {
 public:
   Projectile() = default;
