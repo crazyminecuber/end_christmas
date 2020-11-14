@@ -7,10 +7,12 @@
 #include "Resource_manager.h"
 */
 #include "Entity.h"
+#include "json.hpp"
 
 class Game final
 {
 	public:
+	Game(){};
 	Game(std::string const & map_file, 
 		 std::string const & entity_file,
 		 /*std::string const & shop_file,*/
@@ -22,6 +24,9 @@ class Game final
 		 };
 	void load_map(std::string const & file);
 	void load_entities(std::string const & file);
+	void init_enemies(nlohmann::json const & json_obj);
+	void init_projectiles(nlohmann::json const & json_obj);
+	void init_towers(nlohmann::json const & json_obj);
 	void handle_input();
 	void update_logic();
 	void tile_enemy_set_direction();
