@@ -1,5 +1,5 @@
-#indef PROJECTILE_H
-#DEFINE PROJECTILE_H
+#ifndef PROJECTILE_H
+#define PROJECTILE_H
 
 #include "Entity.h"
 #include <string>
@@ -15,7 +15,7 @@ public:
 
 protected:
   static std::vector<Projectile*> projectiles;
-  int damege();
+  int damage();
   int frame_to_die();
 
 };
@@ -30,7 +30,7 @@ public:
 
 protected:
   static int frames_to_live();
-  static int damege_int();
+  static int damage_init();
 
 };
 
@@ -44,7 +44,7 @@ public:
 
 protected:
   static int frames_to_live();
-  static int damege_int();
+  static int damage_init();
 
 };
 
@@ -58,7 +58,7 @@ public:
 
 protected:
   static int frames_to_live();
-  static int damege_int();
+  static int damage_init();
 
 };
 
@@ -72,7 +72,7 @@ public:
 
 protected:
   static int frames_to_live();
-  static int damege_int();
+  static int damage_init();
 
 };
 #endif
