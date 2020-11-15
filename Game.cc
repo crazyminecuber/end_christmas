@@ -1,8 +1,8 @@
 #include "Game.h"
+#include <sstream>
 #include <fstream>
 #include <unordered_map>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
-#include <iostream>
 //#include "Enemy.h"
 #include "Projectile.h"
 #include "Tower.h"
@@ -12,18 +12,56 @@
 using namespace std;
 using json = nlohmann::json;
 
+void Game::load_map(string const & file)
+{
+    ifstream ifs(file);
+    istringstream iss;
+    string line;
+    int num;
+    if (ifs.is_open())
+    {
+        for (int y = -1; ifs.getline(line, '\n'); y++)
+        {   
+            iss.str(line);
+            for (int x = -1; iss >> num; x++)
+            {
+                if (num == 0)
+                {
+                    Tile::tiles.push_back(new Tile_nothing(x,y));
+                }
+                else if (num == 1)
+                {
+                    Tile::tiles.push_back(new Tile_enemy(x,y));
+                }
+                else if (num == 2)
+                {
+                    Tile::tiles.push_back(new Tile_tower(x,y));
+                }
+                else if (num == 3)
+                {
+                    Tile::tiles.push_back(new Tile_enemy_win(x,y));
+                }
+                else if (num == 4)
+                {
+                    Tile::tiles.push_back(new Tile_enemy_start(x,y));
+                }
+            }
+        }
+    }
+}
+
 void Game::load_entities(string const & file)
 {
-    ifstream istream(file);
-    if (istream.is_open())
+    ifstream ifs(file);
+    if (ifs.is_open())
     {
         json j_data;
-        istream >> j_data;
+        ifs >> j_data;
         init_enemies(j_data["Enemies"]);
         init_projectiles(j_data["Projectiles"]);
         init_towers(j_data["Towers"]);
     }
-    istream.close();
+    ifs.close();
 }
 
 void Game::init_enemies(json const & json_obj)
