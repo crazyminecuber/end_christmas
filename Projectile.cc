@@ -55,7 +55,7 @@ Projectile::Projectile_bomb
 
 void Projectile::collision(Entity* object)
   {
-    
+
   }
 
 //Funktion som tillhör Projectile_bomb_blast
