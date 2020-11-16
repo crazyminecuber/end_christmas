@@ -5,24 +5,31 @@
 
 using namespace std;
 
+
 class Tower : public Entity
 {
   public:
-    Tower() = default;
+    Tower(std::string texture_file, sf::Vector2f position,
+          sf::Vector2f siz, float hit_rad,
+          sf::Vector2f dir, float mov_spd, int arg_level):
+          Entity(std::string texture_file,
+          sf::Vector2f position, sf::Vector2f siz,
+          float hit_rad, sf::Vector2f dir, float mov_spd),
+          level{arg_level}{}
+
     ~Tower() noexcept = default;
 
     void collision(Entity* object) override;
     virtual void shoot()=0;
     void make_projectile(Vector2f velocity);
 
-  protected:
     static std::vector<Tower*> Tower::static_towers;
+  protected:
     std::vector<Entity const &> shootable_enemies;
     int frame_last_shot;
     int fire_period;
     float detection_radius;
     Projectile projectile;
-
 };
 
 class Tower_basic : public Tower
@@ -35,7 +42,6 @@ public:
   Entity select_target();
   vector2<float> aim();
 
-protected:
   static Sprite sprite_init;
   static int frames_to_wait_init;
   static Projectile projectile_init;
@@ -52,12 +58,12 @@ public:
 
   void shoot() override;
 
-protected:
   static Sprite sprite_init;
   static int frames_to_wait_init;
   static Projectile projectile_init;
   static Sprite shop_sprite_init const;
   static int cost_init const;
+protected:
   int num_of_projectile;
 };
 
