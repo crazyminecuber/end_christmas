@@ -7,12 +7,11 @@
 class Projectile : public Entity
 {
 public:
-  Projectile(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f siz, float hit_rad,
-        sf::Vector2f dir, float mov_spd, int arg_life):
-        Entity(std::string texture_file,
-        sf::Vector2f position, sf::Vector2f siz,
-        float hit_rad, sf::Vector2f dir, float mov_spd) {};
+  Projectile(std::string texture_file, sf::Vector2f position, sf::Vector2f siz,
+        float hit_rad, sf::Vector2f dir, float mov_spd, int arg_life):
+        Entity(std::string texture_file, sf::Vector2f position, sf::Vector2f siz,
+        float hit_rad, sf::Vector2f dir, float mov_spd)
+        {}
   ~Projectile() noexcept = default;
 
   void update_position();
