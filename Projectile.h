@@ -46,6 +46,8 @@ public:
   void collision(Entity* object) override;
   static int frames_to_live();
   static int damage_init();
+protected:
+  int nr_pierce;
 
 };
 
