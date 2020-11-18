@@ -25,4 +25,5 @@ test_main.o: test_main.cc
 
 clean:
 	rm *.o
+	rm *.h.gch
 	rm test
