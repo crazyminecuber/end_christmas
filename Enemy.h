@@ -1,8 +1,12 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-//TODO Make test for making instance
+//TODO Ska vi ha någon funktion för att manipulera vektorn med enemies?
+//TODO Behöver vi en funktion för att skapa fiender?
+//TODO Göra en struct för alla entity properties
+//TODO Använda överlagring när vi skapar fiender för att kunna skapa med och utan special inställningar.
 #include <vector>
+#include <SFML/Graphics.hpp>
 #include "Entity.h"
 
 class Enemy
@@ -18,10 +22,19 @@ public:
         dir, mov_spd),
         life{arg_life}{}
 
+    //Statics
+    static void new_basic();
+    static void new_basic(sf::Vector2f position);
+    static void new_boss();
+
+    static void delete_all_enemies();
     static std::vector<Enemy*> enemies;
+    static sf::Vector2f position_init; //Enemies should start at same positions
+
 
     protected:
         int life;
 };
+
 
 #endif //ENEMY_H

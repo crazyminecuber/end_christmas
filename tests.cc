@@ -16,32 +16,86 @@ TEST_CASE("Hello world")
     CHECK(1 + 1 == 2);
 }
 
-TEST_CASE("Enemy_basic")
+// TODO: Lägg till test fall för:
+// Att lägga till fiender i enemy-vektorn
+
+TEST_CASE("Enemy_statics")
 {
-    // Make instance
+    //array
     sf::Vector2f v1(5.0,5.0);
-    Enemy_basic E_BASIC{"resources/textures/Santa.png",
-        v1, //Poistion
-        v1, //Size
-        5.0,        //Hit_rad
-        v1,       //dir
-        3,          //mov_spd
-        5           //life
-    };
+    Enemy_boss* E_BOSS = new Enemy_boss{"resources/textures/Santa.png", v1, v1, 5.0, v1, 3, 5};
+    Enemy_basic* E_BASIC = new Enemy_basic{"resources/textures/Santa.png", v1, v1, 5.0, v1, 3, 5};
+    Enemy::enemies.push_back(E_BOSS);
+    Enemy::enemies.push_back(E_BASIC);
+    CHECK(size(Enemy::enemies) == 2);
+
+    Enemy_basic::position_init = v1;
+    Enemy_basic::prop.texture_file = "resources/textures/Santa.png";
+    Enemy_basic::prop.size = v1;
+    Enemy_basic::prop.hit_rad = 5;
+    Enemy_basic::prop.dir = v1;
+    Enemy_basic::prop.mov_spd = 3;
+    Enemy_basic::life_init = 1;
+
+    CHECK(Enemy_basic::position_init == v1);
+    CHECK(Enemy_basic::prop.texture_file == "resources/textures/Santa.png");
+    CHECK(Enemy_basic::prop.size == v1);
+    CHECK(Enemy_basic::prop.hit_rad == 5);
+    CHECK(Enemy_basic::prop.dir == v1);
+    CHECK(Enemy_basic::prop.mov_spd == 3);
+    CHECK(Enemy_basic::life_init == 1);
+
+    Enemy_boss::position_init = v1;
+    Enemy_boss::prop.texture_file = "resources/textures/Santa.png";
+    Enemy_boss::prop.size = v1;
+    Enemy_boss::prop.hit_rad = 5;
+    Enemy_boss::prop.dir = v1;
+    Enemy_boss::prop.mov_spd = 3;
+    Enemy_boss::life_init = 2;
+
+    CHECK(Enemy_boss::position_init == v1);
+    CHECK(Enemy_boss::prop.texture_file == "resources/textures/Santa.png");
+    CHECK(Enemy_boss::prop.size == v1);
+    CHECK(Enemy_boss::prop.hit_rad == 5);
+    CHECK(Enemy_boss::prop.dir == v1);
+    CHECK(Enemy_boss::prop.mov_spd == 3);
+    CHECK(Enemy_boss::life_init == 2);
+
+    //Delete all previous enemies
+    Enemy::delete_all_enemies();
 }
 
-TEST_CASE("Enemy_boss")
+TEST_CASE("Creating new enemies")
 {
-    //Make instance
     sf::Vector2f v1(5.0,5.0);
-    Enemy_boss E_BOSS{"resources/textures/Santa.png",
-        v1, //Poistion
-        v1, //Size
-        5.0,        //Hit_rad
-        v1,       //dir
-        3,          //mov_spd
-        5           //life
-    };
+    Enemy_basic::position_init = v1;
+    Enemy_basic::prop.texture_file = "resources/textures/Santa.png";
+    Enemy_basic::prop.size = v1;
+    Enemy_basic::prop.hit_rad = 5;
+    Enemy_basic::prop.dir = v1;
+    Enemy_basic::prop.mov_spd = 3;
+    Enemy_basic::life_init = 1;
+
+    Enemy_boss::position_init = v1;
+    Enemy_boss::prop.texture_file = "resources/textures/Santa.png";
+    Enemy_boss::prop.size = v1;
+    Enemy_boss::prop.hit_rad = 5;
+    Enemy_boss::prop.dir = v1;
+    Enemy_boss::prop.mov_spd = 3;
+    Enemy_boss::life_init = 2;
+
+    Enemy::new_basic();
+    Enemy::new_basic();
+    Enemy::new_basic(v1);
+    Enemy::new_basic(v1);
+    Enemy::new_basic(v1);
+    Enemy::new_boss();
+    Enemy::new_boss();
+    Enemy::new_boss();
+    Enemy::new_boss();
+    Enemy::new_boss();
+    CHECK(size(Enemy::enemies) == 10);
+    Enemy::delete_all_enemies();
 }
 
 TEST_CASE("Resource_manager")

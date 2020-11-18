@@ -19,6 +19,10 @@ public:
 
     ~Enemy_basic();
 
+    //Statics
+    static int life_init;
+    static entity_properties prop;
+
     void collision(Entity* object);
 
 };

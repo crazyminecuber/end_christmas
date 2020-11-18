@@ -1,5 +1,6 @@
 *.out
 *.o
 test
+del_*
 *.vim
-*.h.gch
+*.crap

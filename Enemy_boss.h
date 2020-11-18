@@ -19,6 +19,9 @@ public:
 
     ~Enemy_boss();
 
+    static int life_init;
+    static entity_properties prop;
+
     void collision(Entity* object);
 
 };
