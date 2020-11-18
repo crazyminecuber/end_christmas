@@ -53,3 +53,16 @@ TEST_CASE("Resource_manager")
   test2 = Resource_manager::load("resources/textures/Santa.png");
   CHECK(Resource_manager::get_num_of_resources() == 1);
 }
+
+TEST_CASE("Projectile_basic")
+{
+  //Make instance
+  sf::Vector2f v1(1.0,1.0);
+  Projectile_basic P_BASIC{"resources/textures/Snowball.png",
+    v1, //Posistion
+    v2, //Size
+    1.0, //Hit_rad
+    v3, //dir
+    1, //move speed
+    3}; //life?
+}

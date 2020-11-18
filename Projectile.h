@@ -16,6 +16,9 @@ public:
 
   void update_position();
   static std::vector<Projectile*> projectiles;
+  // static void new_projectile_basic(std::Vector2f position);
+  // static void new_projectile_pierce(std::Vector2f position);
+  // static void new_projectile_bomb(std::Vector2f position);
 
 protected:
   int damage();
@@ -29,6 +32,7 @@ public:
   Projectile_basic() : Projectile()
   {}
   ~Projectile_basic() noexcept = default;
+  Projectile(Projectile const& other) //Kopieringskonstruktor
 
   void collision(Entity* object) override;
   static int frames_to_live();
@@ -71,9 +75,12 @@ public:
   {}
   ~Projectile_bomb_blast();
 
+  void update_rad();
   void collision(Entity* object) override;
   static int frames_to_live();
   static int damage_init();
+protected:
+  int blast_rad;
 
 };
 #endif
