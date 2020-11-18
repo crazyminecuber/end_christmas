@@ -25,6 +25,6 @@ test_main.o: test_main.cc
 
 clean:
 	rm *.o
-	rm *.gch
+	rm *.h.gch
 	rm test
 	rm a.out
