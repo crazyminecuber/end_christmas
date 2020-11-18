@@ -1,0 +1,57 @@
+{
+    "Enemy" : 
+        { 
+            "Enemy_basic" : 
+                {
+                    "life_init" : 1
+                },
+            "Enemy_boss" :
+                {
+                    "life_init" : 5
+                }
+        },
+    "Projectile" : 
+        {
+            "Projectile_basic" :
+                {
+                    "frames_to_live" : 300,
+                    "damage_init" : 1
+                },
+            "Projectile_pierce" :
+                {
+                    "frames_to_live" : 300,
+                    "damage_init" : 1
+                },
+            "Projectile_bomb" :
+                {
+                    "frames_to_live" : 300,
+                    "damage_init" : 1
+                },
+            "Projectile_bomb_blast" :
+                {
+                    "frames_to_live" : 300,
+                    "damage_init" : 1
+                }
+        },
+    "Tower" : 
+        {
+            "Tower_basic" :
+                {
+                    "Detection_radius_init" : 100.0,
+                    "sprite_init" : "tower_basic.png",
+                    "fire_period_init" : 30,
+                    "projectile_init" : "Projectile_basic",
+                    "shop_sprite_init" : "tower_basic_shop.png",
+                    "cost_init" : 50
+                },
+            "Tower_ring" :
+                {
+                    "Detection_radius_init" : 100.0,
+                    "sprite_init" : "tower_ring.png",
+                    "fire_period_init" : 30,
+                    "projectile_init" : "Projectile_basic",
+                    "shop_sprite_init" : "tower_ring_shop.png",
+                    "cost_init" : 50
+                }
+        }
+}
