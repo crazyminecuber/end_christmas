@@ -1,10 +1,10 @@
 #include "Entity.h"
+#include "Resource_manager.h"
 
 void Entity::init(std::string texture_file, sf::Vector2f position)
 {
     /* sätt utseende */
-    sf::Texture texture;
-    texture.loadFromFile(texture_file);
+    sf::Texture texture = Resource_manager::load(texture_file);
     setTexture(texture, false);
     // ge rätt storlek
     sf::Vector2u size_original;

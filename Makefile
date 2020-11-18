@@ -3,7 +3,7 @@ CFLAGS=-std=c++17 -g -Wall -Wextra -pedantic -Werror -fmax-errors=1
 LDFLAGS = -L${SFML_ROOT}/lib -I${SFML_ROOT}/include -lsfml-window -lsfml-graphics -lsfml-system
 
 # Lägg till o-filer som ni vill ska skapas i denna listan!
-OBJS = Resource_manager.o Entity.o Enemy_boss.o Enemy_basic.o
+OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o
 
 #SRCS := $(wildcard *.cc)
 #HEADERS := $(SRCS:%.cc=%.h)
@@ -25,4 +25,6 @@ test_main.o: test_main.cc
 
 clean:
 	rm *.o
+	rm *.gch
 	rm test
+	rm a.out
