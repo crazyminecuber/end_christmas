@@ -16,7 +16,10 @@ public:
         init(texture_file, position);
     }
 
+    virtual ~Entity(){};
+
     void init(std::string texture_file, sf::Vector2f position);
+
     virtual void collision(Entity* object) = 0;
 
 protected:
