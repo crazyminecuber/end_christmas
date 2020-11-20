@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "wallet.h"
-#include "tower.h"
+#include "Tower.h"
 
 class Tower_shop : public sf::Sprite
 {
