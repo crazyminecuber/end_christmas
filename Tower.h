@@ -15,11 +15,11 @@ class Tower : public Entity
     Tower(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad,
         sf::Vector2f dir, float mov_spd,
-        int arg_level)
+        int arg_level, int _cost)
     :Entity(texture_file, position,
         size, hit_rad,
         dir, mov_spd),
-        level{arg_level}{}
+        level{arg_level}, cost{_cost}{}
 
     void collision(Entity* object) override;
     virtual void shoot()=0;
@@ -36,6 +36,7 @@ class Tower : public Entity
     float detection_radius;
     int level;
     Projectile *projectile;
+    int cost{};
 };
 
 
@@ -45,10 +46,10 @@ public:
   Tower_basic(std::string texture_file, sf::Vector2f position,
       sf::Vector2f size, float hit_rad,
       sf::Vector2f dir, float mov_spd,
-      int arg_level)
+      int arg_level, int cost)
   : Tower(texture_file, position,
       size, hit_rad,
-      dir, mov_spd, arg_level){}
+      dir, mov_spd, arg_level, cost){}
 
   ~Tower_basic();
 
@@ -70,10 +71,10 @@ public:
   Tower_ring(std::string texture_file, sf::Vector2f position,
       sf::Vector2f size, float hit_rad,
       sf::Vector2f dir, float mov_spd,
-      int arg_level)
+      int arg_level, int cost)
   : Tower(texture_file, position,
       size, hit_rad,
-      dir, mov_spd, arg_level){}
+      dir, mov_spd, arg_level, cost){}
   ~Tower_ring();
 
   void shoot() override;
