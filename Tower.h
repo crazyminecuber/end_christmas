@@ -39,6 +39,7 @@ class Tower : public Entity
     Projectile *projectile;
 };
 
+
 class Tower_basic : public Tower
 {
 public:
@@ -50,7 +51,7 @@ public:
       size, hit_rad,
       dir, mov_spd, arg_level){}
 
-  ~Tower_basic(); 
+  ~Tower_basic();
 
   void shoot() override;
   Entity *select_target();
