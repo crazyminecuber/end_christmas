@@ -1,4 +1,5 @@
 #include "Tower.h"
+#include <string>
 #include <iostream>
 #include <math.h>
 #include <vector>

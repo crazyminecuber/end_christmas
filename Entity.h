@@ -15,7 +15,7 @@ public:
     {
         init(texture_file, position);
     }
-
+    Entity(Entity const & other)=default;
     virtual ~Entity(){};
 
     void init(std::string texture_file, sf::Vector2f position);

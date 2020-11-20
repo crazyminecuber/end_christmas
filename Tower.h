@@ -7,7 +7,6 @@
 #include "Enemy.h"
 #include "Projectile.h"
 
-using namespace std;
 
 
 class Tower : public Entity

@@ -2,10 +2,8 @@
 #define GAME_H
 #include <string>
 #include <vector>
-/*
-#include "Shop.h"
+#include "Tower_shop.h"
 #include "Resource_manager.h"
-*/
 #include "Entity.h"
 #include "json.hpp"
 
@@ -13,7 +11,7 @@ class Game final
 {
 	public:
 	Game(){};
-	Game(std::string const & map_file, 
+	Game(std::string const & map_file,
 		 std::string const & entity_file,
 		 /*std::string const & shop_file,*/
 		 int health
@@ -24,10 +22,8 @@ class Game final
 		 };
 	void load_map(std::string const & file);
 	void load_entities(std::string const & file);
-	void init_enemies(nlohmann::json const & json_obj);
-	void init_projectiles(nlohmann::json const & json_obj);
-	void init_towers(nlohmann::json const & json_obj);
-	void handle_input();
+	void handle_events();
+	void handle_click();
 	void update_logic();
 	void tile_enemy_set_direction();
 	void enemy_update_direction();
@@ -37,12 +33,21 @@ class Game final
 	void render_game();
 	void create_enemies();
 	void fire_towers();
+	void set_window_size(int const width,int const height);
+	static int get_frame();
 
 	private:
+	void init_enemies(nlohmann::json const & json_obj);
+	void init_projectiles(nlohmann::json const & json_obj);
+	void init_towers(nlohmann::json const & json_obj);
 	int health;
-	//Shop shop;
-	int current_frame{};
-	//Resource_manager resources{};
-	
+	//Tower_shop tower_shop;
+	int window_width{};
+	int window_height{};
+    RenderWindow window;
+
+
+	Resource_manager resources{};
+
 };
 #endif
