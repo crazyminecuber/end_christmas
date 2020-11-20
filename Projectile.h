@@ -29,11 +29,11 @@ class Projectile_basic : public Projectile
 {
 public:
   Projectile_basic(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage);
+       sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage);
   ~Projectile_basic() noexcept = default;
   Projectile_basic(Projectile_basic const& other); //Kopieringskonstruktor
 
-  void collision(Entity* object) override;
+  void collision();
   static int frames_to_live;
   static int damage_init;
 
@@ -47,11 +47,12 @@ public:
   ~Projectile_pierce() noexcept = default;
 
   Projectile_pierce(Projectile_pierce const& other); //Kopieringskonstruktor
-  void collision(Entity* object) override;
-  static int frames_to_live();
-  static int damage_init();
+  void collision();
+  static int frames_to_live;
+  static int damage_init;
+  static int nr_pierce;
 protected:
-  int nr_pierce;
+  int nr_enemies_killed;
 
 };
 
@@ -63,9 +64,9 @@ public:
   ~Projectile_bomb() noexcept = default;
 
   Projectile_bomb(Projectile_bomb const& other); //Kopieringskonstruktor
-  void collision(Entity* object) override;
-  static int frames_to_live();
-  static int damage_init();
+  void collision();
+  static int frames_to_live;
+  static int damage_init;
 
 };
 
@@ -78,11 +79,10 @@ public:
 
   Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
   void update_rad();
-  void collision(Entity* object) override;
-  static int frames_to_live();
-  static int damage_init();
-protected:
-  int blast_rad;
+  void collision();
+  static int frames_to_live;
+  static int damage_init;
 
 };
+
 #endif
