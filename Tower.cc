@@ -7,7 +7,7 @@ using namespace std;
 Tower::Tower(std::string texture_file, sf::Vector2f position,
       sf::Vector2f siz, float hit_rad,
       sf::Vector2f dir, float mov_spd, int arg_level){}
-Tower::~Tower(){}
+
 
 
 //Functions for the class Tower
