@@ -5,27 +5,27 @@
 #include <string>
 #include <vector>
 
-#include "wallet.h"
-#include "tower.h"
+#include "Wallet.h"
+#include "Tower.h"
 
 class Tower_shop : public sf::Sprite
 {
 public:
-    Tower_shop(std::vector<Tower *> pt, Wallet w, Vector2f pos,
-            Vector2f siz, Vector2f button_size, std::string texture_file)
-        : sf::Sprite(),
-    passive_towers{pt}, wallet{w}, position{pos}, size{size}
+    Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
+            sf::Vector2f siz, sf::Vector2f btn_size, std::string texture_file,
+            Wallet wallet )
+        : passive_towers{pt}, wallet{w}, button_size{btn_size} // Lagra position och size i sfml:objectet.
     {
         chosen_tower = nullptr;
         generate_shop_grid();
     }
-    Tower * chosen_tower
-
+    Tower* chosen_tower;
 private:
-    std::vector<Tower> passive_towers;
-    Tower chosen_tower;
+    sf::Vector2f button_size;
+    std::vector<Tower *> passive_towers;
+    Wallet wallet;
     void generate_shop_grid(); // Genera knappar med textur genom att kalla på tower_button många gånger.
-}
+};
 
 class Tower_button : public sf::Sprite
 {
@@ -48,6 +48,6 @@ private:
     Tower* tower;
     Tower_shop* tower_shop;
 
-}
+};
 #endif //ENTITY_H
 
