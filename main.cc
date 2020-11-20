@@ -3,6 +3,11 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+#include "Tower_shop.h"
+#include "Wallet.h"
+#include "Tower.h"
+#include <vector>
+
 using namespace std;
 
 using namespace sf;
@@ -22,7 +27,7 @@ int main ()
     CircleShape circle { r };
 
     // placera cirkeln på skärmen
-    circle.setPosition (width / 2, height / 2);
+    circle.setPosition(width / 2, height / 2);
 
     // sätt vilken punkt som är origo
     // i cirkeln (det är denna punkt som
@@ -33,22 +38,27 @@ int main ()
     circle.setFillColor (Color::Green);
 
     /* ladda in en texture (bild) */
-    Texture texture;
+    Texture texture{};
     if ( !texture.loadFromFile ("resources/textures/Santa.png") )
     {
         // gick inte att ladda bilden
         return 1;
     }
 
-    // skapa sprite
-    Sprite sprite { texture };
-    sprite.setPosition (width / 2, height / 2);
+    // skapa och scala sprite (Hittar inget bättre sätt att skala på :()
+
+    float sprite_x{100};
+    float sprite_y{100};
+    Vector2u old_size{texture.getSize()};
+    Sprite sprite{texture};
+    sprite.setPosition(width / 2, height / 2);
+    sprite.setScale(sprite_x / old_size.x, sprite_y / old_size.y);
 
     // sätt origin på sprite till mitten
     auto size { texture.getSize () };
     sprite.setOrigin (size.x / 2, size.y / 2);
 
-    float const speed { 4.0 };
+    float const speed { 4.0 }; // Pixlar per frame
 
     // skapa en klocka
     Clock clock;
@@ -71,6 +81,26 @@ int main ()
 
     auto bounds { text.getGlobalBounds () };
     text.setPosition ((width - bounds.width) / 2, 0);
+
+
+//-------------Tower_shop test----------------------------------
+
+    Wallet wallet{1000};
+
+    Tower_basic tower{};
+    vector<Tower *>passive_towers{tower};
+    Vector2f pos {100,100};
+    Vector2f siz {500,500};
+    Vector2f btnsiz {100,100};
+    Tower_shop shop{passive_towers, wallet, pos, siz, btnsiz};
+
+
+
+
+
+
+
+//-----------------------------------------------
 
     // loopa sålänge fönstret finns
     while ( window.isOpen () )
