@@ -85,7 +85,7 @@ void Projectile_bomb::collision()
     projectiles.erase(std::remove(projectiles.begin(),
           projectiles.end(), this), projectiles.end());
     delete this;
-    projectiles.push_back(new Projectile_bomb_blast);
+    projectiles.push_back(new *Projectile_bomb_blast);
 }
 
 //Funktion som tillhör Projectile_bomb_blast
