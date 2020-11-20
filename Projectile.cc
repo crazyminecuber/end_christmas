@@ -5,137 +5,151 @@
 using namespace std;
 
 //Funktioner som tillhör Projectile
-Projectile::Projectile()
+// Projectile::Projectile(std::string texture_file, sf::Vector2f position,
+//       sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage)
+//       {}
+//
+// Projectile::~Projectile(){}
+
+//Kopieringskonstruktor som lägger in i lista
+Projectile::Projectile(Projectile const& other) : Entity(other)
 {
-  for(int a = 0; frame_to_die > a; a++)
-  {
-    Projectile*->update_position();
-  }
-  //delete projectile if beyond frame_to_die
-  delete Projectile*;
+  *this = other;
+  projectiles.add(*this);
+  frame_to_die() = game.frame + frames_to_live();
 };
 
+//Next posistion
 void Projectile::update_position()
   {
-    Projectile.position += Projectile.mov_spd * Projectile.dir;
   };
 
+  position += mov_spd * dir;
 //Funktioner som tillhör Projectile_basic
-Projectile::Projectile_basic()
-{}
-
-void Projectile::collision(Entity* object)
-  {
-    vector<Enemy*> enemies;
-    vector<Projectile*> projectiles;
-    for (auto curr_proj{projectiles.begin()}; curr_proj != projectiles.end(); ++curr_proj)
-      {
-        for (auto curr_enemy{enemies.begin()}; curr_enemy != enemies.end(); ++curr_enemy)
-        {
-          if (*curr_proj.hit_rad == *curr_enemy.hit_rad)
-          {
-            //delete in Enemy that will delete Enemy
-            delete *curr_proj;
-          }
-        }
-      }
-  };
-//Funktion som tillhör Projectile_pierce
-Projectile::Projectile_pierce
+Projectile_basic::Projectile_basic(std::string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
 {
-  for(int a = 0; frame_to_die > a; a++)
+  if(game.frame == frame_to_die)
   {
     Projectile*->update_position();
   }
   //delete projectile if beyond frame_to_die
-  delete Projectile*;
+  delete *this;
 }
 
-void Projectile::collision(Entity* object)
+Projectile_basic::~Projectile_basic(){}
+
+//Kopieringskonstruktor som lägger in i lista
+Projectile_basic::Projectile_basic(Projectile_basic const& other)
+{
+  *this = other;
+  projectiles.add(*this);
+  frame_to_die() = game.frame + frames_to_live();
+}
+
+void Projectile_basic::collision(Entity* object)
   {
-  vector<Enemy*> enemies;
-  vector<Projectile*> projectiles;
-  int nr_enemies_killed = 0;
-  for (auto curr_proj{projectiles.begin()}; curr_proj != projectiles.end(); ++curr_proj)
+    delete *this;
+  };
+//Funktion som tillhör Projectile_pierce
+Projectile_pierce::Projectile_pierce(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
+{
+  if(game.frame == frame_to_die)
+  {
+    Projectile*->update_position();
+  }
+  //delete projectile if beyond frame_to_die
+  delete *this;
+}
+
+Projectile_pierce::~Projectile_pierce(){}
+
+//Kopieringskonstruktor som lägger in i lista
+Projectile_pierce::Projectile_pierce(Projectile_pierce const& other)
+{
+  *this = other;
+  projectiles.add(*this);
+  frame_to_die() = game.frame + frames_to_live();
+}
+
+void Projectile_pierce::collision(Entity* object)
+  {
+    //delete in Enemy that will delete Enemy
+    if(nr_enemies_killed <= nr_pierce)
     {
-      for (auto curr_enemy{enemies.begin()}; curr_enemy != enemies.end(); ++curr_enemy)
-      {
-        if (*curr_proj.hit_rad == *curr_enemy.hit_rad)
-        {
-          //delete in Enemy that will delete Enemy
-          if(nr_enemies_killed <= nr_pierce)
-          {
-            //uppdate next enemy
-          }
-          else
-          {
-            delete *curr_proj;
-          }
-        }
-      }
+      nr_enemies_killed+= 1;
+    }
+    else
+    {
+      delete *this;
     }
   };
 
 //Funktion som tillhör Projectile_bomb
-Projectile::Projectile_bomb
+Projectile_bomb::Projectile_bomb(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
 {
-  for(int a = 0; frame_to_die > a; a++)
+if(game.frame == frame_to_die)
   {
     Projectile*->update_position();
   }
   //delete projectile if beyond frame_to_die
-  delete Projectile*;
+  delete *this;
 }
 
-void Projectile::collision(Entity* object)
-  {
-  vector<Enemy*> enemies;
-  vector<Projectile*> projectiles;
-  for (auto curr_proj{projectiles.begin()}; curr_proj != projectiles.end(); ++curr_proj)
-    {
-      for (auto curr_enemy{enemies.begin()}; curr_enemy != enemies.end(); ++curr_enemy)
-      {
-        if (*curr_proj.hit_rad == *curr_enemy.hit_rad)
-        {
-          //delete in Enemy that will delete Enemy
-          projectiles.add<new Projectile_bomb_blast*>;
-          delete *curr_proj;
-        }
-      }
-    }
+Projectile_bomb::~Projectile_bomb(){}
 
+//Kopieringskonstruktor som lägger in i lista
+Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
+{
+  *this = other;
+  projectiles.add(*this);
+  frame_to_die() = game.frame + frames_to_live();
+}
+
+void Projectile_bomb::collision(Entity* object)
+  {
+    //delete in Enemy that will delete Enemy
+    projectiles.add<new Projectile_bomb_blast*>;
+    delete Projectile_bomb*;
   };
 
 //Funktion som tillhör Projectile_bomb_blast
-Projectile::Projectile_bomb_blast
+Projectile_bomb_blast::Projectile_bomb_blast(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
 {
-  for(int a = 0; frame_to_die > a; a++)
+  if(game.frame == frame_to_die)
   {
-    Projectile*->update_radius();
+    Projectile->update_rad();
   }
   //delete projectile if beyond frame_to_die
-  delete Projectile*;
+  delete *this;
 }
 
-void Projectile::update_radius(Entity* object)
+Projectile_bomb_blast::~Projectile_bomb_blast(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz, float hit_rad,
+      sf::Vector2f dir, float mov_spd){}
+
+//Kopieringskonstruktor som lägger in i lista
+Projectile::Projectile_bomb_blast(Projectile_bomb_blast const& other)
+{
+  *this = other;
+  projectiles.add(*this);
+  frame_to_die() = game.frame + frames_to_live();
+}
+
+void Projectile::update_rad(Entity* object)
 {
   Projectile.hit_rad += blast_rad;
 };
 
 void Projectile::collision(Entity* object)
 {
-  vector<Enemy*> enemies;
-  vector<Projectile*> projectiles;
-  for (auto curr_proj{projectiles.begin()}; curr_proj != projectiles.end(); ++curr_proj)
-    {
-      for (auto curr_enemy{enemies.begin()}; curr_enemy != enemies.end(); ++curr_enemy)
-      {
-        if (*curr_proj.hit_rad == *curr_enemy.hit_rad)
-        {
-          //delete in Enemy that will delete Enemy
-          delete *curr_proj;
-        }
-      }
-    }
-
-  }
+  //delete in Enemy that will delete Enemy
+  delete *this;
+};

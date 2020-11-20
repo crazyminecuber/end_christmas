@@ -24,8 +24,10 @@ public:
 
     //Statics
     static void new_basic();
-    //static void new_basic(sf::Vector2f position);
+    static void new_basic(sf::Vector2f position);
     static void new_boss();
+
+    static void delete_all_enemies();
     static std::vector<Enemy*> enemies;
     static sf::Vector2f position_init; //Enemies should start at same positions
 
