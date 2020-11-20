@@ -5,29 +5,30 @@
 using namespace std;
 
 //Funktioner som tillhör Projectile
-Projectile::Projectile(std::string texture_file, sf::Vector2f position,
-      sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd):
-      Entity(texture_file, position, siz, hit_rad, dir, mov_spd){}
-
-Projectile::~Projectile(){}
+// Projectile::Projectile(std::string texture_file, sf::Vector2f position,
+//       sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage)
+//       {}
+//
+// Projectile::~Projectile(){}
 
 //Kopieringskonstruktor som lägger in i lista
-Projectile::Projectile(Projectile const& other)
+Projectile::Projectile(Projectile const& other) : Entity(other)
 {
   *this = other;
   projectiles.add(*this);
   frame_to_die() = game.frame + frames_to_live();
-}
+};
 
 //Next posistion
 void Projectile::update_position()
   {
-    position += mov_spd * dir;
-
   };
 
+  position += mov_spd * dir;
 //Funktioner som tillhör Projectile_basic
-Projectile_basic::Projectile_basic() : Projectile()
+Projectile_basic::Projectile_basic(std::string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
 {
   if(game.frame == frame_to_die)
   {
@@ -52,7 +53,9 @@ void Projectile_basic::collision(Entity* object)
     delete *this;
   };
 //Funktion som tillhör Projectile_pierce
-Projectile_pierce::Projectile_pierce() : Projectile()
+Projectile_pierce::Projectile_pierce(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
 {
   if(game.frame == frame_to_die)
   {
@@ -86,7 +89,9 @@ void Projectile_pierce::collision(Entity* object)
   };
 
 //Funktion som tillhör Projectile_bomb
-Projectile_bomb::Projectile_bomb() : Projectile()
+Projectile_bomb::Projectile_bomb(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
 {
 if(game.frame == frame_to_die)
   {
@@ -114,7 +119,9 @@ void Projectile_bomb::collision(Entity* object)
   };
 
 //Funktion som tillhör Projectile_bomb_blast
-Projectile_bomb_blast::Projectile_bomb_blast() : Projectile()
+Projectile_bomb_blast::Projectile_bomb_blast(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz,
+      float hit_rad, sf::Vector2f dir, float mov_spd)
 {
   if(game.frame == frame_to_die)
   {
@@ -124,7 +131,9 @@ Projectile_bomb_blast::Projectile_bomb_blast() : Projectile()
   delete *this;
 }
 
-Projectile_bomb_blast::~Projectile_bomb_blast(){}
+Projectile_bomb_blast::~Projectile_bomb_blast(string texture_file,
+      sf::Vector2f position, sf::Vector2f siz, float hit_rad,
+      sf::Vector2f dir, float mov_spd){}
 
 //Kopieringskonstruktor som lägger in i lista
 Projectile::Projectile_bomb_blast(Projectile_bomb_blast const& other)
