@@ -1,6 +1,6 @@
-#inlcude "Tower.h"
-#include <string>
+#include "Tower.h"
 #include <iostream>
+#include <math.h>
 #include <vector>
 using namespace std;
 
@@ -9,56 +9,76 @@ Tower::Tower(std::string texture_file, sf::Vector2f position,
       sf::Vector2f dir, float mov_spd, int arg_level){}
 Tower::~Tower(){}
 
+
 //Functions for the class Tower
 void Tower::collision(Entity* object)
 {
-  vector<Tower*> towers{};
-  vector<Enemy*> enemies{};
-  for (auto curr_tower{towers.begin()}; curr_tower != towers.end(); ++curr_tower)
-      for (auto curr_enemy{enemies.begin()}; curr_enemy != enemies.end(); ++curr_enemy)
-      {
-        if (*curr_tower.hit_rad == *curr_enemy.hit_rad))
-        {
-          curr_tower->shoot();
-        }
-      }
-  };
+  Tower::shootable_enemies.push_back(object);
+  Tower* shoot();
+}
 
-void Tower::shoot()
+void Tower::make_projectile(sf::Vector2f velocity)
 {
-  if (!shootable_enemies.empty())
-  {
-    arg_level.make_projectile();
-  }
-};
-
-void Tower::make_projectile(Vector2f velocity)
-{
-  new Projectiles*;
+  Projectile* p = new Projectile{
+          Projectile::prop.texture_file, //Texture
+          Projectile::position_init, //Poistion
+          Projectile::prop.size, //Size
+          Projectile::prop.hit_rad,        //Hit_rad
+          aim(),       //dir
+          Projectile::prop.mov_spd,          //mov_spd
+      };
+      Projectile::projectiles.push_back(p);
 };
 
 //Functions for the class Tower_basic
+Tower_basic::~Tower_basic(){}
+
 void Tower_basic::shoot()
 {
-
-};
+  if (!shootable_enemies.empty())
+  {
+    if (frame_last_shot > fire_period)
+    {
+      Tower* select_target();
+    }
+  }
+}
 
 Entity Tower_basic::select_target()
 {
   if (!shootable_enemies.empty())
   {
-    std::string target_enemy = shootable_enemies[1];
+    target_enemy = shootable_enemies.front();
+    float angel = cos((target_enemy->position.y- position.y)/
+                      (target_enemy->position.x - position.y));
+    if (!angel == 0)
+    {
+      Tower* setRotation(angle);
+    }
   }
   return target_enemy;
-};
+}
 
-vector2<float> Tower_basic::aim()
+
+sf::Vector2f Tower_basic::aim()
 {
+  target_enemy = select_target();
+  sf::Vector2f aim = (target_enemy->position - position) +
+                       (target_enemy->mov_spd * target_enemy->dir);
+  return aim;
+}
 
-};
+//Function shoot in the class Tower_ring.
+Tower_ring::~Tower_ring(){}
 
-//Functions for the class Tower_ring
 void Tower_ring::shoot()
 {
-
-};
+  if (!shootable_enemies.empty())
+  {
+    if (frame_last_shot > fire_period)
+    {
+      Tower* rotate(fire_angel);
+      Tower* make_projectile();
+    }
+  }
+}
