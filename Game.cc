@@ -7,7 +7,7 @@
 #include "Enemy_boss.h"
 #include "Projectile.h"
 #include "Tower.h"
-#include <SFML/Graphics/Sprite.hpp> 
+#include <SFML/Graphics/Sprite.hpp>
 //#include "Resource_manager.h"
 
 using namespace std;
@@ -38,7 +38,7 @@ void Game::load_map(string const & file)
     vector<vector<int>> vec2{};
 
     if (ifs.is_open())
-    {   
+    {
         while ( ifs.getline(line, size_t{255}))
         {
             vec2.push_back(vector<int>{});
@@ -47,10 +47,10 @@ void Game::load_map(string const & file)
             {
                 vec2.back().push_back(num);
             }
-        } 
+        }
         int tile_size = window_height / vec2.size();
         for (int y = 0; y < vec2.size(); y++)
-        {   
+        {
             for (int x = 0; x < vec2[y].size(); x++)
             {
                 if (num == 0)
@@ -97,7 +97,7 @@ void Game::init_enemies(json const & json_obj)
 {
     json enemy = json_obj["Enemy_basic"];
     Enemy_basic::life_init = enemy["life_init"];
-    
+
     json enemy = json_obj["Enemy_boss"];
     Enemy_boss::life_init = enemy["life_init"];
 
@@ -112,11 +112,11 @@ void Game::init_projectiles(json const & json_obj)
     proj = json_obj["Projectile_pierce"];
     Projectile_basic::frames_to_live = proj["frames_to_live"];
     Projectile_basic::damage_init = proj["damage_init"];
-    
+
     proj = json_obj["Projectile_bomb"];
     Projectile_basic::frames_to_live = proj["frames_to_live"];
     Projectile_basic::damage_init = proj["damage_init"];
-    
+
     proj = json_obj["Projectile_bomb_blast"];
     Projectile_basic::frames_to_live = proj["frames_to_live"];
     Projectile_basic::damage_init = proj["damage_init"];
@@ -147,16 +147,16 @@ void check_collision()
     vector<Enemy*> *enemies = &Enemy::enemies;
     vector<Projectile*> *projectiles = &Projectile::projectiles;
     vector<Tower*> *towers = &Tower::static_towers;
-    for (auto enemy_it = Enemy::enemies.begin(); 
+    for (auto enemy_it = Enemy::enemies.begin();
          enemy_it != Enemy::enemies.end();
          enemy_it++)
     {
         // kolla kollision mellan projectile - enemy
-        for (auto projectile_it = Projectile::projectiles.begin(); 
+        for (auto projectile_it = Projectile::projectiles.begin();
          projectile_it != Projectile::projectiles.end();
          projectile_it++)
         {
-            if ((*projectile_it)->getPosition() 
+            if ((*projectile_it)->getPosition()
                 == (*enemy_it)->getPosition())
             {
                 (*projectile_it)->collision(*enemy_it);
@@ -169,7 +169,7 @@ void check_collision()
              tower_it != Tower::static_towers.end();
              tower_it++)
         {
-            if ((*tower_it)->getPosition() 
+            if ((*tower_it)->getPosition()
                 == (*enemy_it)->getPosition())
             {
                 (*tower_it)->collision((*enemy_it));
@@ -180,9 +180,56 @@ void check_collision()
 void fire_towers()
 {
     for (auto tower = Tower::static_towers.begin();
-         tower != Tower::static_towers.end(); 
+         tower != Tower::static_towers.end();
          tower++)
         {
             (*tower)->shoot();
         }
+}
+
+void Game::handle_events()
+{
+ while (window.pollEvent(event))
+    {
+        if ( event.type == Event::Closed )
+        {
+            window.close ();
+        }
+        // Has a mouse button been pressed?
+        else if ( event.type == Event::MouseButtonPressed )
+        {
+            auto mouse { event.mouseButton };
+            // Is it the left mouse button?
+            if ( mouse.button == Mouse::Button::Left )
+            {
+                handle_click(sf::Vector2f(mouse.x, mouse.y));
+            }
+        }
+    }
+}
+
+void Game::handle_click(sf::Vector2f click)
+{
+    // Do we want to be smart or dumb here? One way is to just itterate over all
+    // clickable object and see if they contain the clicked location. A faster
+    // way is to use the fact that everything is in a grid and calculate what
+    // button was pressed. I did the dump way.
+
+    // Itterate over tower_butons
+    for (auto b = Tower_button.buttons.begin(); b != Tower_button.buttons.end(); b++)
+    {
+        if(clickable->getGlobalBounds().contains(musposition))
+        {
+            (*b)->on_click();
+        }
+    }
+
+    // Itterate over tiles
+    for (auto t = Tile.tiles.begin();t != Tile.tiles.end(); t++)
+    {
+        if(clickable->getGlobalBounds().contains(musposition))
+        {
+            (*t)->on_click();
+        }
+    }
 }

@@ -2,7 +2,7 @@
 #define GAME_H
 #include <string>
 #include <vector>
-#include "tower_shop.h"
+#include "Tower_shop.h"
 #include "Resource_manager.h"
 #include "Entity.h"
 #include "json.hpp"
@@ -11,7 +11,7 @@ class Game final
 {
 	public:
 	Game(){};
-	Game(std::string const & map_file, 
+	Game(std::string const & map_file,
 		 std::string const & entity_file,
 		 /*std::string const & shop_file,*/
 		 int health
@@ -22,7 +22,8 @@ class Game final
 		 };
 	void load_map(std::string const & file);
 	void load_entities(std::string const & file);
-	void handle_input();
+	void handle_events();
+	void handle_click();
 	void update_logic();
 	void tile_enemy_set_direction();
 	void enemy_update_direction();
@@ -43,7 +44,10 @@ class Game final
 	int current_frame{};
 	int window_width{};
 	int window_height{};
+    RenderWindow window;
+
+
 	Resource_manager resources{};
-	
+
 };
 #endif
