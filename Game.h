@@ -34,14 +34,14 @@ class Game final
 	void create_enemies();
 	void fire_towers();
 	void set_window_size(int const width,int const height);
+	static int get_frame();
 
 	private:
 	void init_enemies(nlohmann::json const & json_obj);
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
 	int health;
-	Tower_shop tower_shop;
-	int current_frame{};
+	//Tower_shop tower_shop;
 	int window_width{};
 	int window_height{};
     RenderWindow window;
