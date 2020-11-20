@@ -3,6 +3,7 @@
 #include <string>
 #include "Entity.h"
 #include <SFML/System/Vector2.hpp>
+#include "Projectile.h"
 
 
 
@@ -13,10 +14,10 @@ class Tower : public Entity
           sf::Vector2f siz, float hit_rad,
           sf::Vector2f dir, float mov_spd/*, int arg_level*/):
           Entity(texture_file,
-                 position, 
+                 position,
                  siz,
                  hit_rad,
-                 dir, 
+                 dir,
                  mov_spd) /*,
           level{arg_level}*/{}
 
@@ -65,7 +66,7 @@ public:
   static int frames_to_wait_init;
   static Projectile *projectile_init;
   static Sprite shop_sprite_init; // samma här som för basic
-  static int cost_init; 
+  static int cost_init;
 protected:
   int num_of_projectile;
 };
