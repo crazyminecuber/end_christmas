@@ -10,8 +10,12 @@ OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Wallet.o T
 #OBJS
 .PHONY: clean, test
 
-main: $(OBJS)
+all: $(OBJS)
 	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS)
+
+demo: $(OBJS)
+	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS)
+	./a.out
 
 test: $(OBJS) test_main.o tests.cc
 	$(CCC) $(CFLAGS) -o test tests.cc $(OBJS) $(LDFLAGS)
