@@ -120,3 +120,13 @@ TEST_CASE("Projectile_basic")
     1, //move speed
     3}; //life?
 }
+
+TEST_CASE("Tower_basic")
+{
+  Tower_basic::position_init = v1;
+  Tower_basic::prop.texture_file = "resources/textures/Santa.png";
+  Tower_basic::prop.size = v1;
+  Tower_basic::prop.hit_rad = 5;
+  Tower_basic::prop.dir = v1;
+  Tower_basic::prop.mov_spd = 3;
+}
