@@ -34,8 +34,8 @@ public:
   Projectile_basic(Projectile_basic const& other); //Kopieringskonstruktor
 
   void collision(Entity* object) override;
-  static int frames_to_live();
-  static int damage_init();
+  static int frames_to_live;
+  static int damage_init;
 
 };
 
