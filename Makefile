@@ -4,7 +4,7 @@ LDFLAGS = -L${SFML_ROOT}/lib -I${SFML_ROOT}/include -lsfml-window -lsfml-graphic
 
 # Lägg till o-filer som ni vill ska skapas i denna listan!
 OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Wallet.o Tower_shop.o Tower.o
-#OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile.o Wallet.o Tower_shop.o
+#OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile.o Wallet.o Tower_shop.o Game.o
 
 #SRCS := $(wildcard *.cc)
 #HEADERS := $(SRCS:%.cc=%.h)
