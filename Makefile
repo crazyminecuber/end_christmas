@@ -3,11 +3,8 @@ CFLAGS=-std=c++17 -g -Wall -Wextra -pedantic -Werror -fmax-errors=1
 LDFLAGS = -L${SFML_ROOT}/lib -I${SFML_ROOT}/include -lsfml-window -lsfml-graphics -lsfml-system
 
 # Lägg till o-filer som ni vill ska skapas i denna listan!
-<<<<<<< HEAD
-OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile.o
-=======
-OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Wallet.o Tower_shop.o
->>>>>>> 7613bf14e5f2e1f96d6b3af1fc291bfa4728a64e
+OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Wallet.o Tower_shop.o Tower.o
+#OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile.o Wallet.o Tower_shop.o
 
 #SRCS := $(wildcard *.cc)
 #HEADERS := $(SRCS:%.cc=%.h)

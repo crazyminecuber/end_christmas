@@ -44,7 +44,7 @@ class Game final
 	//Tower_shop tower_shop;
 	int window_width{};
 	int window_height{};
-    RenderWindow window;
+    sf::RenderWindow window;
 
 
 	Resource_manager resources{};

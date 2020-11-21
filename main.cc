@@ -86,9 +86,17 @@ int main ()
 //-------------Tower_shop test----------------------------------
 
     Wallet wallet{1000};
+    sf::Vector2f position{100,100};
+    sf::Vector2f size_{100,100};
+    float hit_rad{100};
+    sf::Vector2f dir{1,0};
+    float mov_spd{10};
+    int arg_level{1};
+    int cost{100};
 
-    Tower_basic tower{};
-    vector<Tower *>passive_towers{tower};
+    Tower_basic * tower = new Tower_basic{"texture", position, size_, hit_rad, dir, mov_spd, arg_level, cost}; // Memory leak, will fix someday.
+    vector<Tower *> passive_towers{};
+    passive_towers.push_back(tower);
     Vector2f pos {100,100};
     Vector2f siz {500,500};
     Vector2f btnsiz {100,100};

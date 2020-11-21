@@ -12,43 +12,32 @@ class Tower_shop : public sf::RectangleShape
 {
 public:
     Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
-            sf::Vector2f siz, sf::Vector2f btn_size)
-        :RectangleShape(siz), passive_towers{pt}, wallet{w}, button_size{btn_size} // Lagra position och size i sfml:objectet.
-    {
-        setPosition(pos);
-        chosen_tower = nullptr;
-        generate_shop_grid();
-    }
+            sf::Vector2f siz, sf::Vector2f btn_size);
     Tower* chosen_tower;
+    std::vector<sf::Drawable*> drawable{};
 private:
     std::vector<Tower *> passive_towers;
     Wallet wallet;
     sf::Vector2f button_size;
-
     void generate_shop_grid(); // Genera knappar med textur genom att kalla på tower_button många gånger.
 };
 
-class Tower_button : public sf::Sprite
+class Tower_button : public sf::RectangleShape
 {
 public:
-    Tower_button(Tower * tw, std::string texture_file, Tower_shop * ts)
-        : tower{tw}, tower_shop{ts}, texture{texture_file}
-    {
+    Tower_button(Tower * tw, Tower_shop * ts, sf::Vector2f btn_size);
 
-    }
-
-    void on_click()
-    {
-        // Set chosen tower i shop.
-        // TODO Ändra sprite på något sätt.
-        tower_shop->chosen_tower = tower;
-    }
+    void on_click();
 
 private:
     Tower* tower;
     Tower_shop* tower_shop;
-    std::string texture;
+    sf::Text pricetag;
+    sf::Sprite tower_pic;
+    sf::Text make_pricetag(Tower * tw);
+    sf::Sprite make_tower_pic(Tower * tw);
 
 };
-#endif //ENTITY_H
+#endif
+
 
