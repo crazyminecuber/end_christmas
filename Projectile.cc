@@ -87,7 +87,7 @@ void Projectile_bomb::collision()
     delete this;
     projectiles.push_back(new *Projectile_bomb_blast);
 }
-
+// Gör om bomb_blast så att den endast innehåller rad, texture, mm, 
 //Funktion som tillhör Projectile_bomb_blast
 //Kopieringskonstruktor som lägger in i lista
 Projectile::Projectile_bomb_blast(Projectile_bomb_blast const& other)
