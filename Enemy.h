@@ -31,6 +31,8 @@ public:
     static std::vector<Enemy*> enemies;
     static sf::Vector2f position_init; //Enemies should start at same positions
 
+    virtual void collision(Entity* object) = 0;
+
 
     protected:
         int life;

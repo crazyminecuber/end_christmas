@@ -20,7 +20,8 @@ public:
 
     void init(std::string texture_file, sf::Vector2f position);
 
-    virtual void collision(Entity* object) = 0;
+    float get_hitbox_radius() const;
+
 
 protected:
     sf::Vector2u size; //Ska den vara Vector2u och inte Vector2f?

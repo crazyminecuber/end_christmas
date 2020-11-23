@@ -56,7 +56,6 @@ Projectile_pierce::Projectile_pierce(Projectile_pierce const& other)
 void Projectile_pierce::collision()
 {
     //delete in Enemy that will delete Enemy
-
     if(nr_enemies_killed <= nr_pierce)
     {
         nr_enemies_killed+= 1;
@@ -84,46 +83,47 @@ void Projectile_bomb::collision()
 {
     //delete in Enemy that will delete Enemy
     //sf::Vector2f pos = this->getPosition();
-    //Projectile_bomb* new_bomb_blast(pos);
+    new_bomb_blast(this->getPosition());
+    // Projectile_bomb_blast* p = new Projectile_bomb_blast{
+    //     Projectile_bomb_blast::prop.texture_file, //Texture
+    //     pos, //Poistion
+    //     Projectile_bomb_blast::prop.size, //Size
+    //     Projectile_bomb_blast::prop.hit_rad,        //Hit_rad
+    //     Projectile_bomb_blast::prop.dir,       //dir
+    //     Projectile_bomb_blast::prop.mov_spd,
+    //     Projectile_bomb_blast::arg_damage};          //mov_spd
+    // projectiles.push_back(new *p);
+    projectiles.erase(std::remove(projectiles.begin(),
+          projectiles.end(), this), projectiles.end());
+    delete &*this;
+  }
+
+void Projectile_bomb::new_bomb_blast(sf::Vector2f position)
+{
     Projectile_bomb_blast* p = new Projectile_bomb_blast{
         Projectile_bomb_blast::prop.texture_file, //Texture
-        this->getPosition(), //Poistion
+        position, //Poistion
         Projectile_bomb_blast::prop.size, //Size
         Projectile_bomb_blast::prop.hit_rad,        //Hit_rad
         Projectile_bomb_blast::prop.dir,       //dir
         Projectile_bomb_blast::prop.mov_spd,
         Projectile_bomb_blast::damage_init};          //mov_spd
-    projectiles.push_back(new *p);
-    projectiles.erase(std::remove(projectiles.begin(),
-          projectiles.end(), this), projectiles.end());
-    delete &*this;
-
-// void Projectile_bomb::new_bomb_blast(sf::Vector2f position)
-// {
-//     Projectile_bomb_blast* p = new Projectile_bomb_blast{
-//         Projectile_bomb_blast::prop.texture_file, //Texture
-//         position, //Poistion
-//         Projectile_bomb_blast::prop.size, //Size
-//         Projectile_bomb_blast::prop.hit_rad,        //Hit_rad
-//         Projectile_bomb_blast::prop.dir,       //dir
-//         Projectile_basic::prop.mov_spd};          //mov_spd
-//     projectiles.push_back(new *p);
-// }
+    projectiles.push_back(p);
+}
 
 entity_properties Projectile_bomb::prop;
 
-}
 // Gör om bomb_blast så att den endast innehåller rad, texture, mm,
 //Funktion som tillhör Projectile_bomb_blast
 //Kopieringskonstruktor som lägger in i lista
-Projectile::Projectile_bomb_blast(Projectile_bomb_blast const& other)
+Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
     : Projectile(other)
 {
   frame_to_die = Game::get_frame() + frames_to_live;
   projectiles.push_back(& *this);
 }
 
-void Projectile::collision()
+void Projectile_bomb_blast::collision()
 {
     //delete in Enemy that will delete Enemy
     delete &*this;
