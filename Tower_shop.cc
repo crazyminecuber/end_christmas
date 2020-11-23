@@ -11,7 +11,9 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
     chosen_tower = nullptr;
     // Set position of text. Gör smartare!
     heading.setPosition(Vector2f(150,150));
-    generate_shop_grid();
+    int nr_columns{2};
+    IntRect area{100, 100, 500, 500};
+    generate_shop_grid(nr_columns, area);
 }
 
 void Tower_shop::generate_shop_grid(int nr_columns, IntRect area) // Genera knappar med textur genom att kalla på tower_button många gånger.

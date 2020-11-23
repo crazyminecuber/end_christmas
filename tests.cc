@@ -112,13 +112,29 @@ TEST_CASE("Projectile_basic")
 {
   //Make instance
   sf::Vector2f v1(1.0,1.0);
-  Projectile_basic P_BASIC{"resources/textures/Snowball.png",
-    v1, //Posistion
-    v2, //Size
-    1.0, //Hit_rad
-    v3, //dir
-    1, //move speed
-    3}; //life?
+  sf::Vector2f v2(2.0,2.0);
+  Projectile_basic* P_BASIC = new Projectile_basic{"resources/textures/Snowball.png", v1, v2, 1.0, v1, 1, 5};
+  Projectile::projectiles.push_back(P_BASIC);
+  Projectile_pierce* P_PIERCE = new Projectile_pierce{"resources/textures/Snowball.png", v1, v2, 1.0, v1, 1, 5};
+  Projectile::projectiles.push_back(P_PIERCE);
+  CHECK(size(Projectile::projectiles) ==2);
+
+  Projectile_basic::position = v1;
+  Projectile_basic::prop.texture_file = "resources/textures/Snowball.png";
+  Projectile_basic::prop.size = v1;
+  Projectile_basic::prop.hit_rad = 5;
+  Projectile_basic::prop.dir = v1;
+  Projectile_basic::prop.mov_spd = 3;
+  Projectile_basic::damage_init = 2;
+
+  CHECK(Projectile_basic::position == v1);
+  CHECK(Projectile_basic::prop.texture_file == "resources/textures/Santa.png");
+  CHECK(Projectile_basic::prop.size == v1);
+  CHECK(Projectile_basic::prop.hit_rad == 5);
+  CHECK(Projectile_basic::prop.dir == v1);
+  CHECK(Projectile_basic::prop.mov_spd == 3);
+  CHECK(Projectile_basic::damage_init == 2);
+
 }
 
 TEST_CASE("Tower_basic")
