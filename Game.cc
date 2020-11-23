@@ -1,95 +1,211 @@
-#include "Game.h"
+#include <SFML/Graphics/Sprite.hpp>
+#include <cmath>
 #include <sstream>
 #include <fstream>
 #include <vector>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
+
+#include "Game.h"
 #include "Enemy_basic.h"
 #include "Enemy_boss.h"
 #include "Projectile.h"
 #include "Entity.h"
 #include "Tower.h"
-#include <SFML/Graphics/Sprite.hpp>
-#include <cmath>
-//#include "Resource_manager.h"
+#include "Resource_manager.h"
+#include "Tile.h"
+#include "Tile_nothing.h"
+#include "Tile_tower.h"
+#include "Tile_enemy.h"
+#include "Tile_enemy_start.h"
+#include "Tile_enemy_end.h"
 
 using namespace std;
 using json = nlohmann::json;
+float Tile::side_length = 50; // flytta
 
 // Help function to determine init projectile for tower
-Projectile* Game::get_tower_projectile(string const & projectile)
-{
-    if(projectile == "Projectile_basic")
-    {
-        return new Projectile_basic{};
-    }
-    else if(projectile == "Projectile_pierce")
-    {
-        return new Projectile_pierce{};
-    }
-    else if(projectile == "Projectile_bomb")
-    {
-        return new Projectile_bomb{};
-    }
-}
+// Projectile* Game::get_tower_projectile(std::string const & projectile)
+// {
+//     if(projectile == "Projectile_basic")
+//     {
+//         return new Projectile_basic{};
+//     }
+//     else if(projectile == "Projectile_pierce")
+//     {
+//         return new Projectile_pierce{};
+//     }
+//     else if(projectile == "Projectile_bomb")
+//     {
+//         return new Projectile_bomb{};
+//     }
+// }
 
 // Help function to determine if object1 and object2 have collided
 bool Game::collided(Entity const *object1, Entity const *object2)
 {
-    return (pow(object1->getPosition().x - object2->getPosition().x,2) 
+    return (pow(object1->getPosition().x - object2->getPosition().x,2)
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
             && pow(object1->getPosition().y - object2->getPosition().y,2)
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
            );
 }
 
-void Game::load_map(string const & file)
+void Game::load_map(string const & file) //use file "map.csv"
 {
-    ifstream ifs(file);
-    istringstream iss;
-    string line;
+    /* prepare variables needed for reading from file */
+    std::ifstream infile{file};
+    std::string line;
     int num;
-    vector<vector<int>> vec2{};
+    sf::Vector2i tile_index_pos(-1, -1);
 
-    if (ifs.is_open())
+    /* create all tiles */
+    while ( std::getline(infile, line) )
     {
-        while ( ifs.getline(line, size_t{255}))
+        tile_index_pos.x = -1;
+        std::istringstream iss{line};
+        while ( iss >> num )
         {
-            vec2.push_back(vector<int>{});
-            iss.str(line);
-            while (iss >> num)
+            if      ( num == -1 )
             {
-                vec2.back().push_back(num);
+                ;
             }
-        }
-        int tile_size = window_height / vec2.size();
-        for (int y = 0; y < vec2.size(); y++)
-        {
-            for (int x = 0; x < vec2[y].size(); x++)
+            else if ( num == 0 )
             {
-                if (num == 0)
-                {
-                    new Tile_nothing(x-1,y-1,tile_size);
-                }
-                else if (num == 1)
-                {
-                    new Tile_enemy(x-1,y-1,tile_size);
-                }
-                else if (num == 2)
-                {
-                    new Tile_tower(x-1,y-1,tile_size);
-                }
-                else if (num == 3)
-                {
-                    new Tile_enemy_win(x-1,y-1,tile_size)
-                }
-                else if (num == 4)
-                {
-                    new Tile_enemy_start(x-1,y-1,tile_size);
-                }
+                new Tile_nothing("resources/textures/stones.jpg", window, tile_index_pos);
             }
+            else if ( num == 1 )
+            {
+                new Tile_tower("resources/textures/grass.jpg", window, tile_index_pos);
+            }
+            else if ( num == 2 )
+            {
+                new Tile_enemy("resources/textures/dirt.jpg", window, tile_index_pos);
+            }
+            else if ( num == 3 )
+            {
+                new Tile_enemy_start("resources/textures/dirt.jpg", window, tile_index_pos);
+            }
+            else if ( num == 4 )
+            {
+                new Tile_enemy_end("resources/textures/dirt.jpg", window, tile_index_pos);
+            }
+            else
+            {
+                cout << "Error: tile number not specified" << endl;
+            }
+            tile_index_pos.x++;
+            iss.get();
         }
+        tile_index_pos.y++;
     }
-    ifs.close();
+    // infile.close();
+    cout << "Laddat in kartan" << endl;
+
+    /* update side_length */
+    // calculate Tile::side_length and change all tiles
+    int tiles_per_row = tile_index_pos.y  + (1 - 2);
+    int tiles_per_col = tile_index_pos.x + (1 - 2);
+    Tile::side_length = std::min(window_width/tiles_per_row, window_height/tiles_per_col);
+    for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
+    {
+        (*it).second->update_side_length();
+    }
+
+    /* set direction of tiles */
+    determine_tile_directions();
+}
+
+void Game::determine_tile_directions()
+{
+    sf::Vector2i enemy_end;
+    sf::Vector2i last_tile{-100, -100}; // init so never next to enemy_end
+    sf::Vector2i current_tile;
+    sf::Vector2i next_tile;
+    sf::Vector2i direction;
+
+    /* find enemy_end tile */
+    for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
+    {
+        if ( is_tile_enemy_end((*it).first) )
+            enemy_end = (*it).second->get_index_position();
+    }
+    cout << "Tile_enemy_end at: (" << enemy_end.x << ", " << enemy_end.y << ")" << endl;
+    current_tile = enemy_end;
+
+    /* loop through enemy path backwards and set set direction of tile */
+    while ( !(is_tile_enemy_start(current_tile)) )
+    {
+        /* if (tile exists) and (tile is enemy) and (tile is not last tile) */
+        // look up
+        if ( Tile::tiles.find(current_tile + sf::Vector2i{0, -1})  !=
+                Tile::tiles.end()                                  &&
+             is_tile_enemy(  (current_tile + sf::Vector2i{0, -1})) &&
+             last_tile !=    (current_tile + sf::Vector2i{0, -1})     )
+        {
+            next_tile = current_tile + sf::Vector2i{0, -1};
+        }
+        // look right
+        if ( Tile::tiles.find(current_tile + sf::Vector2i{1, 0})  !=
+                Tile::tiles.end()                                 &&
+             is_tile_enemy(  (current_tile + sf::Vector2i{1, 0})) &&
+             last_tile !=    (current_tile + sf::Vector2i{1, 0})     )
+        {
+            next_tile = current_tile + sf::Vector2i{1, 0};
+        }
+        // look down
+        if ( Tile::tiles.find(current_tile + sf::Vector2i{0, 1})  !=
+                Tile::tiles.end()                                 &&
+             is_tile_enemy(  (current_tile + sf::Vector2i{0, 1})) &&
+             last_tile !=    (current_tile + sf::Vector2i{0, 1})     )
+        {
+            next_tile = current_tile + sf::Vector2i{0, 1};
+        }
+        // look left
+        if ( Tile::tiles.find(current_tile + sf::Vector2i{-1, 0})  !=
+                Tile::tiles.end()                                  &&
+             is_tile_enemy(  (current_tile + sf::Vector2i{-1, 0})) &&
+             last_tile !=    (current_tile + sf::Vector2i{-1, 0})     )
+        {
+            next_tile = current_tile + sf::Vector2i{-1, 0};
+        }
+
+        // prepare for next iteration
+        last_tile = current_tile;
+        current_tile = next_tile;
+
+        // set direction
+        direction = last_tile - current_tile;
+        Tile::get_tile_by_index(current_tile)->set_direction(direction);
+    }
+}
+
+bool Game::is_tile_enemy(sf::Vector2i index)
+{
+    return  ( !(dynamic_cast<Tile_enemy*>
+                (Tile::get_tile_by_index(index)) == nullptr) );
+}
+
+bool Game::is_tile_enemy_start(sf::Vector2i index)
+{
+    return  ( !(dynamic_cast<Tile_enemy_start*>
+                (Tile::get_tile_by_index(index)) == nullptr) );
+}
+
+bool Game::is_tile_enemy_end(sf::Vector2i index)
+{
+    return  ( !(dynamic_cast<Tile_enemy_end*>
+                (Tile::get_tile_by_index(index)) == nullptr) );
+}
+
+void Game::render()
+{
+    window.clear();
+    // render tiles
+    for (auto it{begin(Tile::tiles)}; it != end(Tile::tiles); ++it)
+    {
+        window.draw(*it->second);
+    }
+    window.display();
 }
 
 void Game::load_entities(string const & file)

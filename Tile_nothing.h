@@ -14,7 +14,6 @@ public:
         init();
     }
 
-    void set_direction(sf::Vector2i dir) override {};
     //Tower* on_click() override;
 
 private:

@@ -34,7 +34,7 @@ public:
        Projectile(texture_file, position, siz, hit_rad, dir, mov_spd, arg_damage){}
   ~Projectile_basic() noexcept = default;
   Projectile_basic(Projectile_basic const& other); //Kopieringskonstruktor
-
+  Projectile* clone(sf::Vector2f direction) const;
   void collision();
   static int frames_to_live;
   static int damage_init;
@@ -51,6 +51,7 @@ public:
   ~Projectile_pierce() noexcept = default;
 
   Projectile_pierce(Projectile_pierce const& other); //Kopieringskonstruktor
+  Projectile* clone(sf::Vector2f direction) const;
   void collision();
   static int frames_to_live;
   static int damage_init;
@@ -70,6 +71,7 @@ public:
   ~Projectile_bomb() noexcept = default;
 
   Projectile_bomb(Projectile_bomb const& other); //Kopieringskonstruktor
+  Projectile* clone(sf::Vector2f direction) const;
   void collision();
   void new_bomb_blast(sf::Vector2f position);
   static int frames_to_live;
