@@ -9,7 +9,7 @@ class Resource_manager{
     public:
       static int get_num_of_resources()
       {
-        return std::size(resources);
+        return resources.size();
       }
     static sf::Texture& load(std::string const& file){
         auto it{resources.find(file)};

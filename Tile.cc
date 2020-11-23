@@ -3,7 +3,7 @@
 
 std::map<sf::Vector2i, Tile*, cmpTileByCoord> Tile::tiles;
 
-void Tile::init(std::string texture_file)
+void Tile::init()
 {
     /* sätt utseende */
     setTexture(texture, false);
