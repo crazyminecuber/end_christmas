@@ -37,9 +37,8 @@ Projectile_basic::Projectile_basic(Projectile_basic const& other)
     projectiles.push_back(& *this);
 }
 
-void Projectile_basic::collision(Entity* object)
+void Projectile_basic::collision()
     {
-      std::cout << "krockat" << object << std::endl;
       projectiles.erase(std::remove(projectiles.begin(),
             projectiles.end(), this), projectiles.end());
       delete &*this;//inte säker på att detta blir rätt. Samma tanke som i update position. Kompilatorn klagar också på att vi inte använder object
@@ -54,10 +53,9 @@ Projectile_pierce::Projectile_pierce(Projectile_pierce const& other)
     projectiles.push_back(& *this);
 }
 
-void Projectile_pierce::collision(Entity* object)
+void Projectile_pierce::collision()
 {
     //delete in Enemy that will delete Enemy
-    std::cout << "krockat" << object << std::endl;
     if(nr_enemies_killed <= nr_pierce)
     {
         nr_enemies_killed+= 1;
@@ -81,9 +79,8 @@ Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
   projectiles.push_back(& *this);
 }
 
-void Projectile_bomb::collision(Entity* object)
+void Projectile_bomb::collision()
 {
-    std::cout << "krockat" << object << std::endl;
     //delete in Enemy that will delete Enemy
     //sf::Vector2f pos = this->getPosition();
     new_bomb_blast(this->getPosition());
@@ -126,9 +123,8 @@ Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
   projectiles.push_back(& *this);
 }
 
-void Projectile_bomb_blast::collision(Entity* object)
+void Projectile_bomb_blast::collision()
 {
-    std::cout << "krockat" << object << std::endl;
     //delete in Enemy that will delete Enemy
     delete &*this;
 }

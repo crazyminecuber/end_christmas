@@ -6,14 +6,17 @@
 #include "Enemy_basic.h"
 #include "Enemy_boss.h"
 #include "Projectile.h"
+#include "Entity.h"
 #include "Tower.h"
 #include <SFML/Graphics/Sprite.hpp>
+#include <cmath>
 //#include "Resource_manager.h"
 
 using namespace std;
 using json = nlohmann::json;
 
-Projectile* get_tower_projectile(string const & projectile)
+// Help function to determine init projectile for tower
+Projectile* Game::get_tower_projectile(string const & projectile)
 {
     if(projectile == "Projectile_basic")
     {
@@ -27,6 +30,16 @@ Projectile* get_tower_projectile(string const & projectile)
     {
         return new Projectile_bomb{};
     }
+}
+
+// Help function to determine if object1 and object2 have collided
+bool Game::collided(Entity const *object1, Entity const *object2)
+{
+    return (pow(object1->getPosition().x - object2->getPosition().x,2) 
+            < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
+            && pow(object1->getPosition().y - object2->getPosition().y,2)
+            < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
+           );
 }
 
 void Game::load_map(string const & file)
@@ -138,10 +151,10 @@ void Game::init_towers(json const & json_obj)
     Tower_ring::fire_period_init = tower["fire_period_init"];
     Tower_ring::projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_ring::shop_sprite_init.setTexture(resources.load(tower["shop_sprite_init"]));
-    Tower_ring::cost_init = tower = tower["cost_init"]
+    Tower_ring::cost_init = tower = tower["cost_init"];
 }
 
-void check_collision()
+void Game::check_collision()
 {
     //kolla tower - enemy
     vector<Enemy*> *enemies = &Enemy::enemies;
@@ -156,21 +169,17 @@ void check_collision()
          projectile_it != Projectile::projectiles.end();
          projectile_it++)
         {
-            if ((*projectile_it)->getPosition()
-                == (*enemy_it)->getPosition())
+            if (collided((*projectile_it),(*enemy_it)))
             {
-                (*projectile_it)->collision(*enemy_it);
                 (*enemy_it)->collision(*projectile_it);
-                // här borde game ta bort objekten. Tas de bort i collision() så kommer den andra kollision inte att fungera.
-                // Entity::check_if_kill() som dödar objektet om life<=0
+                (*projectile_it)->collision();
             }
         }
         for (auto tower_it = Tower::static_towers.begin();
              tower_it != Tower::static_towers.end();
              tower_it++)
         {
-            if ((*tower_it)->getPosition()
-                == (*enemy_it)->getPosition())
+            if (collided((*tower_it),(*enemy_it)))
             {
                 (*tower_it)->collision((*enemy_it));
             }

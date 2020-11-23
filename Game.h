@@ -37,6 +37,8 @@ class Game final
 	static int get_frame();
 
 	private:
+	Projectile* get_tower_projectile(string const & projectile);
+	bool collided(Entity const *object1, Entity const *object2);
 	void init_enemies(nlohmann::json const & json_obj);
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
