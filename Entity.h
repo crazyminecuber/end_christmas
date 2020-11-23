@@ -22,11 +22,11 @@ public:
 
     float get_hitbox_radius() const;
 
-    virtual void collision(Entity* object) = 0;
 
 protected:
     sf::Vector2u size; //Ska den vara Vector2u och inte Vector2f?
     float hitbox_radius;
+public:
     sf::Vector2f direction;
     float const movement_speed;
 };
