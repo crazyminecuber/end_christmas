@@ -23,7 +23,7 @@ class Tower : public Entity
 
     void collision(Entity* object) override;
     virtual void shoot()=0;
-//    void make_projectile(sf::Vector2f velocity);
+    void make_projectile(sf::Vector2f direction);
 
     static std::vector<Tower*> static_towers;
 
@@ -33,9 +33,11 @@ class Tower : public Entity
     int frame_last_shot;
     int fire_period;
     int fire_angel;
+
     float detection_radius;
     int level;
     Projectile *projectile;
+  public:
     int cost{};
 };
 
@@ -54,7 +56,7 @@ public:
   ~Tower_basic();
 
   void shoot() override;
-  Entity *select_target();
+  Entity * select_target();
   sf::Vector2f aim();
 
   static Sprite sprite_init;
