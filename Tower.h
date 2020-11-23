@@ -21,7 +21,7 @@ class Tower : public Entity
         dir, mov_spd),
         level{arg_level}, cost{_cost}{}
 
-    void collision(Entity* object) override;
+    void collision(Entity* object);
     virtual void shoot()=0;
 //    void make_projectile(sf::Vector2f velocity);
 
