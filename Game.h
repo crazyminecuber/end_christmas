@@ -6,6 +6,7 @@
 #include "Resource_manager.h"
 #include "Entity.h"
 #include "json.hpp"
+#include "Projectile.h"
 
 class Game final
 {
@@ -37,7 +38,7 @@ class Game final
 	static int get_frame();
 
 	private:
-	Projectile* get_tower_projectile(string const & projectile);
+	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	void init_enemies(nlohmann::json const & json_obj);
 	void init_projectiles(nlohmann::json const & json_obj);
