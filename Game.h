@@ -5,11 +5,12 @@
 #include "Tower_shop.h"
 #include "Resource_manager.h"
 #include "Entity.h"
+#include "Projectile.h"
 #include "json.hpp"
 
 class Game final
 {
-	public:
+public:
 	Game(){};
 	Game(std::string const & map_file,
 		 std::string const & entity_file,
@@ -21,6 +22,13 @@ class Game final
 			load_entities(entity_file);
 		 };
 	void load_map(std::string const & file);
+	void determine_tile_directions();
+	bool is_tile_enemy(sf::Vector2i index);
+	bool is_tile_enemy_start(sf::Vector2i index);
+	bool is_tile_enemy_end(sf::Vector2i index);
+
+
+
 	void load_entities(std::string const & file);
 	void handle_events();
 	void handle_click();
@@ -30,23 +38,23 @@ class Game final
 	void enemy_update_position();
 	void projectile_update_position();
 	void check_collision();
-	void render_game();
+	void render();
 	void create_enemies();
 	void fire_towers();
 	void set_window_size(int const width,int const height);
 	static int get_frame();
 
-	private:
-	Projectile* get_tower_projectile(string const & projectile);
+private:
+	//Projectile* get_tower_projectile(std::string const & projectile); ta tillbaka när underklasserna till projectile är gjorda
 	bool collided(Entity const *object1, Entity const *object2);
 	void init_enemies(nlohmann::json const & json_obj);
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
 	int health;
 	//Tower_shop tower_shop;
-	int window_width{};
-	int window_height{};
-    sf::RenderWindow window;
+	unsigned int window_width{1400};
+	unsigned int window_height{800};
+    sf::RenderWindow window{sf::VideoMode{window_width, window_height}, "Tower defence"};
 
 
 	Resource_manager resources{};

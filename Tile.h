@@ -16,14 +16,14 @@ public:
     window{win}, texture{Resource_manager::load(texture_file)},
     index_position{index_pos}
     {
-        init(texture_file);
+        init();
     }
 
-    void init(std::string texture_file);
+    void init();
     void update_side_length();
     sf::Vector2i get_index_position();
     //virtual Tower* on_click() {};
-    virtual void set_direction(sf::Vector2i dir) = 0;
+    virtual void set_direction(sf::Vector2i dir);
 
     /* static members and functions */
     static std::map<sf::Vector2i, Tile*, cmpTileByCoord> tiles;
