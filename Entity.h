@@ -20,6 +20,8 @@ public:
 
     void init(std::string texture_file, sf::Vector2f position);
 
+    float get_hitbox_radius() const;
+
     virtual void collision(Entity* object) = 0;
 
 protected:
