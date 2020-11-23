@@ -35,7 +35,7 @@ public:
   ~Projectile_basic() noexcept = default;
   Projectile_basic(Projectile_basic const& other); //Kopieringskonstruktor
 
-  void collision(Entity* object);
+  void collision();
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
@@ -51,7 +51,7 @@ public:
   ~Projectile_pierce() noexcept = default;
 
   Projectile_pierce(Projectile_pierce const& other); //Kopieringskonstruktor
-  void collision(Entity* object);
+  void collision();
   static int frames_to_live;
   static int damage_init;
   static int nr_pierce;
@@ -70,7 +70,7 @@ public:
   ~Projectile_bomb() noexcept = default;
 
   Projectile_bomb(Projectile_bomb const& other); //Kopieringskonstruktor
-  void collision(Entity* object);
+  void collision();
   void new_bomb_blast(sf::Vector2f position);
   static int frames_to_live;
   static int damage_init;
@@ -88,7 +88,7 @@ public:
 
   Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
   void update_rad();
-  void collision(Entity* object);
+  void collision();
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;

@@ -1,7 +1,7 @@
 #include "Projectile.h"
-#include "iostream"
-#include "string"
-#include "vector"
+#include <iostream>
+#include <string>
+#include <vector>
 #include "Game.h"
 #include <SFML/Graphics.hpp>
 
