@@ -14,3 +14,8 @@ void Entity::init(std::string texture_file, sf::Vector2f position)
     setPosition(position);
     setOrigin(size.x/2.f, size.y/2.f);
 }
+
+float Entity::get_hitbox_radius() const
+{
+    return hitbox_radius;
+}
