@@ -34,6 +34,7 @@ int main ()
 
     while ( true )
     {
+        game.handle_events();
         game.render();
     }
 

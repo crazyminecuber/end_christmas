@@ -32,7 +32,7 @@ public:
 
 	void load_entities(std::string const & file);
 	void handle_events();
-	void handle_click();
+	void handle_click(sf::Vector2f click);
 	void update_logic();
 	void tile_enemy_set_direction();
 	void enemy_update_direction();

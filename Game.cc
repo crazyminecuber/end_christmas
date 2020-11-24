@@ -312,27 +312,30 @@ void Game::render()
 //         }
 // }
 //
-// void Game::handle_events()
-// {
-//  while (window.pollEvent(event))
-//     {
-//         if ( event.type == Event::Closed )
-//         {
-//             window.close ();
-//         }
-//         // Has a mouse button been pressed?
-//         else if ( event.type == Event::MouseButtonPressed )
-//         {
-//             auto mouse { event.mouseButton };
-//             // Is it the left mouse button?
-//             if ( mouse.button == Mouse::Button::Left )
-//             {
-//                 handle_click(sf::Vector2f(mouse.x, mouse.y));
-//             }
-//         }
-//     }
-// }
-//
+void Game::handle_events()
+{
+    sf::Event event;
+    while (window.pollEvent(event))
+        {
+            if ( event.type == sf::Event::Closed )
+            {
+                window.close ();
+            }
+            // Has a mouse button been pressed?
+            // else if ( event.type == sf::Event::MouseButtonPressed )
+            // {
+            //     auto mouse { event.mouseButton };
+            //     // Is it the left mouse button?
+            //     if ( mouse.button == sf::Mouse::Button::Left )
+            //     {
+            //         float mouseX = mouse.x;
+            //         float mouseY = mouse.y;
+            //         handle_click(sf::Vector2f{mouseX, mouseY});
+            //     }
+            // }
+        }
+}
+
 // void Game::handle_click(sf::Vector2f click)
 // {
 //     // Do we want to be smart or dumb here? One way is to just itterate over all
