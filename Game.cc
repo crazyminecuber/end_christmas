@@ -123,7 +123,7 @@ void Game::determine_tile_directions()
     sf::Vector2i last_tile{-100, -100}; // init so never next to enemy_end
     sf::Vector2i current_tile;
     sf::Vector2i next_tile;
-    sf::Vector2i direction;
+    sf::Vector2f direction;
 
     /* find enemy_end tile */
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
@@ -176,7 +176,8 @@ void Game::determine_tile_directions()
         current_tile = next_tile;
 
         // set direction
-        direction = last_tile - current_tile;
+        direction.x = last_tile.x - current_tile.x;
+        direction.y = last_tile.y - current_tile.y;
         Tile::get_tile_by_index(current_tile)->set_direction(direction);
     }
 }
@@ -222,6 +223,23 @@ void Game::render()
 bool Game::is_running()
 {
     return window.isOpen();
+}
+
+void Game::enemy_update_direction()
+{
+    for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
+    {
+        Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
+        tile->update_enemy(*it);
+    }
+}
+
+void Game::enemy_update_position()
+{
+    for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
+    {
+        (*it)->move((*it)->direction * (*it)->movement_speed);
+    }
 }
 //
 // void Game::load_entities(string const & file)
