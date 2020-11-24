@@ -1,5 +1,6 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <cmath>
+#include <math.h>
 #include <sstream>
 #include <fstream>
 #include <vector>
@@ -131,7 +132,6 @@ void Game::determine_tile_directions()
         if ( is_tile_enemy_end((*it).first) )
             enemy_end = (*it).second->get_index_position();
     }
-    // cout << "Tile_enemy_end at: (" << enemy_end.x << ", " << enemy_end.y << ")" << endl;
     current_tile = enemy_end;
 
     /* loop through enemy path backwards and set set direction of tile */
@@ -234,11 +234,20 @@ bool Game::is_running()
 
 void Game::enemy_update_direction()
 {
-    for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
+    float damage_dealt{0};
+    for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
     {
         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
-        tile->update_enemy(*it);
+        if ( tile->update_enemy(*it) > 0 )
+        {
+            damage_dealt += tile->update_enemy(*it);
+            delete *it;
+            it = Enemy::enemies.erase(it);
+        }
+        else
+            ++it;
     }
+    health.remove_n_health(damage_dealt);
 }
 
 void Game::enemy_update_position()
@@ -248,44 +257,88 @@ void Game::enemy_update_position()
         (*it)->move((*it)->direction * (*it)->movement_speed);
     }
 }
-//
-// void Game::load_entities(string const & file)
-// {
-//     ifstream ifs(file);
-//     if (ifs.is_open())
-//     {
-//         json j_data;
-//         ifs >> j_data;
-//         init_enemies(j_data["Enemies"]);
-//         init_projectiles(j_data["Projectiles"]);
-//         init_towers(j_data["Towers"]);
-//     }
-//     ifs.close();
-// }
-//
+
+void Game::load_entities(string const & file)
+{
+    ifstream ifs(file);
+    if (ifs.is_open())
+    {
+        json j_data;
+        ifs >> j_data;
+        init_enemies(j_data["Enemy"]);
+        // init_projectiles(j_data["Projectiles"]);
+        // init_towers(j_data["Towers"]);
+    }
+    ifs.close();
+}
+
  void Game::init_enemies(json const & json_obj)
 {
-    json enemy = json_obj["Enemy_basic"];
-    Enemy_basic::life_init = json_obj["life_init"];
-    //Enemy_basic::position_init = function
-    Enemy_basic::prop.texture_file = json_obj["texture"];
-    std::vector<float> size_basic{json_obj["size"]};
-    Enemy_basic::prop.size = sf::Vector2f(size_basic[0],size_basic[1]);
-    Enemy_basic::prop.hit_rad = json_obj["hit_rad"];
-    Enemy_basic::prop.dir = sf::Vector2f(0,0); //Will be set by tile
-    Enemy_basic::prop.mov_spd = json_obj["mov_spd"];
+    json enemy_basic = json_obj["Enemy_basic"];
+    Enemy_basic::life_init = enemy_basic["life_init"];
+    Enemy_basic::position_init = sf::Vector2f{40, 120};
+    Enemy_basic::prop.texture_file = enemy_basic["texture"];
+    sf::Vector2f size_basic;
+    size_basic.x = enemy_basic["size"][0];
+    size_basic.y = enemy_basic["size"][1];
+    Enemy_basic::prop.size = sf::Vector2f{size_basic};
+    Enemy_basic::prop.hit_rad = enemy_basic["hit_rad"];
+    Enemy_basic::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Enemy_basic::prop.mov_spd = enemy_basic["mov_spd"];
 
-
-    Enemy_boss::life_init = json_obj["life_init"];
-    //Enemy_basic::position_init = function
-    Enemy_boss::prop.texture_file = json_obj["texture"];
-    std::vector<float> size_boss{json_obj["size"]};
-    Enemy_boss::prop.size = sf::Vector2f(size_boss[0],size_boss[1]);
-    Enemy_boss::prop.hit_rad = json_obj["hit_rad"];
-    Enemy_boss::prop.dir = sf::Vector2f(0,0); //Will be set by tile
-    Enemy_boss::prop.mov_spd = json_obj["mov_spd"];
-
+    json enemy_boss = json_obj["Enemy_boss"];
+    Enemy_boss::life_init = enemy_boss["life_init"];
+    //Enemy_boss::position_init = sf::Vector2f{500, 500}; // ERROR, this one seems to write over Enemy_basic::position_init
+    Enemy_boss::prop.texture_file = enemy_boss["texture"];
+    sf::Vector2f size_boss;
+    size_boss.x = enemy_boss["size"][0];
+    size_boss.y = enemy_boss["size"][1];
+    Enemy_boss::prop.size = sf::Vector2f{size_boss};
+    Enemy_boss::prop.hit_rad = enemy_boss["hit_rad"];
+    Enemy_boss::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
 }
+
+void Game::create_1_enemy_basic()
+{
+    Enemy::new_basic();
+}
+
+void Game::create_1_enemy_boss()
+{
+    Enemy::new_boss();
+}
+
+void Game::create_n_enemy_basic(int start_time, int amount, float interval)
+{
+    if ( (frame >= (start_time * fps))                              &&
+         (frame <  (start_time * fps) + (fps * interval * amount )) &&
+         (fmod(frame ,(fps * interval)) == 0)                         )
+    {
+        create_1_enemy_basic();
+    }
+}
+
+void Game::create_n_enemy_boss(int start_time, int amount, float interval)
+{
+    if ( (frame >= (start_time * fps))                              &&
+         (frame <  (start_time * fps) + (fps * interval * amount )) &&
+         (fmod(frame ,(fps * interval)) == 0)                         )
+    {
+        create_1_enemy_boss();
+    }
+}
+
+int Game::get_frame()
+{
+    return frame;
+}
+
+float Game::get_fps()
+{
+    return fps;
+}
+
 //
 // void Game::init_projectiles(json const & json_obj)
 // {
@@ -419,6 +472,10 @@ void Game::handle_input()
 
 void Game::update_logic()
 {
-    enemy_update_direction();
-    enemy_update_position();
+    if ( Enemy::enemies.size() > 0 )
+    {
+        enemy_update_direction();
+        enemy_update_position();
+    }
+    frame++;
 }

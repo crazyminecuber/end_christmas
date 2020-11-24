@@ -13,7 +13,7 @@ public:
     : Tile_enemy(texture_file, win, index_pos)
     {}
 
-    void update_enemy(Enemy* enemy) override;
+    float update_enemy(Enemy* enemy) override;
 };
 
 #endif // TILE_ENEMY_START_H

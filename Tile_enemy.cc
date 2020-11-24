@@ -12,9 +12,10 @@ void Tile_enemy::set_direction(sf::Vector2f dir)
     direction = dir;
 }
 
-void Tile_enemy::update_enemy(Enemy* enemy)
+float Tile_enemy::update_enemy(Enemy* enemy)
 {
     enemy->set_direction(direction);
+    return 0;
 }
 //
 // Tower* Tile_enemy::on_click()

@@ -5,7 +5,7 @@
                 {
                     "life_init" : 1,
                     "texture" : "resources/textures/Santa.png",
-                    "size": [10,10],
+                    "size": [80,60],
                     "hit_rad": 10,
                     "mov_spd": 3
                 },
