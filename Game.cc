@@ -212,6 +212,13 @@ void Game::render()
         window.draw(*it->second);
     }
 
+    // render enemies
+    for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
+    {
+        window.draw(*(*it)); // it doesn't make sense to me either but it works
+    }
+
+    // render health
     health.render();
 
     /*  ---------------------- */
@@ -397,5 +404,6 @@ void Game::handle_input()
 
 void Game::update_logic()
 {
-    ;
+    enemy_update_direction();
+    enemy_update_position();
 }
