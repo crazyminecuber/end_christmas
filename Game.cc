@@ -201,11 +201,20 @@ bool Game::is_tile_enemy_end(sf::Vector2i index)
 void Game::render()
 {
     window.clear();
+
+    /* Put stuff to render here */
+    // OBS: ORDER MATTERS!
+
     // render tiles
     for (auto it{begin(Tile::tiles)}; it != end(Tile::tiles); ++it)
     {
         window.draw(*it->second);
     }
+
+    health.render();
+
+    /*  ---------------------- */
+
     window.display();
 }
 
@@ -318,7 +327,7 @@ bool Game::is_running()
 //         }
 // }
 //
-void Game::handle_events()
+void Game::handle_input()
 {
     sf::Event event;
     while (window.pollEvent(event))
@@ -367,3 +376,8 @@ void Game::handle_events()
 //         }
 //     }
 // }
+
+void Game::update_logic()
+{
+    ;
+}
