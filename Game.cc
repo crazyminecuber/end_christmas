@@ -222,6 +222,15 @@ bool Game::is_running()
 {
     return window.isOpen();
 }
+
+void Game::enemy_update_direction()
+{
+    for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
+    {
+        Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
+        tile->update_enemy(*it);
+    }
+}
 //
 // void Game::load_entities(string const & file)
 // {

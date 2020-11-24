@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Tile_enemy.h"
-//#include "Enemy.h"
+#include "Enemy.h"
 
 class Tile_enemy_end : public Tile_enemy
 {
@@ -13,7 +13,7 @@ public:
     : Tile_enemy(texture_file, win, index_pos)
     {}
 
-    //void update_enemy(Enemy* enemy) override;
+    void update_enemy(Enemy* enemy) override {};
 };
 
 #endif // TILE_ENEMY_END_H

@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Tile.h"
-//#include "Enemy.h"
+#include "Enemy.h"
 
 class Tile_enemy : public Tile
 {
@@ -16,7 +16,7 @@ public:
     }
 
     void set_direction(sf::Vector2i dir) override;
-    //virtual void update_enemy(Enemy* enemy);
+    virtual void update_enemy(Enemy* enemy);
     //Tower* on_click() override;
 
 private:

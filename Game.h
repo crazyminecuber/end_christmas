@@ -34,16 +34,20 @@ public:
 	bool is_tile_enemy(sf::Vector2i index);
 	bool is_tile_enemy_start(sf::Vector2i index);
 	bool is_tile_enemy_end(sf::Vector2i index);
+
+	bool is_running(); // remove when we make StateMachine
+	void check_collision();
 	void load_entities(std::string const & file);
 	void handle_click(sf::Vector2f click);
-	void tile_enemy_set_direction();
+
+	void create_enemies();
 	void enemy_update_direction();
 	void enemy_update_position();
+
 	void projectile_update_position();
-	void check_collision();
-	void create_enemies();
+
 	void fire_towers();
-	bool is_running(); // remove when we make StateMachine
+
 	static int get_frame();
 
 private:
