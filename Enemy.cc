@@ -3,6 +3,13 @@
 #include "Enemy_boss.h"
 #include <SFML/Graphics.hpp>
 
+
+void Enemy::set_direction(sf::Vector2f dir)
+{
+    direction = dir;
+}
+
+
 //Static
 void Enemy::new_basic()
 {

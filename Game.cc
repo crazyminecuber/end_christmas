@@ -6,6 +6,7 @@
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
 
 #include "Game.h"
+#include "Enemy.h"
 #include "Enemy_basic.h"
 #include "Enemy_boss.h"
 #include "Projectile.h"
@@ -111,7 +112,8 @@ void Game::load_map(string const & file) //use file "map.csv"
     // calculate Tile::side_length and change all tiles
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
     int tiles_per_col = tile_index_pos.x + (1 - 2);
-    Tile::side_length = std::min(window_width/tiles_per_row, window_height/tiles_per_col);
+    Tile::side_length = std::min(window_size.x/tiles_per_row,
+                                 window_size.y/tiles_per_col);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -127,7 +129,7 @@ void Game::determine_tile_directions()
     sf::Vector2i last_tile{-100, -100}; // init so never next to enemy_end
     sf::Vector2i current_tile;
     sf::Vector2i next_tile;
-    sf::Vector2i direction;
+    sf::Vector2f direction;
 
     /* find enemy_end tile */
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
@@ -180,7 +182,8 @@ void Game::determine_tile_directions()
         current_tile = next_tile;
 
         // set direction
-        direction = last_tile - current_tile;
+        direction.x = last_tile.x - current_tile.x;
+        direction.y = last_tile.y - current_tile.y;
         Tile::get_tile_by_index(current_tile)->set_direction(direction);
     }
 }
@@ -206,12 +209,43 @@ bool Game::is_tile_enemy_end(sf::Vector2i index)
 void Game::render()
 {
     window.clear();
+
+    /* Put stuff to render here */
+    // OBS: ORDER MATTERS!
+
     // render tiles
     for (auto it{begin(Tile::tiles)}; it != end(Tile::tiles); ++it)
     {
         window.draw(*it->second);
     }
+
+    health.render();
+
+    /*  ---------------------- */
+
     window.display();
+}
+
+bool Game::is_running()
+{
+    return window.isOpen();
+}
+
+void Game::enemy_update_direction()
+{
+    for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
+    {
+        Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
+        tile->update_enemy(*it);
+    }
+}
+
+void Game::enemy_update_position()
+{
+    for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
+    {
+        (*it)->move((*it)->direction * (*it)->movement_speed);
+    }
 }
 //
 // void Game::load_entities(string const & file)
@@ -228,15 +262,29 @@ void Game::render()
 //     ifs.close();
 // }
 //
-// void Game::init_enemies(json const & json_obj)
-// {
-//     json enemy = json_obj["Enemy_basic"];
-//     Enemy_basic::life_init = enemy["life_init"];
-//
-//     enemy = json_obj["Enemy_boss"];
-//     Enemy_boss::life_init = enemy["life_init"];
-//
-// }
+ void Game::init_enemies(json const & json_obj)
+{
+    json enemy = json_obj["Enemy_basic"];
+    Enemy_basic::life_init = json_obj["life_init"];
+    //Enemy_basic::position_init = function
+    Enemy_basic::prop.texture_file = json_obj["texture"];
+    std::vector<float> size_basic{json_obj["size"]};
+    Enemy_basic::prop.size = sf::Vector2f(size_basic[0],size_basic[1]);
+    Enemy_basic::prop.hit_rad = json_obj["hit_rad"];
+    Enemy_basic::prop.dir = sf::Vector2f(0,0); //Will be set by tile
+    Enemy_basic::prop.mov_spd = json_obj["mov_spd"];
+
+
+    Enemy_boss::life_init = json_obj["life_init"];
+    //Enemy_basic::position_init = function
+    Enemy_boss::prop.texture_file = json_obj["texture"];
+    std::vector<float> size_boss{json_obj["size"]};
+    Enemy_boss::prop.size = sf::Vector2f(size_boss[0],size_boss[1]);
+    Enemy_boss::prop.hit_rad = json_obj["hit_rad"];
+    Enemy_boss::prop.dir = sf::Vector2f(0,0); //Will be set by tile
+    Enemy_boss::prop.mov_spd = json_obj["mov_spd"];
+
+}
 //
 // void Game::init_projectiles(json const & json_obj)
 // {
@@ -318,7 +366,7 @@ void Game::render()
 //         }
 // }
 //
-void Game::handle_events()
+void Game::handle_input()
 {
     sf::Event event;
     while (window.pollEvent(event))
@@ -367,3 +415,8 @@ void Game::handle_events()
 //         }
 //     }
 // }
+
+void Game::update_logic()
+{
+    ;
+}
