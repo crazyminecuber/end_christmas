@@ -25,7 +25,7 @@ using namespace std;
 //
 // int const width  { 1000 };
 // int const height { 800 };
-double const FPS{60.0};
+
 
 void throttle(double fps, sf::Clock & clock);
 
@@ -38,13 +38,18 @@ int main ()
     Game game(window_size, map_file, health);
     sf::Clock clock;
 
+    game.load_entities("entity.json");
+
     while ( game.is_running() )
     {
+        game.create_n_enemy_basic(0, 10, 0.5);
+        game.create_n_enemy_basic(8, 4, 0.25);
+        //game.create_n_enemy_boss(0, 1, 0.5);
         game.handle_input();
         game.update_logic();
         game.render();
 
-        throttle(FPS, clock);
+        throttle(game.get_fps(), clock);
     }
 
     return 0;

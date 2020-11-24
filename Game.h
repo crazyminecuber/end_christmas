@@ -40,7 +40,10 @@ public:
 	void load_entities(std::string const & file);
 	void handle_click(sf::Vector2f click);
 
-	void create_enemies();
+	void create_1_enemy_basic();
+	void create_1_enemy_boss();
+	void create_n_enemy_basic(int start_time, int amount, float interval);
+	void create_n_enemy_boss(int start_time, int amount, float interval);
 	void enemy_update_direction();
 	void enemy_update_position();
 
@@ -48,7 +51,8 @@ public:
 
 	void fire_towers();
 
-	static int get_frame();
+	int get_frame();
+	float get_fps();
 
 private:
 	sf::Vector2u window_size;
@@ -61,6 +65,8 @@ private:
 	void init_towers(nlohmann::json const & json_obj);
 	Health health;
 	//Tower_shop tower_shop;
+	int frame{0};
+	float fps{60};
 
 
 

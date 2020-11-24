@@ -3,7 +3,6 @@
 #include "Enemy_boss.h"
 #include <SFML/Graphics.hpp>
 
-
 void Enemy::set_direction(sf::Vector2f dir)
 {
     direction = dir;
@@ -15,7 +14,7 @@ void Enemy::new_basic()
 {
     Enemy_basic* e = new Enemy_basic{
         Enemy_basic::prop.texture_file, //Texture
-        Enemy::position_init, //Poistion
+        Enemy_basic::position_init, //Poistion
         Enemy_basic::prop.size, //Size
         Enemy_basic::prop.hit_rad,        //Hit_rad
         Enemy_basic::prop.dir,       //dir
@@ -43,7 +42,7 @@ void Enemy::new_boss()
 {
     Enemy_boss* e = new Enemy_boss{
         Enemy_boss::prop.texture_file, //Texture
-        Enemy::position_init, //Poistion
+        Enemy_boss::position_init, //Poistion
         Enemy_boss::prop.size, //Size
         Enemy_boss::prop.hit_rad,        //Hit_rad
         Enemy_boss::prop.dir,       //dir
@@ -60,6 +59,11 @@ void Enemy::delete_all_enemies()
         delete p;
     }
     Enemy::enemies.clear();
+}
+
+int Enemy::get_damage()
+{
+    return life;
 }
 
 std::vector<Enemy*> Enemy::enemies;

@@ -55,7 +55,8 @@ void Tile::set_direction(sf::Vector2f dir)
     dir = sf::Vector2f{0, 0}; // compiler don't likes "unused arguments"
 }
 
-void Tile::update_enemy(Enemy* enemy)
+float Tile::update_enemy(Enemy* enemy)
 {
     enemy->direction.x += 0; // compiler don't likes "unused arguments"
+    return 0;
 }
