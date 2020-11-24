@@ -23,22 +23,38 @@
             "Projectile_basic" :
                 {
                     "frames_to_live" : 300,
-                    "damage_init" : 1
+                    "damage_init" : 1,
+                    "texture" : "resources/textures/Projectile_basic.png",
+                    "size" : {"x" : 5, "y" : 5},
+                    "hit_rad" : 2.5,
+                    "mov_spd" : 5
                 },
             "Projectile_pierce" :
                 {
                     "frames_to_live" : 300,
-                    "damage_init" : 1
+                    "damage_init" : 1,
+                    "texture" : "resources/textures/Projectile_pierce.png",
+                    "size" : {"x" : 5, "y" : 5},
+                    "hit_rad" : 2.5,
+                    "mov_spd" : 5
                 },
             "Projectile_bomb" :
                 {
                     "frames_to_live" : 300,
-                    "damage_init" : 1
+                    "damage_init" : 1,
+                    "texture" : "resources/textures/Projectile_bomb.png",
+                    "size" : {"x" : 5, "y" : 5},
+                    "hit_rad" : 2.5,
+                    "mov_spd" : 5
                 },
             "Projectile_bomb_blast" :
                 {
-                    "frames_to_live" : 300,
-                    "damage_init" : 1
+                    "frames_to_live" : 20,
+                    "damage_init" : 1,
+                    "texture" : "resources/textures/Projectile_bomb_blast.png",
+                    "size" : {"x" : 10, "y" : 10},
+                    "hit_rad" : 5,
+                    "mov_spd" : 0
                 }
         },
     "Tower" :
