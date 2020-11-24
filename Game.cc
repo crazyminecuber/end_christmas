@@ -227,7 +227,7 @@ void Game::init_enemies(json const & json_obj)
     json enemy = json_obj["Enemy_basic"];
     Enemy_basic::life_init = enemy["life_init"];
 
-    json enemy = json_obj["Enemy_boss"];
+    enemy = json_obj["Enemy_boss"];
     Enemy_boss::life_init = enemy["life_init"];
 
 }
