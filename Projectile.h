@@ -7,9 +7,9 @@
 class Projectile : public Entity
 {
 public:
-  Projectile(std::string texture_file, sf::Vector2f position, sf::Vector2f siz,
+  Projectile(std::string texture_file, sf::Vector2f position, sf::Vector2f size,
         float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
-        Entity(texture_file, position, siz, hit_rad, dir, mov_spd),
+        Entity(texture_file, position, size, hit_rad, dir, mov_spd),
         damage{arg_damage}{}
 
   ~Projectile();
@@ -30,15 +30,21 @@ class Projectile_basic : public Projectile
 {
 public:
   Projectile_basic(std::string texture_file, sf::Vector2f position,
-       sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
-       Projectile(texture_file, position, siz, hit_rad, dir, mov_spd, arg_damage){}
+       sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
+       Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
   ~Projectile_basic() noexcept = default;
   Projectile_basic(Projectile_basic const& other); //Kopieringskonstruktor
-  Projectile* clone(sf::Vector2f direction) const;
+  void clone(sf::Vector2f direction, sf::Vector2f position);
   void collision();
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
+protected:
+  std::string texture_file;
+  float hit_rad;
+  float mov_spd;
+
+
 
 };
 
@@ -46,18 +52,21 @@ class Projectile_pierce : public Projectile
 {
 public:
   Projectile_pierce(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
-        Projectile(texture_file, position, siz, hit_rad, dir, mov_spd, arg_damage){}
+        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
+        Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
   ~Projectile_pierce() noexcept = default;
 
   Projectile_pierce(Projectile_pierce const& other); //Kopieringskonstruktor
-  Projectile* clone(sf::Vector2f direction) const;
+  void clone(sf::Vector2f direction, sf::Vector2f position);
   void collision();
   static int frames_to_live;
   static int damage_init;
   static int nr_pierce;
   static entity_properties prop;
 protected:
+  std::string texture_file;
+  float hit_rad;
+  float mov_spd;
   int nr_enemies_killed;
 
 };
@@ -66,17 +75,21 @@ class Projectile_bomb : public Projectile
 {
 public:
   Projectile_bomb(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
-        Projectile(texture_file, position, siz, hit_rad, dir, mov_spd, arg_damage){}
+        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
+        Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
   ~Projectile_bomb() noexcept = default;
 
   Projectile_bomb(Projectile_bomb const& other); //Kopieringskonstruktor
-  Projectile* clone(sf::Vector2f direction) const;
+  void clone(sf::Vector2f direction, sf::Vector2f position);
   void collision();
   void new_bomb_blast(sf::Vector2f position);
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
+protected:
+  std::string texture_file;
+  float hit_rad;
+  float mov_spd;
 
 };
 
@@ -84,8 +97,8 @@ class Projectile_bomb_blast : public Projectile
 {
 public:
   Projectile_bomb_blast(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f siz, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage)
-        : Projectile(texture_file, position, siz, hit_rad, dir, mov_spd, arg_damage){}
+        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage)
+        : Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
   ~Projectile_bomb_blast();
 
   Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
