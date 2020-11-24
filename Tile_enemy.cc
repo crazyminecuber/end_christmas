@@ -7,7 +7,7 @@ void Tile_enemy::init()
     Tile::tiles[index_position] = this;
 }
 
-void Tile_enemy::set_direction(sf::Vector2i dir)
+void Tile_enemy::set_direction(sf::Vector2f dir)
 {
     direction = dir;
 }

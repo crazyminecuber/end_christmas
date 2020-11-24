@@ -24,8 +24,8 @@ public:
     void update_side_length();
     sf::Vector2i get_index_position();
     //virtual Tower* on_click() {};
-    virtual void set_direction(sf::Vector2i dir);
-    virtual void update_enemy(Enemy* enemy) {};
+    virtual void set_direction(sf::Vector2f dir);
+    virtual void update_enemy(Enemy* enemy);
 
 
     /* static members and functions */
