@@ -6,6 +6,7 @@
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
 
 #include "Game.h"
+#include "Enemy.h"
 #include "Enemy_basic.h"
 #include "Enemy_boss.h"
 #include "Projectile.h"
@@ -237,15 +238,29 @@ bool Game::is_running()
 //     ifs.close();
 // }
 //
-// void Game::init_enemies(json const & json_obj)
-// {
-//     json enemy = json_obj["Enemy_basic"];
-//     Enemy_basic::life_init = enemy["life_init"];
-//
-//     enemy = json_obj["Enemy_boss"];
-//     Enemy_boss::life_init = enemy["life_init"];
-//
-// }
+ void Game::init_enemies(json const & json_obj)
+{
+    json enemy = json_obj["Enemy_basic"];
+    Enemy_basic::life_init = json_obj["life_init"];
+    //Enemy_basic::position_init = function
+    Enemy_basic::prop.texture_file = json_obj["texture"];
+    std::vector<float> size_basic{json_obj["size"]};
+    Enemy_basic::prop.size = sf::Vector2f(size_basic[0],size_basic[1]);
+    Enemy_basic::prop.hit_rad = json_obj["hit_rad"];
+    Enemy_basic::prop.dir = sf::Vector2f(0,0); //Will be set by tile
+    Enemy_basic::prop.mov_spd = json_obj["mov_spd"];
+
+
+    Enemy_boss::life_init = json_obj["life_init"];
+    //Enemy_basic::position_init = function
+    Enemy_boss::prop.texture_file = json_obj["texture"];
+    std::vector<float> size_boss{json_obj["size"]};
+    Enemy_boss::prop.size = sf::Vector2f(size_boss[0],size_boss[1]);
+    Enemy_boss::prop.hit_rad = json_obj["hit_rad"];
+    Enemy_boss::prop.dir = sf::Vector2f(0,0); //Will be set by tile
+    Enemy_boss::prop.mov_spd = json_obj["mov_spd"];
+
+}
 //
 // void Game::init_projectiles(json const & json_obj)
 // {
