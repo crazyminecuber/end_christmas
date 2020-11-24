@@ -29,10 +29,11 @@ using namespace std;
 int main ()
 {
     std::string map_file{"map.csv"};
+    sf::Vector2u window_size{1400, 800};
     int health{5};
-    Game game(map_file, health);
+    Game game(window_size, map_file, health);
 
-    while ( true )
+    while ( game.is_running() )
     {
         game.handle_events();
         game.render();

@@ -105,7 +105,8 @@ void Game::load_map(string const & file) //use file "map.csv"
     // calculate Tile::side_length and change all tiles
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
     int tiles_per_col = tile_index_pos.x + (1 - 2);
-    Tile::side_length = std::min(window_width/tiles_per_row, window_height/tiles_per_col);
+    Tile::side_length = std::min(window_size.x/tiles_per_row,
+                                 window_size.y/tiles_per_col);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -206,6 +207,11 @@ void Game::render()
         window.draw(*it->second);
     }
     window.display();
+}
+
+bool Game::is_running()
+{
+    return window.isOpen();
 }
 //
 // void Game::load_entities(string const & file)

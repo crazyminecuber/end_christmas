@@ -13,11 +13,12 @@ class Game final
 {
 public:
 	Game(){};
-	Game(std::string const & map_file,
+	Game(sf::Vector2u win_size, std::string const & map_file,
+		 int health
 		 /* std::string const & entity_file, */
 		 /*std::string const & shop_file,*/
-		 int health
-		 ) : health{health}/*, shop{shop_file}*/
+		 )
+		 : health{health}, window_size{win_size.x, win_size.y}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
 			//load_entities(entity_file);
@@ -42,7 +43,7 @@ public:
 	void render();
 	void create_enemies();
 	void fire_towers();
-	void set_window_size(int const width,int const height);
+	bool is_running(); // remove when we make StateMachine
 	static int get_frame();
 
 private:
@@ -53,9 +54,9 @@ private:
 	void init_towers(nlohmann::json const & json_obj);
 	int health;
 	//Tower_shop tower_shop;
-	unsigned int window_width{1400};
-	unsigned int window_height{800};
-    sf::RenderWindow window{sf::VideoMode{window_width, window_height}, "Tower defence"};
+	sf::Vector2u window_size;
+    sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
+	 						"Tower defence"};
 
 
 	Resource_manager resources{};
