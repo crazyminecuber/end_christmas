@@ -2,6 +2,7 @@
 #define PROJECTILE_H
 
 #include "Entity.h"
+#include <SFML/Graphics.hpp>
 #include <string>
 
 class Projectile : public Entity
@@ -14,7 +15,7 @@ public:
 
   ~Projectile();
 
-  Projectile(Projectile const& other); //Kopieringskonstruktor
+  Projectile(Projectile const& other):Entity(other){} //Kopieringskonstruktor
 
   void update_position();
   virtual void collision()=0;

@@ -54,7 +54,7 @@ private:
 	sf::Vector2u window_size;
     sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
 	 						"Tower defence"};
-	//Projectile* get_tower_projectile(std::string const & projectile); ta tillbaka när underklasserna till projectile är gjorda
+	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	void init_enemies(nlohmann::json const & json_obj);
 	void init_projectiles(nlohmann::json const & json_obj);

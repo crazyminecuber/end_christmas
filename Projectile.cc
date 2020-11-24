@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Game.h"
+#include "Entity.h"
 #include <SFML/Graphics.hpp>
 
 using namespace std;
