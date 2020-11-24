@@ -26,6 +26,8 @@ class Tower : public Entity
     void make_projectile(sf::Vector2f direction);
 
     static std::vector<Tower*> static_towers;
+    static float detection_radius_init;
+    static int fire_period_init;
 
   protected:
     std::vector<Entity*> shootable_enemies;

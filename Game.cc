@@ -26,32 +26,38 @@ using json = nlohmann::json;
 float Tile::side_length = 50; // flytta
 
 // Help function to determine init projectile for tower
-// Projectile* Game::get_tower_projectile(std::string const & projectile)
-// {
-//     if(projectile == "Projectile_basic")
-//     {
-//         return new Projectile_basic{};
-//     }
-//     else if(projectile == "Projectile_pierce")
-//     {
-//         return new Projectile_pierce{};
-//     }
-//     else if(projectile == "Projectile_bomb")
-//     {
-//         return new Projectile_bomb{};
-//     }
-// }
+/*
+Projectile* Game::get_tower_projectile(std::string const & projectile)
+{
+    sf::Vector2f double0{0,0};//7
+    if(projectile == "Projectile_basic")
+    {
+        return new Projectile_basic{double0,double0};
+    }
+    else if(projectile == "Projectile_pierce")
+    {
+        return new Projectile_pierce{double0,double0};
+    }
+    else if(projectile == "Projectile_bomb")
+    {
+        return new Projectile_bomb{double0,double0};
+    }
+    else
+    {
+        __throw_bad_function_call();
+    }
+}
 
-// // Help function to determine if object1 and object2 have collided
-// bool Game::collided(Entity const *object1, Entity const *object2)
-// {
-//     return (pow(object1->getPosition().x - object2->getPosition().x,2)
-//             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
-//             && pow(object1->getPosition().y - object2->getPosition().y,2)
-//             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
-//            );
-// }
-
+// Help function to determine if object1 and object2 have collided
+bool Game::collided(Entity const *object1, Entity const *object2)
+{
+    return (pow(object1->getPosition().x - object2->getPosition().x,2)
+            < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
+            && pow(object1->getPosition().y - object2->getPosition().y,2)
+            < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
+           );
+}
+*/
 void Game::load_map(string const & file) //use file "map.csv"
 {
     /* prepare variables needed for reading from file */
