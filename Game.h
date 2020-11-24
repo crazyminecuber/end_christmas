@@ -14,13 +14,13 @@ class Game final
 public:
 	Game(){};
 	Game(std::string const & map_file,
-		 std::string const & entity_file,
+		 /* std::string const & entity_file, */
 		 /*std::string const & shop_file,*/
 		 int health
 		 ) : health{health}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
-			load_entities(entity_file);
+			//load_entities(entity_file);
 		 };
 	void load_map(std::string const & file);
 	void determine_tile_directions();

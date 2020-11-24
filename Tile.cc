@@ -49,3 +49,8 @@ sf::Vector2i Tile::get_index_position()
 {
     return index_position;
 }
+
+void Tile::set_direction(sf::Vector2i dir)
+{
+    dir = sf::Vector2i{0, 0}; // compiler don't likes "unused arguments"
+}
