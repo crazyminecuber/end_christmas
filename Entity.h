@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Resource_manager.h"
 
 class Entity : public sf::Sprite
 {
