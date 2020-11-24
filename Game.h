@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Projectile.h"
 #include "json.hpp"
+#include "Projectile.h"
 
 class Game final
 {

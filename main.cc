@@ -1,6 +1,5 @@
 #include <iomanip>
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
@@ -20,22 +19,6 @@
 #include <vector>
 
 using namespace std;
-using json = nlohmann::json;
-std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector);
-std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector);
-
-int const width  {1400};
-int const height {800};
-float Tile::side_length = 50;
-std::map<std::string, sf::Texture> Resource_manager::resources;
-
-void render();
-void load_map(sf::RenderWindow const& window);
-void render(sf::RenderWindow & window);
-void determine_tile_directions();
-bool is_tile_enemy(sf::Vector2i index);
-bool is_tile_enemy_start(sf::Vector2i index);
-bool is_tile_enemy_end(sf::Vector2i index);
 
 // using namespace sf;
 //

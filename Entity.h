@@ -24,7 +24,7 @@ public:
 
 
 protected:
-    sf::Vector2u size; //Ska den vara Vector2u och inte Vector2f?
+    sf::Vector2f size; //Ska den vara Vector2u och inte Vector2f?
     float hitbox_radius;
 public:
     sf::Vector2f direction;
