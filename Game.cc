@@ -135,19 +135,19 @@ void Game::determine_tile_directions()
     /* find enemy_end tile */
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
-        if ( is_tile_enemy_end((*it).first) )
+        if ( Tile::is_tile_enemy_end((*it).first) )
             enemy_end = (*it).second->get_index_position();
     }
     current_tile = enemy_end;
 
     /* loop through enemy path backwards and set set direction of tile */
-    while ( !(is_tile_enemy_start(current_tile)) )
+    while ( !(Tile::is_tile_enemy_start(current_tile)) )
     {
         /* if (tile exists) and (tile is enemy) and (tile is not last tile) */
         // look up
         if ( Tile::tiles.find(current_tile + sf::Vector2i{0, -1})  !=
                 Tile::tiles.end()                                  &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{0, -1})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{0, -1})) &&
              last_tile !=    (current_tile + sf::Vector2i{0, -1})     )
         {
             next_tile = current_tile + sf::Vector2i{0, -1};
@@ -155,7 +155,7 @@ void Game::determine_tile_directions()
         // look right
         if ( Tile::tiles.find(current_tile + sf::Vector2i{1, 0})  !=
                 Tile::tiles.end()                                 &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{1, 0})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{1, 0})) &&
              last_tile !=    (current_tile + sf::Vector2i{1, 0})     )
         {
             next_tile = current_tile + sf::Vector2i{1, 0};
@@ -163,7 +163,7 @@ void Game::determine_tile_directions()
         // look down
         if ( Tile::tiles.find(current_tile + sf::Vector2i{0, 1})  !=
                 Tile::tiles.end()                                 &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{0, 1})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{0, 1})) &&
              last_tile !=    (current_tile + sf::Vector2i{0, 1})     )
         {
             next_tile = current_tile + sf::Vector2i{0, 1};
@@ -171,7 +171,7 @@ void Game::determine_tile_directions()
         // look left
         if ( Tile::tiles.find(current_tile + sf::Vector2i{-1, 0})  !=
                 Tile::tiles.end()                                  &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{-1, 0})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{-1, 0})) &&
              last_tile !=    (current_tile + sf::Vector2i{-1, 0})     )
         {
             next_tile = current_tile + sf::Vector2i{-1, 0};
@@ -186,24 +186,6 @@ void Game::determine_tile_directions()
         direction.y = last_tile.y - current_tile.y;
         Tile::get_tile_by_index(current_tile)->set_direction(direction);
     }
-}
-
-bool Game::is_tile_enemy(sf::Vector2i index)
-{
-    return  ( !(dynamic_cast<Tile_enemy*>
-                (Tile::get_tile_by_index(index)) == nullptr) );
-}
-
-bool Game::is_tile_enemy_start(sf::Vector2i index)
-{
-    return  ( !(dynamic_cast<Tile_enemy_start*>
-                (Tile::get_tile_by_index(index)) == nullptr) );
-}
-
-bool Game::is_tile_enemy_end(sf::Vector2i index)
-{
-    return  ( !(dynamic_cast<Tile_enemy_end*>
-                (Tile::get_tile_by_index(index)) == nullptr) );
 }
 
 void Game::render()
@@ -244,6 +226,9 @@ void Game::enemy_update_direction()
     for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
     {
         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
+        // maybe change this later so that the deletion is done inside
+        // tile_enemy_end instead. Have to change flow of information
+        // between damage and health then too. 
         if ( tile->update_enemy(*it) > 0 )
         {
             damage_dealt += tile->update_enemy(*it);
@@ -280,9 +265,14 @@ void Game::load_entities(string const & file)
 
  void Game::init_enemies(json const & json_obj)
 {
+    /* position_init */
+    sf::Vector2f tile_enemy_start_position;
+    tile_enemy_start_position = Tile::get_tile_enemy_start()->getPosition();
+    Enemy::position_init = tile_enemy_start_position;
+
+    /* Enemy_basic */
     json enemy_basic = json_obj["Enemy_basic"];
     Enemy_basic::life_init = enemy_basic["life_init"];
-    Enemy_basic::position_init = sf::Vector2f{40, 120};
     Enemy_basic::prop.texture_file = enemy_basic["texture"];
     sf::Vector2f size_basic;
     size_basic.x = enemy_basic["size"][0];
@@ -292,9 +282,9 @@ void Game::load_entities(string const & file)
     Enemy_basic::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Enemy_basic::prop.mov_spd = enemy_basic["mov_spd"];
 
+    /* Enemy_boss */
     json enemy_boss = json_obj["Enemy_boss"];
     Enemy_boss::life_init = enemy_boss["life_init"];
-    //Enemy_boss::position_init = sf::Vector2f{500, 500}; // ERROR, this one seems to write over Enemy_basic::position_init
     Enemy_boss::prop.texture_file = enemy_boss["texture"];
     sf::Vector2f size_boss;
     size_boss.x = enemy_boss["size"][0];
@@ -303,6 +293,9 @@ void Game::load_entities(string const & file)
     Enemy_boss::prop.hit_rad = enemy_boss["hit_rad"];
     Enemy_boss::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
+
+    // std::cout << Enemy_basic::position_init << std::endl;
+    // std::cout << Enemy_boss::position_init << std::endl;
 }
 
 void Game::create_1_enemy_basic()
@@ -478,10 +471,25 @@ void Game::handle_input()
 
 void Game::update_logic()
 {
-    if ( Enemy::enemies.size() > 0 )
-    {
-        enemy_update_direction();
-        enemy_update_position();
-    }
+    create_n_enemy_basic(0, 10, 0.5);
+    create_n_enemy_basic(8, 4, 0.25);
+    create_n_enemy_boss(5, 1, 0.5);
+
+    enemy_update_direction();
+    enemy_update_position();
     frame++;
 }
+
+/* overload stream operator för sf::Vector2f */
+// std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector)
+// {
+//     output << "(" << vector.x << ", " << vector.y << ")";
+//     return output;
+// }
+//
+// /* overload stream operator för sf::Vector2i */
+// std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector)
+// {
+//     output << "(" << vector.x << ", " << vector.y << ")";
+//     return output;
+// }

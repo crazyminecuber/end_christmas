@@ -20,10 +20,10 @@ public:
     :Entity(texture_file, position,
         size, hit_rad,
         dir, mov_spd),
-        life{arg_life}{}
+        life{arg_life}
+    {}
 
     virtual void collision(Entity* object) = 0;
-    void set_direction(sf::Vector2f dir);
     int get_damage();
 
     //Statics

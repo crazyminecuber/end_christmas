@@ -15,7 +15,8 @@ public:
     :Enemy(texture_file, position,
         size, hit_rad,
         dir, mov_spd,
-        arg_life){}
+        arg_life)
+    {}
 
     ~Enemy_basic();
 

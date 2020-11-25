@@ -42,9 +42,6 @@ int main ()
 
     while ( game.is_running() )
     {
-        game.create_n_enemy_basic(0, 10, 0.5);
-        game.create_n_enemy_basic(8, 4, 0.25);
-        //game.create_n_enemy_boss(0, 1, 0.5);
         game.handle_input();
         game.update_logic();
         game.render();
@@ -220,19 +217,6 @@ void throttle(double fps, sf::Clock & clock)
 //     window.display();
 // }
 //
-// /* overload stream operator för sf::Vector2f */
-// std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector)
-// {
-//     output << "(" << vector.x << ", " << vector.y << ")";
-//     return output;
-// }
-//
-// /* overload stream operator för sf::Vector2i */
-// std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector)
-// {
-//     output << "(" << vector.x << ", " << vector.y << ")";
-//     return output;
-// }
 
 // int main ()
 // {

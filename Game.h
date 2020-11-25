@@ -31,9 +31,6 @@ public:
 
 	void load_map(std::string const & file);
 	void determine_tile_directions();
-	bool is_tile_enemy(sf::Vector2i index);
-	bool is_tile_enemy_start(sf::Vector2i index);
-	bool is_tile_enemy_end(sf::Vector2i index);
 
 	bool is_running(); // remove when we make StateMachine
 	void check_collision();
@@ -53,6 +50,11 @@ public:
 
 	int get_frame();
 	float get_fps();
+
+	// operator overload
+	// std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector);
+	// std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector);
+
 
 private:
 	sf::Vector2u window_size;

@@ -33,6 +33,11 @@ public:
     static float side_length;
     static Tile* get_tile_by_coord(sf::Vector2f coord_pos);
     static Tile* get_tile_by_index(sf::Vector2i index);
+    static Tile* get_tile_enemy_start();
+    static Tile* get_tile_enemy_end();
+    static bool is_tile_enemy(sf::Vector2i index);
+	static bool is_tile_enemy_start(sf::Vector2i index);
+	static bool is_tile_enemy_end(sf::Vector2i index);
 
 protected:
     sf::RenderWindow const& window;

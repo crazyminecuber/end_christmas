@@ -16,6 +16,7 @@ public:
     }
 
     void set_direction(sf::Vector2f dir) override;
+    bool ready_to_update_enemy(Enemy* enemy);
     virtual float update_enemy(Enemy* enemy);
     //Tower* on_click() override;
 
