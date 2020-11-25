@@ -9,6 +9,7 @@ Tower_properties Tower_ring::tower_prop;
 entity_properties Tower_ring::entity_prop;
 Tower_properties Tower_basic::tower_prop;
 entity_properties Tower_basic::entity_prop;
+vector<Tower*> Tower::static_towers;
 
 //Functions for the class Tower
 void Tower::collision(Entity* object)
@@ -33,12 +34,10 @@ void Tower::make_projectile(sf::Vector2f direction)
           Projectile::prop.mov_spd,          //mov_spd
       };
       Projectile::projectiles.push_back(p);
-      */
-
+*/
 }
 
 //Functions for the class Tower_basic
-Tower_basic::~Tower_basic(){}
 
 void Tower_basic::shoot()
 {
@@ -76,7 +75,6 @@ sf::Vector2f Tower_basic::aim()
 }
 
 //Function shoot in the class Tower_ring.
-Tower_ring::~Tower_ring(){}
 
 // skall igentiligen skjuta num_of_projectile st skott på efter varandra, med några frames i mellan
 // Blir ganska komplicerat att implementera så jag förslår att vi till en början

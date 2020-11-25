@@ -31,6 +31,7 @@ class Tower : public Entity
         size, hit_rad,
         dir, mov_spd),
         level{arg_level}, cost{_cost}{}
+    ~Tower()=default;
 
     void collision(Entity* object);
     virtual void shoot()=0;
@@ -64,7 +65,7 @@ public:
       size, hit_rad,
       dir, mov_spd, arg_level, cost){}
 
-  ~Tower_basic();
+  ~Tower_basic()=default;
 
   void shoot() override;
   Entity * select_target();
@@ -83,7 +84,7 @@ public:
   : Tower(texture_file, position,
       size, hit_rad,
       dir, mov_spd, arg_level, cost){}
-  ~Tower_ring();
+  ~Tower_ring()=default;
 
   void shoot() override;
   static Tower_properties tower_prop;
