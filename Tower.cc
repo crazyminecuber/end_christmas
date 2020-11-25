@@ -5,6 +5,10 @@
 #include <vector>
 using namespace std;
 
+Tower_properties Tower_ring::tower_prop;
+entity_properties Tower_ring::entity_prop;
+Tower_properties Tower_basic::tower_prop;
+entity_properties Tower_basic::entity_prop;
 
 //Functions for the class Tower
 void Tower::collision(Entity* object)

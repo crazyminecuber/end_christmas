@@ -24,6 +24,7 @@
 using namespace std;
 using json = nlohmann::json;
 float Tile::side_length = 50; // flytta
+int Game::frame =0;
 
 
 /*

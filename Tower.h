@@ -8,6 +8,17 @@
 #include "Projectile.h"
 
 
+struct Tower_properties
+{
+  sf::Sprite sprite_init;
+  int frames_to_wait_init;
+  Projectile *projectile_init;
+  sf::Sprite shop_sprite_init;
+  int cost_init;
+  float detection_radius_init;
+  int fire_period_init;
+};
+
 
 class Tower : public Entity
 {
@@ -26,8 +37,6 @@ class Tower : public Entity
     void make_projectile(sf::Vector2f direction);
 
     static std::vector<Tower*> static_towers;
-    static float detection_radius_init;
-    static int fire_period_init;
 
   protected:
     std::vector<Entity*> shootable_enemies;
@@ -60,13 +69,8 @@ public:
   void shoot() override;
   Entity * select_target();
   sf::Vector2f aim();
-
-  static Sprite sprite_init;
-  static int frames_to_wait_init;
-  static Projectile *projectile_init;
-  static int fire_period_init;
-  static Sprite shop_sprite_init;
-  static int cost_init;
+  static Tower_properties tower_prop;
+  static entity_properties entity_prop;
 };
 
 class Tower_ring : public Tower
@@ -82,15 +86,11 @@ public:
   ~Tower_ring();
 
   void shoot() override;
+  static Tower_properties tower_prop;
+  static entity_properties entity_prop;
 
-  static Sprite sprite_init;
-  static int frames_to_wait_init;
-  static Projectile *projectile_init;
-  static Sprite shop_sprite_init;
-  static int cost_init;
 protected:
   int num_of_projectile;
 };
-
 
 #endif
