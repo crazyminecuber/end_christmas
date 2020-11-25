@@ -40,8 +40,6 @@ int main ()
     sf::Clock clock;
 
     game.load_entities("entity.json");
-    Projectile_basic *p = new Projectile_basic(sf::Vector2f(100,100),sf::Vector2f(-1,0));
-    p->clone(sf::Vector2f(0.5,0.5),sf::Vector2f(200,100));
 
     while ( game.is_running() )
     {

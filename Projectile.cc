@@ -22,7 +22,7 @@ void Projectile::update_position()
         {
             projectiles.erase(std::remove(projectiles.begin(),
                   projectiles.end(), this), projectiles.end());
-            delete &*this;
+            //delete &*this;
         }
     }
 
