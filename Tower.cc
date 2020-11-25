@@ -78,8 +78,7 @@ sf::Vector2f Tower_basic::aim()
 //Function shoot in the class Tower_ring.
 Tower_ring::~Tower_ring(){}
 
-
-// skall igentiligen skjuta 8 skott på efter varandra, med några frames i mellan
+// skall igentiligen skjuta num_of_projectile st skott på efter varandra, med några frames i mellan
 // Blir ganska komplicerat att implementera så jag förslår att vi till en början
 // skjuter 8 skott i samma frame.
 void Tower_ring::shoot()
