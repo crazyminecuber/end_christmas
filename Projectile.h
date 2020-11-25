@@ -13,7 +13,7 @@ public:
         Entity(texture_file, position, size, hit_rad, dir, mov_spd),
         damage{arg_damage}{}
 
-  ~Projectile();
+  ~Projectile()=default;
 
   Projectile(Projectile const& other):Entity(other){} //Kopieringskonstruktor
 
@@ -34,23 +34,8 @@ public:
   Projectile_basic(std::string texture_file, sf::Vector2f position,
        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
        Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
-  Projectile_basic
-  (
-    sf::Vector2f position,
-    sf::Vector2f direction
-  )
-    : Projectile
-      (
-        prop.texture_file,
-        position,
-        prop.size,
-        prop.hit_rad,
-        direction,
-        prop.mov_spd,
-        damage_init
-      )
-  {}
-  ~Projectile_basic() noexcept = default;
+  Projectile_basic(sf::Vector2f position, sf::Vector2f direction);
+  ~Projectile_basic() = default;
   Projectile_basic(Projectile_basic const& other); //Kopieringskonstruktor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
   void collision();
@@ -70,23 +55,8 @@ public:
   Projectile_pierce(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
         Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
-  Projectile_pierce
-  (
-    sf::Vector2f position,
-    sf::Vector2f direction
-  )
-    : Projectile
-      (
-        prop.texture_file,
-        position,
-        prop.size,
-        prop.hit_rad,
-        direction,
-        prop.mov_spd,
-        damage_init
-      )
-  {}
-  ~Projectile_pierce() noexcept = default;
+  Projectile_pierce(sf::Vector2f position,sf::Vector2f direction);
+  ~Projectile_pierce() = default;
 
   Projectile_pierce(Projectile_pierce const& other); //Kopieringskonstruktor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
@@ -109,23 +79,8 @@ public:
   Projectile_bomb(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
         Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
-  Projectile_bomb
-  (
-    sf::Vector2f position,
-    sf::Vector2f direction
-  )
-    : Projectile
-      (
-        prop.texture_file,
-        position,
-        prop.size,
-        prop.hit_rad,
-        direction,
-        prop.mov_spd,
-        damage_init
-      )
-  {}
-  ~Projectile_bomb() noexcept = default;
+  Projectile_bomb(sf::Vector2f position, sf::Vector2f direction);
+  ~Projectile_bomb() = default;
 
   Projectile_bomb(Projectile_bomb const& other); //Kopieringskonstruktor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
@@ -145,9 +100,8 @@ class Projectile_bomb_blast : public Projectile
 {
 public:
   Projectile_bomb_blast(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd)
-        : Projectile(texture_file, position, size, hit_rad, dir, mov_spd, damage_init){}
-  ~Projectile_bomb_blast();
+        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd);
+  ~Projectile_bomb_blast()=default;
 
   Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
   void update_rad();
