@@ -56,8 +56,8 @@ Projectile_basic::Projectile_basic(Projectile_basic const& other)
 void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_basic* p = new Projectile_basic{*this};
-  direction = dir;
-  setPosition(pos);
+  p->direction = dir;
+  p->setPosition(pos);
   projectiles.push_back(p);
 }
 //Removes and delete the porjectile when collided with an enemy
@@ -104,8 +104,8 @@ Projectile_pierce::Projectile_pierce(Projectile_pierce const& other)
 void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_pierce* p = new Projectile_pierce{*this};
-  direction = dir;
-  setPosition(pos);
+  p->direction = dir;
+  p->setPosition(pos);
   projectiles.push_back(p);
 }
 //Counts nr of enemies killed and remove and delete the projectile when
@@ -162,8 +162,8 @@ Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
 void  Projectile_bomb::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_bomb* p = new Projectile_bomb{*this};
-  direction = dir;
-  setPosition(pos);
+  p->direction = dir;
+  p->setPosition(pos);
   projectiles.push_back(p);
 }
 
