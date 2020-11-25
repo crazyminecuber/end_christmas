@@ -24,14 +24,12 @@ void Projectile::update_position()
                   projectiles.end(), this), projectiles.end());
             delete &*this;
         }
-
     }
 
 //entity_properties Projectile::prop;
 
 
 //Tillhör Projectile_basic
-
 
 //Kopieringskonstruktor som lägger in i lista
 Projectile_basic::Projectile_basic(Projectile_basic const& other)
@@ -55,6 +53,8 @@ void Projectile_basic::collision()
       delete &*this;
     }
 entity_properties Projectile_basic::prop;
+int Projectile_basic::frames_to_live;
+int Projectile_basic::damage_init;
 
 //Tillhör Projectile_pierce
 //Kopieringskonstruktor som lägger in i lista
@@ -89,6 +89,7 @@ void Projectile_pierce::collision()
 }
 
 entity_properties Projectile_pierce::prop;
+
 
 //Funktion som tillhör Projectile_bomb
 //Kopieringskonstruktor som lägger in i lista
