@@ -10,15 +10,12 @@ public:
     Tile_tower(std::string texture_file, sf::RenderWindow const& win,
                sf::Vector2i index_pos)
     : Tile(texture_file, win, index_pos)
-    {
-        init();
-    }
+    {}
 
     //bool is_occupied();
     //Tower* on_click() override;
 
 private:
-    void init();
     //Tower* tower{nullptr};
 };
 

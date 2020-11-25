@@ -4,11 +4,6 @@
 #include <iostream> //debugg
 //#include "Enemy.h"
 
-void Tile_enemy::init()
-{
-    Tile::tiles[index_position] = this;
-}
-
 void Tile_enemy::set_direction(sf::Vector2f dir)
 {
     direction = dir;

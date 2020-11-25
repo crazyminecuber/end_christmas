@@ -79,23 +79,23 @@ void Game::load_map(string const & file) //use file "map.csv"
             }
             else if ( num == 0 )
             {
-                new Tile_nothing("resources/textures/stones.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_nothing("resources/textures/stones.jpg", window, tile_index_pos);
             }
             else if ( num == 1 )
             {
-                new Tile_tower("resources/textures/grass.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_tower("resources/textures/grass.jpg", window, tile_index_pos);
             }
             else if ( num == 2 )
             {
-                new Tile_enemy("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy("resources/textures/dirt.jpg", window, tile_index_pos);
             }
             else if ( num == 3 )
             {
-                new Tile_enemy_start("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy_start("resources/textures/dirt.jpg", window, tile_index_pos);
             }
             else if ( num == 4 )
             {
-                new Tile_enemy_end("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy_end("resources/textures/dirt.jpg", window, tile_index_pos);
             }
             else
             {
@@ -228,7 +228,7 @@ void Game::enemy_update_direction()
         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
         // maybe change this later so that the deletion is done inside
         // tile_enemy_end instead. Have to change flow of information
-        // between damage and health then too. 
+        // between damage and health then too.
         if ( tile->update_enemy(*it) > 0 )
         {
             damage_dealt += tile->update_enemy(*it);
@@ -267,7 +267,10 @@ void Game::load_entities(string const & file)
 {
     /* position_init */
     sf::Vector2f tile_enemy_start_position;
-    tile_enemy_start_position = Tile::get_tile_enemy_start()->getPosition();
+    tile_enemy_start_position = Tile::get_tile_enemy_start()->getPosition() +
+                                sf::Vector2f{(Tile::side_length / 2.f),
+                                             (Tile::side_length / 2.f) };
+    std::cout << tile_enemy_start_position.x << ", " << tile_enemy_start_position.y << std::endl;
     Enemy::position_init = tile_enemy_start_position;
 
     /* Enemy_basic */
@@ -279,7 +282,7 @@ void Game::load_entities(string const & file)
     size_basic.y = enemy_basic["size"][1];
     Enemy_basic::prop.size = sf::Vector2f{size_basic};
     Enemy_basic::prop.hit_rad = enemy_basic["hit_rad"];
-    Enemy_basic::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Enemy_basic::prop.dir = sf::Vector2f{1, 0}; //Will be set by tile
     Enemy_basic::prop.mov_spd = enemy_basic["mov_spd"];
 
     /* Enemy_boss */
