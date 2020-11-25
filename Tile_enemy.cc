@@ -29,7 +29,7 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     if ( enemy->get_direction() == sf::Vector2f{1, 0} )
     {
         if ( (enemy->getPosition().x + (enemy->getGlobalBounds().width / 2)) >
-             (coord_position         + (Tile::side_length / 2))                )
+             (coord_position.x       + (Tile::side_length / 2))                )
         {
             return true;
         }
