@@ -2,12 +2,11 @@
 #define GAME_H
 #include <string>
 #include <vector>
-#include "Tower_shop.h"
+//#include "Tower_shop.h"
 #include "Resource_manager.h"
 #include "Entity.h"
 #include "Projectile.h"
 #include "json.hpp"
-#include "Projectile.h"
 #include "Health.h"
 
 class Game final
@@ -51,7 +50,7 @@ public:
 
 	void fire_towers();
 
-	int get_frame();
+	static int get_frame();
 	float get_fps();
 
 private:
@@ -65,7 +64,7 @@ private:
 	void init_towers(nlohmann::json const & json_obj);
 	Health health;
 	//Tower_shop tower_shop;
-	int frame{0};
+	static int frame;
 	float fps{60};
 
 

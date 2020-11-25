@@ -55,6 +55,10 @@ void Projectile_basic::collision()
       delete &*this;
     }
 entity_properties Projectile_basic::prop;
+int Projectile_basic::frames_to_live;
+int Projectile_basic::damage_init;
+
+
 
 //Tillhör Projectile_pierce
 //Kopieringskonstruktor som lägger in i lista
@@ -89,6 +93,9 @@ void Projectile_pierce::collision()
 }
 
 entity_properties Projectile_pierce::prop;
+int Projectile_pierce::frames_to_live;
+int Projectile_pierce::damage_init;
+int Projectile_pierce::nr_pierce;
 
 //Funktion som tillhör Projectile_bomb
 //Kopieringskonstruktor som lägger in i lista
@@ -131,6 +138,8 @@ void Projectile_bomb::new_bomb_blast(sf::Vector2f position)
 }
 
 entity_properties Projectile_bomb::prop;
+int Projectile_bomb::frames_to_live;
+int Projectile_bomb::damage_init;
 
 // Gör om bomb_blast så att den endast innehåller rad, texture, mm,
 //Funktion som tillhör Projectile_bomb_blast
@@ -149,3 +158,5 @@ void Projectile_bomb_blast::collision()
 }
 
 entity_properties Projectile_bomb_blast::prop;
+int Projectile_bomb_blast::frames_to_live;
+int Projectile_bomb_blast::damage_init;
