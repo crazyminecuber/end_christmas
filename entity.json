@@ -7,7 +7,7 @@
                     "texture" : "resources/textures/Santa.png",
                     "size": [80,60],
                     "hit_rad": 10,
-                    "mov_spd": 1
+                    "mov_spd": 3
                 },
             "Enemy_boss" :
                 {

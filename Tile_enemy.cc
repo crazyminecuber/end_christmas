@@ -25,16 +25,45 @@ float Tile_enemy::update_enemy(Enemy* enemy)
 
 bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
 {
+    bool ready_check{false};
     // moving right
     if ( enemy->get_direction() == sf::Vector2f{1, 0} )
     {
         if ( (enemy->getPosition().x + (enemy->getGlobalBounds().width / 2)) >
              (coord_position.x       + (Tile::side_length / 2))                )
         {
-            return true;
+            ready_check = true;
         }
     }
-    return false;
+    // moving left
+    else if ( enemy->get_direction() == sf::Vector2f{-1, 0} )
+    {
+        if ( (enemy->getPosition().x + (enemy->getGlobalBounds().width / 2)) <
+             (coord_position.x       + (Tile::side_length / 2))                )
+        {
+            ready_check = true;
+        }
+    }
+    // moving up
+    else if ( enemy->get_direction() == sf::Vector2f{0, -1} )
+    {
+        if ( (enemy->getPosition().y + (enemy->getGlobalBounds().height / 2)) <
+             (coord_position.y       + (Tile::side_length / 2))                )
+        {
+            ready_check = true;
+        }
+    }
+    // moving down
+    else if ( enemy->get_direction() == sf::Vector2f{0, 1} )
+    {
+        if ( (enemy->getPosition().y + (enemy->getGlobalBounds().height / 2)) >
+             (coord_position.y       + (Tile::side_length / 2))                )
+        {
+            ready_check = true;
+        }
+    }
+
+    return ready_check;
 }
 
 //
