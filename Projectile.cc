@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Game.h"
+#include "Entity.h"
 #include <SFML/Graphics.hpp>
 
 using namespace std;
@@ -19,7 +20,6 @@ void Projectile::update_position()
         }
         else
         {
-            // kanske returnera något så att game kan ta bort *this ur projectiles och destruera. Annars kommer de finnas pekare i projectiles som pekar på borttagna object väl?
             projectiles.erase(std::remove(projectiles.begin(),
                   projectiles.end(), this), projectiles.end());
             delete &*this;
@@ -27,28 +27,24 @@ void Projectile::update_position()
 
     }
 
-entity_properties Projectile::prop;
+//entity_properties Projectile::prop;
 
 
 //Tillhör Projectile_basic
+
+
 //Kopieringskonstruktor som lägger in i lista
 Projectile_basic::Projectile_basic(Projectile_basic const& other)
     : Projectile(other)
 {
     frame_to_die = Game::get_frame() + frames_to_live;
-    projectiles.push_back(& *this);
 }
 //clone and add direction void clone(sf::Vector2f direction, sf::Vector2f position)
-void Projectile_basic::clone(sf::Vector2f direction, sf::Vector2f position)
+void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
-  Projectile_basic* p = new Projectile_basic{
-      texture_file,  //Texture
-      position,     //Poistion
-      size,        //Size
-      hit_rad,    //Hit_rad
-      direction, //dir
-      mov_spd,  //mov_spd
-      damage};
+  Projectile_basic* p = new Projectile_basic{*this};
+  direction = dir;
+  setPosition(pos);
   projectiles.push_back(p);
 }
 //Removes and delete the porjectile when collided with an enemy
@@ -66,20 +62,14 @@ Projectile_pierce::Projectile_pierce(Projectile_pierce const& other)
     : Projectile(other)
 {
     frame_to_die = Game::get_frame() + frames_to_live;
-    projectiles.push_back(& *this);
 }
 //clone and add direction
-void Projectile_pierce::clone(sf::Vector2f direction, sf::Vector2f position)
+void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
-  Projectile_pierce* p = new Projectile_pierce{
-    texture_file,  //Texture
-    position,     //Poistion
-    size,        //Size
-    hit_rad,    //Hit_rad
-    direction, //dir
-    mov_spd,  //mov_spd
-    damage};
-projectiles.push_back(p);
+  Projectile_pierce* p = new Projectile_pierce{*this};
+  direction = dir;
+  setPosition(pos);
+  projectiles.push_back(p);
 }
 //Counts nr of enemies killed and remove and delete the projectile when
 // nr_pierce nr of enemies is killed
@@ -109,17 +99,12 @@ Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
   projectiles.push_back(& *this);
 }
 //clone and add direction
-void  Projectile_bomb::clone(sf::Vector2f direction, sf::Vector2f position)
+void  Projectile_bomb::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
-  Projectile_bomb* p = new Projectile_bomb{
-    texture_file,  //Texture
-    position,     //Poistion
-    size,        //Size
-    hit_rad,    //Hit_rad
-    direction, //dir
-    mov_spd,  //mov_spd
-    damage};
-projectiles.push_back(p);
+  Projectile_bomb* p = new Projectile_bomb{*this};
+  direction = dir;
+  setPosition(pos);
+  projectiles.push_back(p);
 }
 
 //adds bomb_blast to projectiles vector and remove and delete the projectile
@@ -136,13 +121,12 @@ void Projectile_bomb::collision()
 void Projectile_bomb::new_bomb_blast(sf::Vector2f position)
 {
     Projectile_bomb_blast* p = new Projectile_bomb_blast{
-      texture_file,  //Texture
+      Projectile_bomb_blast::prop.texture_file,  //Texture
       position,     //Poistion
-      size,        //Size
-      hit_rad,    //Hit_rad
-      direction, //dir
-      mov_spd,  //mov_spd
-      damage};
+      Projectile_bomb_blast::prop.size,        //Size
+      Projectile_bomb_blast::prop.hit_rad,    //Hit_rad
+      Projectile_bomb_blast::prop.dir, //dir
+      Projectile_bomb_blast::prop.mov_spd};  //mov_spd
   projectiles.push_back(p);
 }
 

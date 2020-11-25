@@ -50,7 +50,13 @@ sf::Vector2i Tile::get_index_position()
     return index_position;
 }
 
-void Tile::set_direction(sf::Vector2i dir)
+void Tile::set_direction(sf::Vector2f dir)
 {
-    dir = sf::Vector2i{0, 0}; // compiler don't likes "unused arguments"
+    dir = sf::Vector2f{0, 0}; // compiler don't likes "unused arguments"
+}
+
+float Tile::update_enemy(Enemy* enemy)
+{
+    enemy->direction.x += 0; // compiler don't likes "unused arguments"
+    return 0;
 }

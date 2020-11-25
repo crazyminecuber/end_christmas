@@ -22,6 +22,10 @@ public:
         dir, mov_spd),
         life{arg_life}{}
 
+    virtual void collision(Entity* object) = 0;
+    void set_direction(sf::Vector2f dir);
+    int get_damage();
+
     //Statics
     static void new_basic();
     static void new_basic(sf::Vector2f position);
@@ -30,9 +34,6 @@ public:
     static void delete_all_enemies();
     static std::vector<Enemy*> enemies;
     static sf::Vector2f position_init; //Enemies should start at same positions
-
-    virtual void collision(Entity* object) = 0;
-
 
     protected:
         int life;

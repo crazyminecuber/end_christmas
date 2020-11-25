@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map> // kanske ändra till unordered_map?
 #include "Resource_manager.h"
+#include "Enemy.h"
 
 struct cmpTileByCoord;
 
@@ -23,7 +24,9 @@ public:
     void update_side_length();
     sf::Vector2i get_index_position();
     //virtual Tower* on_click() {};
-    virtual void set_direction(sf::Vector2i dir);
+    virtual void set_direction(sf::Vector2f dir);
+    virtual float update_enemy(Enemy* enemy);
+
 
     /* static members and functions */
     static std::map<sf::Vector2i, Tile*, cmpTileByCoord> tiles;
