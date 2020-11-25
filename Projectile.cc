@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Game.h"
+#include "Entity.h"
 #include <SFML/Graphics.hpp>
 
 using namespace std;
@@ -26,7 +27,7 @@ void Projectile::update_position()
 
     }
 
-entity_properties Projectile::prop;
+//entity_properties Projectile::prop;
 
 
 //Tillhör Projectile_basic

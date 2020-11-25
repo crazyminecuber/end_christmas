@@ -26,18 +26,41 @@ using namespace std;
 // int const width  { 1000 };
 // int const height { 800 };
 
+
+void throttle(double fps, sf::Clock & clock);
+
+
 int main ()
 {
     std::string map_file{"map.csv"};
-    int health{5};
-    Game game(map_file, health);
+    sf::Vector2u window_size{1400, 800};
+    int health{100};
+    Game game(window_size, map_file, health);
+    sf::Clock clock;
 
-    while ( true )
+    game.load_entities("entity.json");
+
+    while ( game.is_running() )
     {
+        game.create_n_enemy_basic(0, 10, 0.5);
+        game.create_n_enemy_basic(8, 4, 0.25);
+        //game.create_n_enemy_boss(0, 1, 0.5);
+        game.handle_input();
+        game.update_logic();
         game.render();
+
+        throttle(game.get_fps(), clock);
     }
 
     return 0;
+}
+
+void throttle(double fps, sf::Clock & clock)
+{
+    auto const target{sf::milliseconds(1000.0/fps)};
+    auto wait_time{target - clock.getElapsedTime()};
+    sleep(wait_time);
+    clock.restart();
 }
 
 // void load_map(sf::RenderWindow const& window)

@@ -8,54 +8,66 @@
 #include "Projectile.h"
 #include "json.hpp"
 #include "Projectile.h"
+#include "Health.h"
 
 class Game final
 {
 public:
 	Game(){};
-	Game(std::string const & map_file,
+	Game(sf::Vector2u win_size, std::string const & map_file, int hp
 		 /* std::string const & entity_file, */
 		 /*std::string const & shop_file,*/
-		 int health
-		 ) : health{health}/*, shop{shop_file}*/
+		 )
+		 : window_size{win_size.x, win_size.y}, health{window, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
 			//load_entities(entity_file);
 		 };
+
+
+	void handle_input();
+	void update_logic();
+	void render();
+
 	void load_map(std::string const & file);
 	void determine_tile_directions();
 	bool is_tile_enemy(sf::Vector2i index);
 	bool is_tile_enemy_start(sf::Vector2i index);
 	bool is_tile_enemy_end(sf::Vector2i index);
 
-
-
+	bool is_running(); // remove when we make StateMachine
+	void check_collision();
 	void load_entities(std::string const & file);
-	void handle_events();
-	void handle_click();
-	void update_logic();
-	void tile_enemy_set_direction();
+	void handle_click(sf::Vector2f click);
+
+	void create_1_enemy_basic();
+	void create_1_enemy_boss();
+	void create_n_enemy_basic(int start_time, int amount, float interval);
+	void create_n_enemy_boss(int start_time, int amount, float interval);
 	void enemy_update_direction();
 	void enemy_update_position();
+
 	void projectile_update_position();
-	void check_collision();
-	void render();
-	void create_enemies();
+
 	void fire_towers();
-	void set_window_size(int const width,int const height);
-	static int get_frame();
+
+	int get_frame();
+	float get_fps();
 
 private:
-	//Projectile* get_tower_projectile(std::string const & projectile); ta tillbaka när underklasserna till projectile är gjorda
+	sf::Vector2u window_size;
+    sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
+	 						"Tower defence"};
+	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	void init_enemies(nlohmann::json const & json_obj);
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
-	int health;
+	Health health;
 	//Tower_shop tower_shop;
-	unsigned int window_width{1400};
-	unsigned int window_height{800};
-    sf::RenderWindow window{sf::VideoMode{window_width, window_height}, "Tower defence"};
+	int frame{0};
+	float fps{60};
+
 
 
 	Resource_manager resources{};
