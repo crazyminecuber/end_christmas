@@ -419,7 +419,7 @@ void Game::init_towers(json const & json_obj)
     cout << "börjar ladda towers" << endl;
     json tower = json_obj["Tower_basic"];
 
-    //Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_basic::tower_prop.cost_init = tower["cost_init"];
     Tower_basic::tower_prop.fire_period_init = tower["fire_period_init"];
     Tower_basic::entity_prop.texture_file = tower["sprite_init"];
@@ -472,7 +472,7 @@ void Game::check_collision()
     }
 }
 
-void fire_towers()
+void Game::fire_towers()
 {
     for (auto tower = Tower::static_towers.begin();
          tower != Tower::static_towers.end();

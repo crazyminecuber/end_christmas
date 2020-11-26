@@ -5,13 +5,12 @@
 #include <vector>
 #include <SFML/System/Vector2.hpp>
 #include "Entity.h"
-#include "Enemy.h"
-//#include "Projectile.h"
+#include "Projectile.h"
 
 
 struct Tower_properties
 {
-  //Projectile *projectile_init{};
+  Projectile *projectile_init{};
   int cost_init{};
   int fire_period_init{};
 };
@@ -23,17 +22,19 @@ class Tower : public Entity
     Tower(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad,
         sf::Vector2f dir, float mov_spd,
-        int _cost)
+        int _cost, Projectile * proj)
     :Entity(texture_file, position,
         size, hit_rad,
         dir, mov_spd),
+        projectile{proj},
         cost{_cost}{}
 
     ~Tower() = default;
     void collision(Entity* object);
     virtual void shoot()=0;
     virtual void create_active(sf::Vector2f position) = 0;
-    // void make_projectile(sf::Vector2f direction);
+    void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
+
 
     static std::vector<Tower*> static_towers;
 
@@ -46,7 +47,7 @@ class Tower : public Entity
     int fire_period;
     int fire_angle;
 
-  //  Projectile *projectile;
+    Projectile *projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren?
   public:
     int cost{};
 };
@@ -58,14 +59,14 @@ public:
   Tower_basic(std::string texture_file, sf::Vector2f position,
       sf::Vector2f size, float hit_rad,
       sf::Vector2f dir, float mov_spd,
-      int cost)
+      int cost, Projectile * proj)
   : Tower(texture_file, position,
       size, hit_rad,
-      dir, mov_spd, cost){}
+      dir, mov_spd, cost, proj){}
 
   Tower_basic(): Tower(entity_prop.texture_file, sf::Vector2f{0,0},
           entity_prop.size, entity_prop.hit_rad, entity_prop.dir,
-          entity_prop.mov_spd, tower_prop.cost_init)
+          entity_prop.mov_spd, tower_prop.cost_init, tower_prop.projectile_init)
   {}
 
   ~Tower_basic()=default;
@@ -73,7 +74,8 @@ public:
   void shoot() override;
   void create_active(sf::Vector2f position) override;
   Entity * select_target();
-  sf::Vector2f aim();
+  void rotate_to_target(Entity * target_enemy);
+  sf::Vector2f aim_direction(Entity * target_enemy);
   static Tower_properties tower_prop;
   static entity_properties entity_prop;
 };
@@ -84,14 +86,14 @@ public:
   Tower_ring(std::string texture_file, sf::Vector2f position,
       sf::Vector2f size, float hit_rad,
       sf::Vector2f dir, float mov_spd,
-      int cost, int num_proj)
+      int cost, int num_proj, Projectile * proj)
   : Tower(texture_file, position,
       size, hit_rad,
-      dir, mov_spd, cost), num_of_projectile{num_proj}{}
+      dir, mov_spd, cost, proj), num_of_projectile{num_proj}{}
 
   Tower_ring(): Tower(entity_prop.texture_file, sf::Vector2f{0,0},
           entity_prop.size, entity_prop.hit_rad, entity_prop.dir,
-          entity_prop.mov_spd, tower_prop.cost_init), num_of_projectile{num_projectile_init}
+          entity_prop.mov_spd, tower_prop.cost_init, tower_prop.projectile_init), num_of_projectile{num_projectile_init}
   {}
   ~Tower_ring() = default;
 

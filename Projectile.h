@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <iostream>
 
 class Projectile : public Entity
 {
@@ -19,6 +20,7 @@ public:
 
   bool update_position();
   virtual void collision()=0;
+  virtual void clone(sf::Vector2f dir, sf::Vector2f pos)=0;
   static std::vector<Projectile*> projectiles;
  // static entity_properties prop; // ska Projectile ha Entity prop?
 
@@ -70,7 +72,6 @@ protected:
   // float hit_rad;
   // float mov_spd;
   int nr_enemies_killed;
-
 };
 
 class Projectile_bomb : public Projectile
@@ -103,9 +104,17 @@ public:
         sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd);
   ~Projectile_bomb_blast()=default;
 
+
   Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
   void update_rad();
   void collision();
+
+  // Super dump and of no use but is a must to compile because clone needs to be
+  // virtual in Projectile
+  void clone(sf::Vector2f dir, sf::Vector2f pos)
+  {
+      std::cout << dir.x << pos.y << std::endl;
+  };
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;

@@ -49,12 +49,21 @@ int main ()
 
 
     game.load_entities("entity.json");
-    sf::Vector2f pos{100,100};
+    sf::Vector2f pos{200,100};
     Tower_basic tow{};
     tow.create_active(pos);
+    /*
     sf::Vector2f pos2{300,100};
     Tower_ring tow2{};
     tow2.create_active(pos2);
+    */
+    cout << Tower_basic::tower_prop.projectile_init->getPosition().x << endl;
+/*
+    sf::Vector2f pos3{300,300};
+    sf::Vector2f dir{0,1};
+    Projectile_basic proj{pos3,dir};
+    proj.clone(dir, pos3);
+    */
 
     while ( game.is_running() )
     {
@@ -63,6 +72,7 @@ int main ()
         //game.create_n_enemy_boss(0, 1, 0.5);
         game.handle_input();
         game.update_logic();
+        game.fire_towers();
         game.render();
 
         throttle(game.get_fps(), clock);
