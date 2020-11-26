@@ -13,17 +13,17 @@ vector<Projectile*> Projectile::projectiles;
 
 //Next posistion
 bool Projectile::update_position()
-    {
-        if (Game::get_frame() < frame_to_die)
-        {
-            move(direction*movement_speed);
-            return true;
-        }
-        else
-        {
-          return false;
-        }
-    }
+  {
+      if (Game::get_frame() < frame_to_die)
+      {
+          move(direction*movement_speed);
+          return true;
+      }
+      else
+      {
+        return false;
+      }
+  }
 
 //Tillhör Projectile_basic
 entity_properties Projectile_basic::prop;
@@ -46,7 +46,7 @@ Projectile_basic::Projectile_basic(sf::Vector2f position,sf::Vector2f direction)
 Projectile_basic::Projectile_basic(Projectile_basic const& other)
     : Projectile(other)
 {
-    frame_to_die = Game::get_frame() + frames_to_live;
+  frame_to_die = Game::get_frame() + frames_to_live;
 }
 //clone and add direction void clone(sf::Vector2f direction, sf::Vector2f position)
 void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
@@ -58,11 +58,10 @@ void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 }
 //Removes and delete the porjectile when collided with an enemy
 void Projectile_basic::collision()
-    {
-      //Will be deleted on the next update_position
-      frame_to_die = Game::get_frame();
-
-    }
+  {
+    //Will be deleted on the next update_position
+    frame_to_die = Game::get_frame();
+  }
 
 
 //Tillhör Projectile_pierce
@@ -106,19 +105,17 @@ void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
 // nr_pierce nr of enemies is killed
 void Projectile_pierce::collision()
 {
-    //delete in Enemy that will delete Enemy
-    if(nr_enemies_killed <= nr_pierce)
-    {
-        nr_enemies_killed+= 1;
-    }
-    else
-    {
-      //Will be deleted on the next update_position
-      frame_to_die= Game::get_frame();
-    }
+  //delete in Enemy that will delete Enemy
+  if(nr_enemies_killed <= nr_pierce)
+  {
+      nr_enemies_killed+= 1;
+  }
+  else
+  {
+    //Will be deleted on the next update_position
+    frame_to_die= Game::get_frame();
+  }
 }
-
-
 //Funktion som tillhör Projectile_bomb
 entity_properties Projectile_bomb::prop;
 int Projectile_bomb::frames_to_live;
@@ -163,25 +160,24 @@ void  Projectile_bomb::clone(sf::Vector2f dir, sf::Vector2f pos)
 //adds bomb_blast to projectiles vector and remove and delete the projectile
 void Projectile_bomb::collision()
 {
-    //delete in Enemy that will delete Enemy
-    //sf::Vector2f pos = this->getPosition();
-    new_bomb_blast(this->getPosition());
-    //Will be deleted on the next update_position
-    frame_to_die= Game::get_frame();
-  }
+  //delete in Enemy that will delete Enemy
+  //sf::Vector2f pos = this->getPosition();
+  new_bomb_blast(this->getPosition());
+  //Will be deleted on the next update_position
+  frame_to_die= Game::get_frame();
+}
 
 void Projectile_bomb::new_bomb_blast(sf::Vector2f position)
 {
-    Projectile_bomb_blast* p = new Projectile_bomb_blast{
-      Projectile_bomb_blast::prop.texture_file,  //Texture
-      position,     //Poistion
-      Projectile_bomb_blast::prop.size,        //Size
-      Projectile_bomb_blast::prop.hit_rad,    //Hit_rad
-      Projectile_bomb_blast::prop.dir, //dir
-      Projectile_bomb_blast::prop.mov_spd};  //mov_spd
+  Projectile_bomb_blast* p = new Projectile_bomb_blast{
+    Projectile_bomb_blast::prop.texture_file,  //Texture
+    position,     //Poistion
+    Projectile_bomb_blast::prop.size,        //Size
+    Projectile_bomb_blast::prop.hit_rad,    //Hit_rad
+    Projectile_bomb_blast::prop.dir, //dir
+    Projectile_bomb_blast::prop.mov_spd};  //mov_spd
   projectiles.push_back(p);
 }
-
 
 
 // Gör om bomb_blast så att den endast innehåller rad, texture, mm,
@@ -198,11 +194,9 @@ Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
   projectiles.push_back(& *this);
 }
 
-
 //remove and delete the projectile when collided with enemies
 void Projectile_bomb_blast::collision()
 {
     //delete in Enemy that will delete Enemy
     //Will be deleted on the next update_position
-
 }

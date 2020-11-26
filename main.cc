@@ -14,9 +14,9 @@
 #include "Tile_enemy_start.h"
 #include "Tile_enemy_end.h"
 
-//#include "Tower_shop.h"
+// #include "Tower_shop.h"
 // #include "Wallet.h"
-#include "Tower.h"
+// #include "Tower.h"
 // #include <vector>
 
 using namespace std;
@@ -39,31 +39,9 @@ int main ()
     Game game(window_size, map_file, health);
     sf::Clock clock;
 
-/*
-    sf::Vector2f siz{100,100};
-    sf::Vector2f dir{1,0};
-    float hit{100};
-    float mov_spd{100};
-    int cost{1000};
-    */
-
-
     game.load_entities("entity.json");
-    sf::Vector2f pos{200,100};
-    Tower_basic tow{};
-    tow.create_active(pos);
-    /*
-    sf::Vector2f pos2{300,100};
-    Tower_ring tow2{};
-    tow2.create_active(pos2);
-    */
-    cout << Tower_basic::tower_prop.projectile_init->getPosition().x << endl;
-/*
-    sf::Vector2f pos3{300,300};
-    sf::Vector2f dir{0,1};
-    Projectile_basic proj{pos3,dir};
-    proj.clone(dir, pos3);
-    */
+    Projectile_basic *p = new Projectile_basic(sf::Vector2f(100,100),sf::Vector2f(-1,0));
+    p->clone(sf::Vector2f(0.5,0.5),sf::Vector2f(200,100));
 
     while ( game.is_running() )
     {
@@ -72,7 +50,6 @@ int main ()
         //game.create_n_enemy_boss(0, 1, 0.5);
         game.handle_input();
         game.update_logic();
-        game.fire_towers();
         game.render();
 
         throttle(game.get_fps(), clock);

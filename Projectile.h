@@ -27,7 +27,6 @@ public:
 protected:
   int damage;
   int frame_to_die;
-
 };
 
 class Projectile_basic : public Projectile
@@ -44,11 +43,6 @@ public:
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
-protected:
-  // std::string texture_file;
-  // float hit_rad;
-  // float mov_spd;
-
 };
 
 class Projectile_pierce : public Projectile
@@ -68,9 +62,6 @@ public:
   static int nr_pierce;
   static entity_properties prop;
 protected:
-  // std::string texture_file;
-  // float hit_rad;
-  // float mov_spd;
   int nr_enemies_killed;
 };
 
@@ -90,11 +81,6 @@ public:
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
-protected:
-  // std::string texture_file;
-  // float hit_rad;
-  // float mov_spd;
-
 };
 
 class Projectile_bomb_blast : public Projectile
