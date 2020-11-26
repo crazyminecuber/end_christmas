@@ -278,9 +278,17 @@ void Game::enemy_update_position()
 
 void Game::projectile_update_position()
 {
-    for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles); ++it)
+    for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles);)
     {
-        (*it)->update_position();
+      if(!(*it)->update_position())
+      {
+        delete *it;
+        it = Projectile::projectiles.erase(it);
+      }
+      else
+      {
+        ++it;
+      }
     }
 }
 void Game::load_entities(string const & file)
@@ -535,5 +543,6 @@ void Game::update_logic()
     {
         projectile_update_position();
     }
+    check_collision();
     frame++;
 }

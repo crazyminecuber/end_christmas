@@ -17,7 +17,7 @@ public:
 
   Projectile(Projectile const& other):Entity(other){} //Kopieringskonstruktor
 
-  void update_position();
+  bool update_position();
   virtual void collision()=0;
   static std::vector<Projectile*> projectiles;
  // static entity_properties prop; // ska Projectile ha Entity prop?
