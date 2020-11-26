@@ -466,6 +466,11 @@ void Game::check_collision()
                   ++projectile_it;
                 }
             }
+            else
+            {
+                ++projectile_it;
+            }
+            
         }
         for (auto tower_it = Tower::static_towers.begin();
              tower_it != Tower::static_towers.end();
