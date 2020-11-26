@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <ostream>
 
 class Projectile : public Entity
 {
@@ -15,7 +16,8 @@ public:
 
   ~Projectile()=default;
 
-  Projectile(Projectile const& other):Entity(other){} //Kopieringskonstruktor
+  Projectile(Projectile const& other); //Kopieringskonstruktor
+  virtual void clone(sf::Vector2f dir, sf::Vector2f pos)=0;
 
   bool update_position();
   virtual void collision()=0;
@@ -73,6 +75,22 @@ protected:
 
 };
 
+class Projectile_bomb_blast : public Projectile
+{
+public:
+  Projectile_bomb_blast(std::string texture_file, sf::Vector2f position,
+        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd);
+  ~Projectile_bomb_blast()=default;
+
+  void clone(sf::Vector2f dir, sf::Vector2f pos);
+  Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
+  void collision();
+  static int frames_to_live;
+  static int damage_init;
+  static entity_properties prop;
+
+};
+
 class Projectile_bomb : public Projectile
 {
 public:
@@ -85,30 +103,15 @@ public:
   Projectile_bomb(Projectile_bomb const& other); //Kopieringskonstruktor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
   void collision();
-  void new_bomb_blast(sf::Vector2f position);
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
 protected:
+  Projectile_bomb_blast* blast;
+  void new_bomb_blast(sf::Vector2f position);
   // std::string texture_file;
   // float hit_rad;
   // float mov_spd;
-
-};
-
-class Projectile_bomb_blast : public Projectile
-{
-public:
-  Projectile_bomb_blast(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd);
-  ~Projectile_bomb_blast()=default;
-
-  Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
-  void update_rad();
-  void collision();
-  static int frames_to_live;
-  static int damage_init;
-  static entity_properties prop;
 
 };
 
