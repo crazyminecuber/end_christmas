@@ -29,6 +29,7 @@ bool Projectile::update_position()
 Projectile::Projectile(Projectile const& other):Entity(other) 
 {
   damage = other.damage;
+  frame_to_die = other.frame_to_die;
 }
 
 //Tillhör Projectile_basic
@@ -148,17 +149,10 @@ Projectile_bomb::Projectile_bomb
         direction,
         prop.mov_spd,
         damage_init
-      )
+      ),
+      blast{}
   {
-    blast = new Projectile_bomb_blast
-    {
-      Projectile_bomb_blast::prop.texture_file,  //Texture
-      position,     //Poistion
-      Projectile_bomb_blast::prop.size,        //Size
-      Projectile_bomb_blast::prop.hit_rad,    //Hit_rad
-      sf::Vector2f(0,0), //dir
-      Projectile_bomb_blast::prop.mov_spd  //mov_spd
-    };
+    
   }
 //Kopieringskonstruktor som lägger in i lista
 Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
@@ -178,7 +172,7 @@ void  Projectile_bomb::clone(sf::Vector2f dir, sf::Vector2f pos)
 //adds bomb_blast to projectiles vector and remove and delete the projectile
 void Projectile_bomb::collision()
 {
-    blast->clone(sf::Vector2f(0,0), getPosition());
+    blast.clone(sf::Vector2f(0,0), getPosition());
     //Will be deleted on the next update_position
     frame_to_die= Game::get_frame();
   }
@@ -186,10 +180,23 @@ void Projectile_bomb::collision()
 
 // Gör om bomb_blast så att den endast innehåller rad, texture, mm,
 //Funktion som tillhör Projectile_bomb_blast
+Projectile_bomb_blast::Projectile_bomb_blast()
+    : Projectile
+      (
+        prop.texture_file,
+        sf::Vector2f(0,0),
+        prop.size,
+        prop.hit_rad,
+        direction,
+        prop.mov_spd,
+        damage_init
+      )
+  {}
 
 Projectile_bomb_blast::Projectile_bomb_blast(string texture_file, sf::Vector2f position,
       sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd)
       : Projectile(texture_file, position, size, hit_rad, dir, mov_spd, damage_init){}
+
 //Kopieringskonstruktor som lägger in i lista
 Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
     : Projectile(other)

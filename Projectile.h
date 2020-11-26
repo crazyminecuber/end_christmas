@@ -25,8 +25,8 @@ public:
  // static entity_properties prop; // ska Projectile ha Entity prop?
 
 protected:
-  int damage;
-  int frame_to_die;
+  int damage{};
+  int frame_to_die{};
 
 };
 
@@ -78,6 +78,7 @@ protected:
 class Projectile_bomb_blast : public Projectile
 {
 public:
+  Projectile_bomb_blast();
   Projectile_bomb_blast(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd);
   ~Projectile_bomb_blast()=default;
@@ -96,7 +97,11 @@ class Projectile_bomb : public Projectile
 public:
   Projectile_bomb(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage):
-        Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage){}
+        Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage),
+        blast{}
+  {
+    
+  }
   Projectile_bomb(sf::Vector2f position, sf::Vector2f direction);
   ~Projectile_bomb() = default;
 
@@ -107,7 +112,7 @@ public:
   static int damage_init;
   static entity_properties prop;
 protected:
-  Projectile_bomb_blast* blast;
+  Projectile_bomb_blast blast;
   void new_bomb_blast(sf::Vector2f position);
   // std::string texture_file;
   // float hit_rad;
