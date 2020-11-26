@@ -7,7 +7,7 @@ Enemy_boss::~Enemy_boss(){}
 
 //Overloada collision för olika object?
 void Enemy_boss::collision(Entity* object){
-    std::cout << "krockat" << object << std::endl;
+    std::cout << "krockat" << *object << std::endl;
 }
 
 

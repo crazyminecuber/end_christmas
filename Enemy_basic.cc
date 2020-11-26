@@ -7,7 +7,7 @@ Enemy_basic::~Enemy_basic(){}
 
 
 void Enemy_basic::collision(Entity* object){
-    std::cout << "krockat" << object << std::endl;
+    std::cout << "krockat" << *object << std::endl;
 }
 
 
