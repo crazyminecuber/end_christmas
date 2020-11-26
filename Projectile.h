@@ -20,7 +20,7 @@ public:
   virtual void clone(sf::Vector2f dir, sf::Vector2f pos)=0;
 
   bool update_position();
-  virtual void collision()=0;
+  virtual bool collision()=0;
   static std::vector<Projectile*> projectiles;
  // static entity_properties prop; // ska Projectile ha Entity prop?
 
@@ -40,7 +40,7 @@ public:
   ~Projectile_basic() = default;
   Projectile_basic(Projectile_basic const& other); //Kopieringskonstruktor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
-  void collision();
+  bool collision();
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
@@ -62,7 +62,7 @@ public:
 
   Projectile_pierce(Projectile_pierce const& other); //Kopieringskonstruktor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
-  void collision();
+  bool collision();
   static int frames_to_live;
   static int damage_init;
   static int nr_pierce;
@@ -85,7 +85,7 @@ public:
 
   void clone(sf::Vector2f dir, sf::Vector2f pos);
   Projectile_bomb_blast(Projectile_bomb_blast const& other); //Kopieringskonstruktor
-  void collision();
+  bool collision();
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
@@ -100,14 +100,14 @@ public:
         Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage),
         blast{}
   {
-    
+
   }
   Projectile_bomb(sf::Vector2f position, sf::Vector2f direction);
   ~Projectile_bomb() = default;
 
   Projectile_bomb(Projectile_bomb const& other); //Kopieringskonstruktor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
-  void collision();
+  bool collision();
   static int frames_to_live;
   static int damage_init;
   static entity_properties prop;
