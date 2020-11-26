@@ -157,7 +157,7 @@ Projectile_bomb::Projectile_bomb
   }
 //Kopieringskonstruktor som lägger in i lista
 Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
-    : Projectile(other)
+    : Projectile(other), blast{other.blast}
 {
   frame_to_die = Game::get_frame() + frames_to_live;
 }
