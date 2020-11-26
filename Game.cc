@@ -10,7 +10,7 @@
 #include "Enemy.h"
 #include "Enemy_basic.h"
 #include "Enemy_boss.h"
-//#include "Projectile.h"
+#include "Projectile.h"
 #include "Entity.h"
 #include "Tower.h"
 #include "Resource_manager.h"
@@ -278,9 +278,17 @@ void Game::enemy_update_position()
 
 void Game::projectile_update_position()
 {
-    for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles); ++it)
+    for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles);)
     {
-        (*it)->update_position();
+      if(!(*it)->update_position())
+      {
+        delete *it;
+        it = Projectile::projectiles.erase(it);
+      }
+      else
+      {
+        ++it;
+      }
     }
 }
 void Game::load_entities(string const & file)
@@ -433,7 +441,7 @@ void Game::init_towers(json const & json_obj)
     cout << "laddat towers" << endl;
 }
 
-/*
+
 void Game::check_collision()
 {
     //kolla tower - enemy
@@ -463,7 +471,7 @@ void Game::check_collision()
         }
     }
 }
-*/
+
 void fire_towers()
 {
     for (auto tower = Tower::static_towers.begin();
@@ -535,5 +543,6 @@ void Game::update_logic()
     {
         projectile_update_position();
     }
+    check_collision();
     frame++;
 }

@@ -12,22 +12,18 @@ using namespace std;
 vector<Projectile*> Projectile::projectiles;
 
 //Next posistion
-void Projectile::update_position()
+bool Projectile::update_position()
     {
         if (Game::get_frame() < frame_to_die)
         {
             move(direction*movement_speed);
+            return true;
         }
         else
         {
-            projectiles.erase(std::remove(projectiles.begin(),
-                  projectiles.end(), this), projectiles.end());
-            //delete &*this;
+          return false;
         }
     }
-
-//entity_properties Projectile::prop;
-
 
 //Tillhör Projectile_basic
 entity_properties Projectile_basic::prop;
@@ -63,12 +59,10 @@ void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 //Removes and delete the porjectile when collided with an enemy
 void Projectile_basic::collision()
     {
-      projectiles.erase(std::remove(projectiles.begin(),
-            projectiles.end(), this), projectiles.end());
-      delete &*this;
+      //Will be deleted on the next update_position
+      frame_to_die = Game::get_frame();
+
     }
-
-
 
 
 //Tillhör Projectile_pierce
@@ -119,9 +113,8 @@ void Projectile_pierce::collision()
     }
     else
     {
-      projectiles.erase(std::remove(projectiles.begin(),
-            projectiles.end(), this), projectiles.end());
-        delete &*this;
+      //Will be deleted on the next update_position
+      frame_to_die= Game::get_frame();
     }
 }
 
@@ -173,9 +166,8 @@ void Projectile_bomb::collision()
     //delete in Enemy that will delete Enemy
     //sf::Vector2f pos = this->getPosition();
     new_bomb_blast(this->getPosition());
-    projectiles.erase(std::remove(projectiles.begin(),
-          projectiles.end(), this), projectiles.end());
-    delete &*this;
+    //Will be deleted on the next update_position
+    frame_to_die= Game::get_frame();
   }
 
 void Projectile_bomb::new_bomb_blast(sf::Vector2f position)
@@ -205,10 +197,12 @@ Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
   frame_to_die = Game::get_frame() + frames_to_live;
   projectiles.push_back(& *this);
 }
+
+
 //remove and delete the projectile when collided with enemies
 void Projectile_bomb_blast::collision()
 {
     //delete in Enemy that will delete Enemy
-    delete &*this;
-}
+    //Will be deleted on the next update_position
 
+}

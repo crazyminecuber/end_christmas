@@ -22,11 +22,11 @@
         {
             "Projectile_basic" :
                 {
-                    "frames_to_live" : 300,
+                    "frames_to_live" : 1000,
                     "damage_init" : 1,
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [100,100],
-                    "hit_rad" : 2.5,
+                    "hit_rad" : 100,
                     "mov_spd" : 1
                 },
             "Projectile_pierce" :
