@@ -47,7 +47,6 @@ void Tower::make_projectile(sf::Vector2f direction)
       Projectile::projectiles.push_back(p);
 
 
-}
 */
 
 //Functions for the class Tower_basic
@@ -89,7 +88,6 @@ sf::Vector2f Tower_basic::aim()
 //----------------------------------------------------------------------------
 
 //Function shoot in the class Tower_ring.
-Tower_ring::~Tower_ring(){}
 
 void Tower_ring::create_active(sf::Vector2f position)
 {

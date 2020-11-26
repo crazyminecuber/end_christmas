@@ -29,7 +29,7 @@ class Tower : public Entity
         dir, mov_spd),
         cost{_cost}{}
 
-    ~Tower(){};
+    ~Tower() = default;
     void collision(Entity* object);
     virtual void shoot()=0;
     virtual void create_active(sf::Vector2f position) = 0;
@@ -68,7 +68,7 @@ public:
           entity_prop.mov_spd, tower_prop.cost_init)
   {}
 
-  ~Tower_basic(){};
+  ~Tower_basic()=default;
 
   void shoot() override;
   void create_active(sf::Vector2f position) override;
@@ -93,7 +93,7 @@ public:
           entity_prop.size, entity_prop.hit_rad, entity_prop.dir,
           entity_prop.mov_spd, tower_prop.cost_init), num_of_projectile{num_projectile_init}
   {}
-  ~Tower_ring();
+  ~Tower_ring() = default;
 
   void shoot() override;
   static Tower_properties tower_prop;

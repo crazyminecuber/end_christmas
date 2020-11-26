@@ -22,7 +22,7 @@ void Projectile::update_position()
         {
             projectiles.erase(std::remove(projectiles.begin(),
                   projectiles.end(), this), projectiles.end());
-            delete &*this;
+            //delete &*this;
         }
     }
 
@@ -30,7 +30,22 @@ void Projectile::update_position()
 
 
 //Tillhör Projectile_basic
+entity_properties Projectile_basic::prop;
+int Projectile_basic::frames_to_live;
+int Projectile_basic::damage_init;
 
+Projectile_basic::Projectile_basic(sf::Vector2f position,sf::Vector2f direction)
+  : Projectile
+    (
+      prop.texture_file,
+      position,
+      prop.size,
+      prop.hit_rad,
+      direction,
+      prop.mov_spd,
+      damage_init
+    )
+{}
 //Kopieringskonstruktor som lägger in i lista
 Projectile_basic::Projectile_basic(Projectile_basic const& other)
     : Projectile(other)
@@ -41,8 +56,8 @@ Projectile_basic::Projectile_basic(Projectile_basic const& other)
 void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_basic* p = new Projectile_basic{*this};
-  direction = dir;
-  setPosition(pos);
+  p->direction = dir;
+  p->setPosition(pos);
   projectiles.push_back(p);
 }
 //Removes and delete the porjectile when collided with an enemy
@@ -52,13 +67,33 @@ void Projectile_basic::collision()
             projectiles.end(), this), projectiles.end());
       delete &*this;
     }
-entity_properties Projectile_basic::prop;
-int Projectile_basic::frames_to_live;
-int Projectile_basic::damage_init;
+
 
 
 
 //Tillhör Projectile_pierce
+entity_properties Projectile_pierce::prop;
+int Projectile_pierce::frames_to_live;
+int Projectile_pierce::damage_init;
+int Projectile_pierce::nr_pierce;
+
+
+Projectile_pierce::Projectile_pierce
+(
+  sf::Vector2f position,
+  sf::Vector2f direction
+)
+  : Projectile
+    (
+      prop.texture_file,
+      position,
+      prop.size,
+      prop.hit_rad,
+      direction,
+      prop.mov_spd,
+      damage_init
+    )
+{}
 //Kopieringskonstruktor som lägger in i lista
 Projectile_pierce::Projectile_pierce(Projectile_pierce const& other)
     : Projectile(other)
@@ -69,8 +104,8 @@ Projectile_pierce::Projectile_pierce(Projectile_pierce const& other)
 void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_pierce* p = new Projectile_pierce{*this};
-  direction = dir;
-  setPosition(pos);
+  p->direction = dir;
+  p->setPosition(pos);
   projectiles.push_back(p);
 }
 //Counts nr of enemies killed and remove and delete the projectile when
@@ -90,13 +125,32 @@ void Projectile_pierce::collision()
     }
 }
 
-entity_properties Projectile_pierce::prop;
-int Projectile_pierce::frames_to_live;
-int Projectile_pierce::damage_init;
-int Projectile_pierce::nr_pierce;
-
 
 //Funktion som tillhör Projectile_bomb
+entity_properties Projectile_bomb::prop;
+int Projectile_bomb::frames_to_live;
+int Projectile_bomb::damage_init;
+
+entity_properties Projectile_bomb_blast::prop;
+int Projectile_bomb_blast::frames_to_live;
+int Projectile_bomb_blast::damage_init;
+
+Projectile_bomb::Projectile_bomb
+  (
+    sf::Vector2f position,
+    sf::Vector2f direction
+  )
+    : Projectile
+      (
+        prop.texture_file,
+        position,
+        prop.size,
+        prop.hit_rad,
+        direction,
+        prop.mov_spd,
+        damage_init
+      )
+  {}
 //Kopieringskonstruktor som lägger in i lista
 Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
     : Projectile(other)
@@ -108,8 +162,8 @@ Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)
 void  Projectile_bomb::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_bomb* p = new Projectile_bomb{*this};
-  direction = dir;
-  setPosition(pos);
+  p->direction = dir;
+  p->setPosition(pos);
   projectiles.push_back(p);
 }
 
@@ -136,12 +190,14 @@ void Projectile_bomb::new_bomb_blast(sf::Vector2f position)
   projectiles.push_back(p);
 }
 
-entity_properties Projectile_bomb::prop;
-int Projectile_bomb::frames_to_live;
-int Projectile_bomb::damage_init;
+
 
 // Gör om bomb_blast så att den endast innehåller rad, texture, mm,
 //Funktion som tillhör Projectile_bomb_blast
+
+Projectile_bomb_blast::Projectile_bomb_blast(string texture_file, sf::Vector2f position,
+      sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd)
+      : Projectile(texture_file, position, size, hit_rad, dir, mov_spd, damage_init){}
 //Kopieringskonstruktor som lägger in i lista
 Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
     : Projectile(other)
@@ -156,6 +212,3 @@ void Projectile_bomb_blast::collision()
     delete &*this;
 }
 
-entity_properties Projectile_bomb_blast::prop;
-int Projectile_bomb_blast::frames_to_live;
-int Projectile_bomb_blast::damage_init;

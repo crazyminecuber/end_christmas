@@ -18,7 +18,7 @@ public:
         init(position);
     }
     Entity(Entity const & other)=default;
-    virtual ~Entity() = default;
+    virtual ~Entity()=default;
 
     void init(sf::Vector2f position);
 

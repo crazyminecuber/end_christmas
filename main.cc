@@ -27,6 +27,7 @@ using namespace std;
 // int const height { 800 };
 
 
+
 void throttle(double fps, sf::Clock & clock);
 
 
