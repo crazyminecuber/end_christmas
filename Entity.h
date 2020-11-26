@@ -8,17 +8,17 @@
 class Entity : public sf::Sprite
 {
 public:
-    Entity(std::string texture_file,
+    Entity(std::string _texture_file,
            sf::Vector2f position, sf::Vector2f size,
            float hit_rad, sf::Vector2f dir, float mov_spd)
-    : sf::Sprite(),
-    texture{Resource_manager::load(texture_file)}, size{size}, hitbox_radius{hit_rad}, direction{dir},
+    : sf::Sprite(), texture_file{_texture_file},
+    texture{Resource_manager::load(_texture_file)}, size{size}, hitbox_radius{hit_rad}, direction{dir},
     movement_speed{mov_spd}
     {
         init(position);
     }
     Entity(Entity const & other)=default;
-    virtual ~Entity(){};
+    virtual ~Entity() = default;
 
     void init(sf::Vector2f position);
 
@@ -26,6 +26,7 @@ public:
 
 
 protected:
+    std::string texture_file;
     sf::Texture texture;
     sf::Vector2f size; //Ska den vara Vector2u och inte Vector2f?
     float hitbox_radius;

@@ -7,8 +7,10 @@ using namespace std;
 
 Tower_properties Tower_ring::tower_prop;
 entity_properties Tower_ring::entity_prop;
-Tower_properties Tower_basic::tower_prop;
-entity_properties Tower_basic::entity_prop;
+Tower_properties Tower_basic::tower_prop{};
+entity_properties Tower_basic::entity_prop{};
+std::vector<Tower*> Tower::static_towers{};
+int Tower_ring::num_projectile_init{8}; // Läsa in från fil istället?
 
 //Functions for the class Tower
 void Tower::collision(Entity* object)
@@ -16,14 +18,24 @@ void Tower::collision(Entity* object)
   Tower::shootable_enemies.push_back(object);
 }
 
+void Tower_basic::create_active(sf::Vector2f position)
+{
+    Tower * t = new Tower_basic{
+        texture_file, position, size, hitbox_radius, direction, movement_speed, cost
+    };
+    static_towers.push_back(t);
+
+}
+
 
 // 2 alternativ passiva projektiler som skapar sig själva,
 // eller en arg_level som avgör vilken typ av projektil som Tower skapar
 
+/*
 void Tower::make_projectile(sf::Vector2f direction)
 {
     cout << "made projectile. Speed: " + to_string(direction.x);
-    /*
+
   Projectile* p = new Projectile{
           Projectile::prop.texture_file, //Texture
           Projectile::position_init, //Poistion
@@ -33,12 +45,12 @@ void Tower::make_projectile(sf::Vector2f direction)
           Projectile::prop.mov_spd,          //mov_spd
       };
       Projectile::projectiles.push_back(p);
-      */
+
 
 }
+*/
 
 //Functions for the class Tower_basic
-Tower_basic::~Tower_basic(){}
 
 void Tower_basic::shoot()
 {
@@ -74,9 +86,19 @@ sf::Vector2f Tower_basic::aim()
                        (target_enemy->movement_speed * target_enemy->direction);
   return aim;
 }
+//----------------------------------------------------------------------------
 
 //Function shoot in the class Tower_ring.
 Tower_ring::~Tower_ring(){}
+
+void Tower_ring::create_active(sf::Vector2f position)
+{
+    Tower * t = new Tower_ring{
+        texture_file, position, size, hitbox_radius, direction, movement_speed, cost, num_of_projectile
+    };
+    static_towers.push_back(t);
+
+}
 
 // skall igentiligen skjuta num_of_projectile st skott på efter varandra, med några frames i mellan
 // Blir ganska komplicerat att implementera så jag förslår att vi till en början
@@ -91,9 +113,10 @@ void Tower_ring::shoot()
       {
         float rad = (2 * M_PI / num_of_projectile) * i;
         sf::Vector2f dir{cos(rad), sin(rad)};
-        make_projectile(dir);
+        //make_projectile(dir);
 
       }
     }
   }
 }
+

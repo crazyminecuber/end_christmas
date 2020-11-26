@@ -14,9 +14,9 @@
 #include "Tile_enemy_start.h"
 #include "Tile_enemy_end.h"
 
-// #include "Tower_shop.h"
+//#include "Tower_shop.h"
 // #include "Wallet.h"
-// #include "Tower.h"
+#include "Tower.h"
 // #include <vector>
 
 using namespace std;
@@ -38,7 +38,22 @@ int main ()
     Game game(window_size, map_file, health);
     sf::Clock clock;
 
+/*
+    sf::Vector2f siz{100,100};
+    sf::Vector2f dir{1,0};
+    float hit{100};
+    float mov_spd{100};
+    int cost{1000};
+    */
+
+
     game.load_entities("entity.json");
+    sf::Vector2f pos{100,100};
+    Tower_basic tow{};
+    tow.create_active(pos);
+    sf::Vector2f pos2{300,100};
+    Tower_ring tow2{};
+    tow2.create_active(pos2);
 
     while ( game.is_running() )
     {
