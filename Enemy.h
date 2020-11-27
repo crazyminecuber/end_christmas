@@ -8,6 +8,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
+#include <iostream> // debugg
 
 class Enemy
 : public Entity
@@ -22,7 +23,6 @@ public:
         dir, mov_spd),
         life{arg_life}
     {}
-
     virtual void collision(Entity* object) = 0;
     int get_damage();
 

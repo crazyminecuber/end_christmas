@@ -2,6 +2,7 @@
 #include <cmath>
 #include <math.h>
 #include <sstream>
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
@@ -270,7 +271,6 @@ void Game::load_entities(string const & file)
     tile_enemy_start_position = Tile::get_tile_enemy_start()->getPosition() +
                                 sf::Vector2f{(Tile::side_length / 2.f),
                                              (Tile::side_length / 2.f) };
-    std::cout << tile_enemy_start_position.x << ", " << tile_enemy_start_position.y << std::endl;
     Enemy::position_init = tile_enemy_start_position;
 
     /* Enemy_basic */
@@ -282,7 +282,7 @@ void Game::load_entities(string const & file)
     size_basic.y = enemy_basic["size"][1];
     Enemy_basic::prop.size = sf::Vector2f{size_basic};
     Enemy_basic::prop.hit_rad = enemy_basic["hit_rad"];
-    Enemy_basic::prop.dir = sf::Vector2f{1, 0}; //Will be set by tile
+    Enemy_basic::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Enemy_basic::prop.mov_spd = enemy_basic["mov_spd"];
 
     /* Enemy_boss */
@@ -296,9 +296,6 @@ void Game::load_entities(string const & file)
     Enemy_boss::prop.hit_rad = enemy_boss["hit_rad"];
     Enemy_boss::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
-
-    // std::cout << Enemy_basic::position_init << std::endl;
-    // std::cout << Enemy_boss::position_init << std::endl;
 }
 
 void Game::create_1_enemy_basic()
@@ -313,6 +310,7 @@ void Game::create_1_enemy_boss()
 
 void Game::create_n_enemy_basic(int start_time, int amount, float interval)
 {
+    // start_time and interval is in seconds
     if ( (frame >= (start_time * fps))                              &&
          (frame <  (start_time * fps) + (fps * interval * amount )) &&
          (fmod(frame ,(fps * interval)) == 0)                         )
@@ -323,6 +321,7 @@ void Game::create_n_enemy_basic(int start_time, int amount, float interval)
 
 void Game::create_n_enemy_boss(int start_time, int amount, float interval)
 {
+    // start_time and interval is in seconds
     if ( (frame >= (start_time * fps))                              &&
          (frame <  (start_time * fps) + (fps * interval * amount )) &&
          (fmod(frame ,(fps * interval)) == 0)                         )
@@ -484,15 +483,22 @@ void Game::update_logic()
 }
 
 /* overload stream operator för sf::Vector2f */
-// std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector)
-// {
-//     output << "(" << vector.x << ", " << vector.y << ")";
-//     return output;
-// }
-//
-// /* overload stream operator för sf::Vector2i */
-// std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector)
-// {
-//     output << "(" << vector.x << ", " << vector.y << ")";
-//     return output;
-// }
+std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector)
+{
+    output << "(" << vector.x << ", " << vector.y << ")";
+    return output;
+}
+
+/* overload stream operator för sf::Vector2i */
+std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector)
+{
+    output << "(" << vector.x << ", " << vector.y << ")";
+    return output;
+}
+
+/* overload stream operator för sf::Vector2u */
+std::ostream& operator<<(std::ostream& output, sf::Vector2u const & vector)
+{
+    output << "(" << vector.x << ", " << vector.y << ")";
+    return output;
+}

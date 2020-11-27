@@ -1,4 +1,5 @@
 #include <iostream> //debugg
+#include <cmath>
 #include "Tile.h"
 #include "Tile_enemy.h"
 #include "Tile_enemy_start.h"
@@ -24,9 +25,9 @@ void Tile::init()
 
 Tile* Tile::get_tile_by_coord(sf::Vector2f pos)
 {
-    int row = pos.x / Tile::side_length;
-    int col = pos.y / Tile::side_length;
-    sf::Vector2i index{row, col};
+    int x = floor(pos.x / Tile::side_length);
+    int y = floor(pos.y / Tile::side_length);
+    sf::Vector2i index{x, y};
     return tiles[index];
 }
 

@@ -24,7 +24,7 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     // moving right
     if ( enemy->get_direction() == sf::Vector2f{1, 0} )
     {
-        if ( (enemy->getPosition().x + (enemy->getGlobalBounds().width / 2)) >
+        if ( (enemy->getPosition().x) >
              (coord_position.x       + (Tile::side_length / 2))                )
         {
             ready_check = true;
@@ -33,7 +33,7 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     // moving left
     else if ( enemy->get_direction() == sf::Vector2f{-1, 0} )
     {
-        if ( (enemy->getPosition().x + (enemy->getGlobalBounds().width / 2)) <
+        if ( (enemy->getPosition().x) <
              (coord_position.x       + (Tile::side_length / 2))                )
         {
             ready_check = true;
@@ -42,7 +42,7 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     // moving up
     else if ( enemy->get_direction() == sf::Vector2f{0, -1} )
     {
-        if ( (enemy->getPosition().y + (enemy->getGlobalBounds().height / 2)) <
+        if ( (enemy->getPosition().y) <
              (coord_position.y       + (Tile::side_length / 2))                )
         {
             ready_check = true;
@@ -51,7 +51,7 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     // moving down
     else if ( enemy->get_direction() == sf::Vector2f{0, 1} )
     {
-        if ( (enemy->getPosition().y + (enemy->getGlobalBounds().height / 2)) >
+        if ( (enemy->getPosition().y) >
              (coord_position.y       + (Tile::side_length / 2))                )
         {
             ready_check = true;

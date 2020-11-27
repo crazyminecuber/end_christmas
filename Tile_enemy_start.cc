@@ -6,7 +6,6 @@
 
 float Tile_enemy_start::update_enemy(Enemy* enemy)
 {
-    std::cout << "här är jag" << std::endl;
     enemy->set_direction(direction);
     return 0;
 }

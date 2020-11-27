@@ -2,6 +2,8 @@
 #define GAME_H
 #include <string>
 #include <vector>
+#include <sstream>
+#include <iostream>
 #include "Tower_shop.h"
 #include "Resource_manager.h"
 #include "Entity.h"
@@ -51,11 +53,6 @@ public:
 	int get_frame();
 	float get_fps();
 
-	// operator overload
-	// std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector);
-	// std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector);
-
-
 private:
 	sf::Vector2u window_size;
     sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
@@ -75,4 +72,10 @@ private:
 	Resource_manager resources{};
 
 };
+
+// operator overload for sf::Vector2
+std::ostream& operator<<(std::ostream& output, sf::Vector2f const & vector);
+std::ostream& operator<<(std::ostream& output, sf::Vector2i const & vector);
+std::ostream& operator<<(std::ostream& output, sf::Vector2u const & vector);
+
 #endif
