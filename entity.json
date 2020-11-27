@@ -11,7 +11,7 @@
                 },
             "Enemy_boss" :
                 {
-                    "life_init" : 1000,
+                    "life_init" : 10,
                     "texture" : "resources/textures/heart.png",
                     "size": [50,50],
                     "hit_rad": 10,
