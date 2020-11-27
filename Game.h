@@ -11,6 +11,7 @@
 #include "json.hpp"
 #include "Projectile.h"
 #include "Health.h"
+#include "Wave_manager.h"
 
 class Game final
 {
@@ -39,12 +40,9 @@ public:
 	void load_entities(std::string const & file);
 	void handle_click(sf::Vector2f click);
 
-	void create_1_enemy_basic();
-	void create_1_enemy_boss();
-	void create_n_enemy_basic(int start_time, int amount, float interval);
-	void create_n_enemy_boss(int start_time, int amount, float interval);
 	void enemy_update_direction();
 	void enemy_update_position();
+	void next_wave();
 
 	void projectile_update_position();
 
@@ -63,6 +61,8 @@ private:
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
 	Health health;
+	Wave_manager wave_manager{};
+
 	//Tower_shop tower_shop;
 	int frame{0};
 	float fps{60};

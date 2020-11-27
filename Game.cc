@@ -21,6 +21,7 @@
 #include "Tile_enemy.h"
 #include "Tile_enemy_start.h"
 #include "Tile_enemy_end.h"
+#include "Wave_manager.h"
 
 using namespace std;
 using json = nlohmann::json;
@@ -250,6 +251,11 @@ void Game::enemy_update_position()
     }
 }
 
+void Game::next_wave()
+{
+    wave_manager.next_wave();
+}
+
 void Game::load_entities(string const & file)
 {
     ifstream ifs(file);
@@ -298,37 +304,7 @@ void Game::load_entities(string const & file)
     Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
 }
 
-void Game::create_1_enemy_basic()
-{
-    Enemy::new_basic();
-}
 
-void Game::create_1_enemy_boss()
-{
-    Enemy::new_boss();
-}
-
-void Game::create_n_enemy_basic(int start_time, int amount, float interval)
-{
-    // start_time and interval is in seconds
-    if ( (frame >= (start_time * fps))                              &&
-         (frame <  (start_time * fps) + (fps * interval * amount )) &&
-         (fmod(frame ,(fps * interval)) == 0)                         )
-    {
-        create_1_enemy_basic();
-    }
-}
-
-void Game::create_n_enemy_boss(int start_time, int amount, float interval)
-{
-    // start_time and interval is in seconds
-    if ( (frame >= (start_time * fps))                              &&
-         (frame <  (start_time * fps) + (fps * interval * amount )) &&
-         (fmod(frame ,(fps * interval)) == 0)                         )
-    {
-        create_1_enemy_boss();
-    }
-}
 
 int Game::get_frame()
 {
@@ -473,10 +449,7 @@ void Game::handle_input()
 
 void Game::update_logic()
 {
-    create_n_enemy_basic(0, 10, 0.5);
-    create_n_enemy_basic(8, 4, 0.25);
-    create_n_enemy_boss(5, 1, 0.5);
-
+    wave_manager.spawn_enemies(frame);
     enemy_update_direction();
     enemy_update_position();
     frame++;

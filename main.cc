@@ -39,6 +39,7 @@ int main ()
     sf::Clock clock;
 
     game.load_entities("entity.json");
+    game.next_wave();
 
     while ( game.is_running() )
     {
