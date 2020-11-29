@@ -27,7 +27,7 @@ float Tile::side_length = 50; // flytta
 int Game::frame =0;
 
 
-/*
+
 // Help function to determine init projectile for tower
 Projectile* Game::get_tower_projectile(std::string const & projectile)
 {
@@ -58,7 +58,6 @@ bool Game::collided(Entity const *object1, Entity const *object2)
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
            );
 }
-*/
 void Game::load_map(string const & file) //use file "map.csv"
 {
     /* prepare variables needed for reading from file */
@@ -226,6 +225,18 @@ void Game::render()
         window.draw(*(*it)); // it doesn't make sense to me either but it works
     }
 
+    for (auto it{begin(Tower::static_towers)}; it != end(Tower::static_towers); ++it)
+    {
+        window.draw(*(*it)); // it doesn't make sense to me either but it works
+    }
+    //render projectiles
+    for (auto it = begin(Projectile::projectiles);
+         it != end(Projectile::projectiles);
+         ++it)
+    {
+        window.draw(*(*it));
+    }
+
     // render health
     health.render();
 
@@ -265,6 +276,21 @@ void Game::enemy_update_position()
     }
 }
 
+void Game::projectile_update_position()
+{
+    for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles);)
+    {
+      if(!(*it)->update_position())
+      {
+        delete *it;
+        it = Projectile::projectiles.erase(it);
+      }
+      else
+      {
+        ++it;
+      }
+    }
+}
 void Game::load_entities(string const & file)
 {
     ifstream ifs(file);
@@ -274,7 +300,9 @@ void Game::load_entities(string const & file)
         ifs >> j_data;
         init_enemies(j_data["Enemy"]);
 //        init_projectiles(j_data["Projectiles"]);
-//        init_towers(j_data["Towers"]);
+        init_towers(j_data["Tower"]);
+        init_projectiles(j_data["Projectile"]);
+        //init_towers(j_data["Tower"]);
     }
     ifs.close();
 }
@@ -304,6 +332,8 @@ void Game::load_entities(string const & file)
     Enemy_boss::prop.hit_rad = enemy_boss["hit_rad"];
     Enemy_boss::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
+
+    cout << "laddat enemies" << endl;
 }
 
 void Game::create_1_enemy_basic()
@@ -344,65 +374,73 @@ float Game::get_fps()
 {
     return fps;
 }
-/*
+
 void Game::init_projectiles(json const & json_obj)
-{
+{   cout << "ladda in projectile basic" << endl;
     json proj = json_obj["Projectile_basic"];
     Projectile_basic::frames_to_live = proj["frames_to_live"];
     Projectile_basic::damage_init = proj["damage_init"];
     Projectile_basic::prop.texture_file = proj["texture"];
-    Projectile_basic::prop.size = sf::Vector2f(proj["size"]["x"],proj["size"]["y"]);
-    Projectile_basic::prop.hit_rad = json_obj["hit_rad"];
+    Projectile_basic::prop.size = sf::Vector2f(proj["size"][0],proj["size"][1]);
+    Projectile_basic::prop.hit_rad = proj["hit_rad"];
     Projectile_basic::prop.dir = sf::Vector2f(0,0);
-    Projectile_basic::prop.mov_spd = json_obj["mov_spd"];
-
+    Projectile_basic::prop.mov_spd = proj["mov_spd"];
 
     proj = json_obj["Projectile_pierce"];
     Projectile_pierce::frames_to_live = proj["frames_to_live"];
     Projectile_pierce::damage_init = proj["damage_init"];
     Projectile_pierce::prop.texture_file = proj["texture"];
-    Projectile_pierce::prop.size = sf::Vector2f(proj["size"]["x"],proj["size"]["y"]);
-    Projectile_pierce::prop.hit_rad = json_obj["hit_rad"];
+    Projectile_pierce::prop.size = sf::Vector2f(proj["size"][0],proj["size"][1]);
+    Projectile_pierce::prop.hit_rad = proj["hit_rad"];
     Projectile_pierce::prop.dir = sf::Vector2f(0,0);
-    Projectile_pierce::prop.mov_spd = json_obj["mov_spd"];
+    Projectile_pierce::prop.mov_spd = proj["mov_spd"];
 
     proj = json_obj["Projectile_bomb"];
     Projectile_bomb::frames_to_live = proj["frames_to_live"];
     Projectile_bomb::damage_init = proj["damage_init"];
     Projectile_bomb::prop.texture_file = proj["texture"];
-    Projectile_bomb::prop.size = sf::Vector2f(proj["size"]["x"],proj["size"]["y"]);
-    Projectile_bomb::prop.hit_rad = json_obj["hit_rad"];
+    Projectile_bomb::prop.size = sf::Vector2f(proj["size"][0],proj["size"][1]);
+    Projectile_bomb::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb::prop.dir = sf::Vector2f(0,0);
-    Projectile_bomb::prop.mov_spd = json_obj["mov_spd"];
+    Projectile_bomb::prop.mov_spd = proj["mov_spd"];
 
     proj = json_obj["Projectile_bomb_blast"];
     Projectile_bomb_blast::frames_to_live = proj["frames_to_live"];
     Projectile_bomb_blast::damage_init = proj["damage_init"];
     Projectile_bomb_blast::prop.texture_file = proj["texture"];
-    Projectile_bomb_blast::prop.size = sf::Vector2f(proj["size"]["x"],proj["size"]["y"]);
-    Projectile_bomb_blast::prop.hit_rad = json_obj["hit_rad"];
+    Projectile_bomb_blast::prop.size = sf::Vector2f(proj["size"][0],proj["size"][1]);
+    Projectile_bomb_blast::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb_blast::prop.dir = sf::Vector2f(0,0);
-    Projectile_bomb_blast::prop.mov_spd = json_obj["mov_spd"];
+    Projectile_bomb_blast::prop.mov_spd = proj["mov_spd"];
 }
 
 void Game::init_towers(json const & json_obj)
 {
+    cout << "börjar ladda towers" << endl;
     json tower = json_obj["Tower_basic"];
-    Tower_basic::detection_radius_init = tower["detection_radius_init"];
-    Tower_basic::sprite_init.setTexture(resources.load(tower["sprite_init"]));
-    Tower_basic::fire_period_init = tower["fire_period_init"];
-    Tower_basic::projectile_init = get_tower_projectile(tower["projectile_init"]);
-    Tower_basic::shop_sprite_init.setTexture(resources.load(tower["shop_sprite_init"]));
-    Tower_basic::cost_init = tower["cost_init"];
+
+    Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_basic::tower_prop.cost_init = tower["cost_init"];
+    Tower_basic::tower_prop.fire_period_init = tower["fire_period_init"];
+    Tower_basic::entity_prop.texture_file = tower["sprite_init"];
+    Tower_basic::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
+    Tower_basic::entity_prop.hit_rad = tower["detection_radius_init"];
+    Tower_basic::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Tower_basic::entity_prop.mov_spd = 0;
 
     tower = json_obj["Tower_ring"];
-    Tower_ring::detection_radius_init = tower["detection_radius_init"];
-    Tower_ring::sprite_init.setTexture(resources.load(tower["sprite_init"]));
-    Tower_ring::fire_period_init = tower["fire_period_init"];
-    Tower_ring::projectile_init = get_tower_projectile(tower["projectile_init"]);
-    Tower_ring::shop_sprite_init.setTexture(resources.load(tower["shop_sprite_init"]));
-    Tower_ring::cost_init = tower["cost_init"];
+    //Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_ring::tower_prop.cost_init = tower["cost_init"];
+    Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
+    Tower_ring::entity_prop.texture_file = tower["sprite_init"];
+    Tower_ring::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
+    Tower_ring::entity_prop.hit_rad = tower["detection_radius_init"];
+    Tower_ring::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Tower_ring::entity_prop.mov_spd = 0;
+
+    cout << "laddat towers" << endl;
 }
+
 
 void Game::check_collision()
 {
@@ -433,7 +471,8 @@ void Game::check_collision()
         }
     }
 }
-void fire_towers()
+
+void Game::fire_towers()
 {
     for (auto tower = Tower::static_towers.begin();
          tower != Tower::static_towers.end();
@@ -442,7 +481,7 @@ void fire_towers()
             (*tower)->shoot();
         }
 }
-*/
+
 void Game::handle_input()
 {
     sf::Event event;
@@ -500,5 +539,10 @@ void Game::update_logic()
         enemy_update_direction();
         enemy_update_position();
     }
+    if (Projectile::projectiles.size() > 0)
+    {
+        projectile_update_position();
+    }
+    check_collision();
     frame++;
 }

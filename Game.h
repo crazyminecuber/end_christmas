@@ -20,7 +20,8 @@ public:
 		 : window_size{win_size.x, win_size.y}, health{window, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
-			//load_entities(entity_file);
+			//load_entities(entity_file); // Kallr vi på explicit i main.cc av
+            //någon anledning.
 		 };
 
 
