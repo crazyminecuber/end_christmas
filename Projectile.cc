@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Entity.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 using namespace std;
 
@@ -25,6 +26,7 @@ bool Projectile::update_position()
       return false;
     }
 }
+
 
 //Copy-constructor, sets frame_to_die and damage
 Projectile::Projectile(Projectile const& other):Entity(other)
@@ -74,6 +76,7 @@ bool Projectile_basic::collision()
     {
       return true;
     }
+
 
 /*----------------------------------------------------------------------------*/
 //Projectile_pierce
@@ -131,6 +134,7 @@ bool Projectile_pierce::collision()
   }
 }
 
+
 /*----------------------------------------------------------------------------*/
 //Projectile_bomb
 //Static Projectile_bomb
@@ -183,6 +187,7 @@ bool Projectile_bomb::collision()
   blast.clone(sf::Vector2f(0,0), getPosition());
   return true;
 }
+
 
 /*----------------------------------------------------------------------------*/
 

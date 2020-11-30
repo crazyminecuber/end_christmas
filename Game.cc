@@ -446,8 +446,7 @@ void Game::check_collision()
 {
     //kolla tower - enemy
     for (auto enemy_it = Enemy::enemies.begin();
-         enemy_it != Enemy::enemies.end();
-         enemy_it++)
+         enemy_it != Enemy::enemies.end(); enemy_it++)
     {
         // kolla kollision mellan projectile - enemy
         for (auto projectile_it = Projectile::projectiles.begin();
@@ -455,7 +454,11 @@ void Game::check_collision()
         {
             if (collided((*projectile_it),(*enemy_it)))
             {
-                (*enemy_it)->collision(*projectile_it);
+                if ((*enemy_it)->collision(*projectile_it))
+                {
+                  delete *enemy_it;
+                  enemy_it = Enemy::enemies.erase(enemy_it);
+                }
                 if ((*projectile_it)->collision())
                 {
                   delete *projectile_it;
@@ -470,7 +473,7 @@ void Game::check_collision()
             {
                 ++projectile_it;
             }
-            
+
         }
         for (auto tower_it = Tower::static_towers.begin();
              tower_it != Tower::static_towers.end();

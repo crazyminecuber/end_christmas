@@ -23,7 +23,7 @@
             "Projectile_basic" :
                 {
                     "frames_to_live" : 1000,
-                    "damage_init" : 1,
+                    "damage_init" : 1100,
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [100,100],
                     "hit_rad" : 50,
@@ -32,7 +32,7 @@
             "Projectile_pierce" :
                 {
                     "frames_to_live" : 3000,
-                    "damage_init" : 1,
+                    "damage_init" : 1100,
                     "texture" : "resources/textures/icicle.png",
                     "size" : [50,50],
                     "hit_rad" : 25,
@@ -41,7 +41,7 @@
             "Projectile_bomb" :
                 {
                     "frames_to_live" : 3000,
-                    "damage_init" : 1,
+                    "damage_init" : 4000,
                     "texture" : "resources/textures/Christmas_cracker.png",
                     "size" : [50, 50],
                     "hit_rad" : 25,
@@ -50,7 +50,7 @@
             "Projectile_bomb_blast" :
                 {
                     "frames_to_live" : 20,
-                    "damage_init" : 1,
+                    "damage_init" : 11000,
                     "texture" : "resources/textures/Bang.png",
                     "size" : [100,100],
                     "hit_rad" : 50,
