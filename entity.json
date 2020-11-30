@@ -26,34 +26,34 @@
                     "damage_init" : 1,
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [100,100],
-                    "hit_rad" : 100,
+                    "hit_rad" : 50,
                     "mov_spd" : 1
                 },
             "Projectile_pierce" :
                 {
-                    "frames_to_live" : 300,
+                    "frames_to_live" : 3000,
                     "damage_init" : 1,
                     "texture" : "resources/textures/icicle.png",
-                    "size" : [5,5],
-                    "hit_rad" : 2.5,
-                    "mov_spd" : 5
+                    "size" : [50,50],
+                    "hit_rad" : 25,
+                    "mov_spd" : 2
                 },
             "Projectile_bomb" :
                 {
-                    "frames_to_live" : 300,
+                    "frames_to_live" : 3000,
                     "damage_init" : 1,
                     "texture" : "resources/textures/Christmas_cracker.png",
-                    "size" : [5, 5],
-                    "hit_rad" : 2.5,
-                    "mov_spd" : 5
+                    "size" : [50, 50],
+                    "hit_rad" : 25,
+                    "mov_spd" : 2
                 },
             "Projectile_bomb_blast" :
                 {
                     "frames_to_live" : 20,
                     "damage_init" : 1,
                     "texture" : "resources/textures/Bang.png",
-                    "size" : [10,10],
-                    "hit_rad" : 5,
+                    "size" : [100,100],
+                    "hit_rad" : 50,
                     "mov_spd" : 0
                 }
         },
