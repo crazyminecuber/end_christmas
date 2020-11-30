@@ -2,15 +2,21 @@
 #include "Entity.h"
 #include "Enemy_basic.h"
 
-Enemy_basic::~Enemy_basic(){}
-
-
-
-void Enemy_basic::collision(Entity* object){
-    std::cout << "krockat" << *object << std::endl;
-}
-
-
 //Statics
 int Enemy_basic::life_init;
 entity_properties Enemy_basic::prop;
+
+Enemy_basic::~Enemy_basic(){}
+
+bool Enemy_basic::collision(Projectile* object){
+    std::cout << "krockat" << *object << std::endl;
+    life_init-= object->damage;
+    if (life_init <= 0)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+}

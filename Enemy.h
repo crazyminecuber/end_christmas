@@ -8,6 +8,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
+#include "Projectile.h"
 
 class Enemy
 : public Entity
@@ -22,7 +23,7 @@ public:
         dir, mov_spd),
         life{arg_life}{}
 
-    virtual void collision(Entity* object) = 0;
+    virtual bool collision(Projectile* object) = 0;
     void set_direction(sf::Vector2f dir);
     int get_damage();
 

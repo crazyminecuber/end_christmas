@@ -21,9 +21,9 @@ public:
   virtual bool collision()=0;
   //static
   static std::vector<Projectile*> projectiles;
+  int damage{};
 
 protected:
-  int damage{};
   int frame_to_die{};
 };
 
