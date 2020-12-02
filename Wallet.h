@@ -6,11 +6,12 @@
 class Wallet
 {
 public:
+    Wallet(){};
     Wallet(int starting_cash): cash{starting_cash}
     {
 
     }
-    int cash;
+    int cash{};
 };
 
 #endif //ENTITY_H

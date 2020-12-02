@@ -20,6 +20,7 @@
 #include "Tile_enemy.h"
 #include "Tile_enemy_start.h"
 #include "Tile_enemy_end.h"
+#include "Tower_shop.h"
 
 using namespace std;
 using json = nlohmann::json;
@@ -229,6 +230,7 @@ void Game::render()
     {
         window.draw(*(*it)); // it doesn't make sense to me either but it works
     }
+
     //render projectiles
     for (auto it = begin(Projectile::projectiles);
          it != end(Projectile::projectiles);
@@ -237,6 +239,7 @@ void Game::render()
         window.draw(*(*it));
     }
 
+    shop.render(window);
     // render health
     health.render();
 
@@ -299,10 +302,9 @@ void Game::load_entities(string const & file)
         json j_data;
         ifs >> j_data;
         init_enemies(j_data["Enemy"]);
-//        init_projectiles(j_data["Projectiles"]);
         init_towers(j_data["Tower"]);
         init_projectiles(j_data["Projectile"]);
-        //init_towers(j_data["Tower"]);
+        init_shop(j_data["Shop"]);
     }
     ifs.close();
 }
@@ -441,6 +443,22 @@ void Game::init_towers(json const & json_obj)
     cout << "laddat towers" << endl;
 }
 
+void Game::init_shop(json const & j_shop)
+{
+    Wallet wallet{j_shop["start_cash"]};
+    sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
+    sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
+    sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0};
+    json back_color = j_shop["background_color"];
+    sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
+    json btn_color = j_shop["btn_color"];
+    sf::Color button_color{btn_color["r"], btn_color["g"], btn_color["b"]};
+    json btn_select_color = j_shop["btn_select_color"];
+    sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
+    vector<Tower *> passive_towers{new Tower_basic{}, new Tower_basic, new Tower_basic, new Tower_basic, new Tower_basic}; //TODO! change to other
+    shop = Tower_shop{passive_towers, wallet, shop_pos, shop_size,btn_size, color,button_color,button_select_color};
+}
+
 
 void Game::check_collision()
 {
@@ -507,45 +525,40 @@ void Game::handle_input()
                 window.close ();
             }
             // Has a mouse button been pressed?
-            // else if ( event.type == sf::Event::MouseButtonPressed )
-            // {
-            //     auto mouse { event.mouseButton };
-            //     // Is it the left mouse button?
-            //     if ( mouse.button == sf::Mouse::Button::Left )
-            //     {
-            //         float mouseX = mouse.x;
-            //         float mouseY = mouse.y;
-            //         handle_click(sf::Vector2f{mouseX, mouseY});
-            //     }
-            // }
+             else if ( event.type == sf::Event::MouseButtonPressed )
+             {
+                 auto mouse { event.mouseButton };
+                 // Is it the left mouse button?
+                 if ( mouse.button == sf::Mouse::Button::Left )
+                 {
+                     float mouseX = mouse.x;
+                     float mouseY = mouse.y;
+                     handle_click(sf::Vector2f{mouseX, mouseY});
+                 }
+             }
         }
 }
 
-// void Game::handle_click(sf::Vector2f click)
-// {
-//     // Do we want to be smart or dumb here? One way is to just itterate over all
-//     // clickable object and see if they contain the clicked location. A faster
-//     // way is to use the fact that everything is in a grid and calculate what
-//     // button was pressed. I did the dump way.
-//
-//     // Itterate over tower_butons
-//     for (auto b = Tower_button.buttons.begin(); b != Tower_button.buttons.end(); b++)
-//     {
-//         if(clickable->getGlobalBounds().contains(musposition))
-//         {
-//             (*b)->on_click();
-//         }
-//     }
-//
-//     // Itterate over tiles
-//     for (auto t = Tile.tiles.begin();t != Tile.tiles.end(); t++)
-//     {
-//         if(clickable->getGlobalBounds().contains(musposition))
-//         {
-//             (*t)->on_click();
-//         }
-//     }
-// }
+ void Game::handle_click(sf::Vector2f click)
+ {
+     // Do we want to be smart or dumb here? One way is to just itterate over all
+     // clickable object and see if they contain the clicked location. A faster
+     // way is to use the fact that everything is in a grid and calculate what
+     // button was pressed. I did the dump way.
+
+             shop.on_click(click);
+
+     // Itterate over tiles
+     /*
+     for (auto t = Tile::tiles.begin();t != Tile::tiles.end(); t++)
+     {
+         if(t->getGlobalBounds().contains(click))
+         {
+             (*t)->on_click();
+         }
+     }
+     */
+ }
 
 void Game::update_logic()
 {
