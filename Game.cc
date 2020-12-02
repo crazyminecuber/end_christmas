@@ -255,7 +255,8 @@ void Game::enemy_update_position()
 
 void Game::next_wave()
 {
-    wave_manager.next_wave();
+    wave_manager.init_waves();
+    wave_manager.calculate_spawn_frames(fps);
 }
 
 void Game::load_entities(string const & file)

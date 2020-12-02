@@ -65,7 +65,7 @@ private:
 
 	//Tower_shop tower_shop;
 	int frame{0};
-	float fps{60};
+	float fps{60}; //Change to int???
 
 
 
