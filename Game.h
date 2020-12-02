@@ -52,7 +52,7 @@ public:
 	void fire_towers();
 
 	static int get_frame();
-	float get_fps();
+	double get_fps(); // ta bort
 
 private:
 	sf::Vector2u window_size;
@@ -66,7 +66,7 @@ private:
 	Health health;
 	//Tower_shop tower_shop;
 	static int frame;
-	float fps{60};
+	double fps{60}; // ta bort
 
 
 

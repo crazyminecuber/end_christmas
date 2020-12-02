@@ -370,7 +370,7 @@ int Game::get_frame()
 {
     return frame;
 }
-float Game::get_fps()
+double Game::get_fps()
 {
     return fps;
 }
