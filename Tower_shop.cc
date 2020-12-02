@@ -1,22 +1,37 @@
 #include "Tower_shop.h"
-using namespace sf;
+#include "Tower_button.h"
+#include <iostream>
 using namespace std;
 
 Tower_shop::Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
-        sf::Vector2f siz, sf::Vector2f btn_size)
+        sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color, sf::Color btn_color, sf::Color btn_select_color)
     : RectangleShape(siz), passive_towers{pt}, wallet{w}, button_size{btn_size},
     heading{make_text()}// Lagra position och size i sfml:objectet.
 {
     setPosition(pos);
     chosen_tower = nullptr;
     // Set position of text. Gör smartare!
-    heading.setPosition(Vector2f(150,150));
+    // Centered horizontally but top vertically
+    heading.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y);
+
+    sf::Vector2f head_orig{};
+    sf::FloatRect head_rec = heading.getLocalBounds();
+    head_orig.x = head_rec.left + head_rec.width / 2;
+    head_orig.y = 0.0f;
+    heading.setOrigin(head_orig);
+
     int nr_columns{2};
-    IntRect area{100, 100, 500, 500};
-    generate_shop_grid(nr_columns, area);
+    sf::IntRect area{int(getPosition().x),int(getPosition().y) + 100, int(siz.x), 400};
+    generate_shop_grid(nr_columns, area, btn_color, btn_select_color);
+    //drawable.push_back(this);
+    setFillColor(color);
+
+     cout << "shop globalbounds, width: " << getGlobalBounds().width << ", height: " << getGlobalBounds().height
+     << ", left: " << getGlobalBounds().left << ", top:" << getGlobalBounds().top << endl;
+     cout << "shop position, x: " << getPosition().x << ", y: " << getPosition().y << endl;
 }
 
-void Tower_shop::generate_shop_grid(int nr_columns, IntRect area) // Genera knappar med textur genom att kalla på tower_button många gånger.
+void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color) // Genera knappar med textur genom att kalla på tower_button många gånger.
 {
     // Just to test, will add more advanced stuff later.
     // What determins all the sizes? The shop will have a given with. When it
@@ -30,26 +45,31 @@ void Tower_shop::generate_shop_grid(int nr_columns, IntRect area) // Genera knap
     // center of a button or the edge of the rectangle
 
     // Make a button for every tower
+     cout << "button rectangle, width: " << area.width << ", height: " << area.height
+     << ", left: " << area.left << ", top:" << area.top << endl;
 
     int spacing = (area.width - nr_columns * button_size.x) / (nr_columns + 1);
-    int current_column{1};
-    int current_row{1};
-    Vector2f btn_pos{};
+    int current_column{0};
+    int current_row{0};
+    sf::Vector2f btn_pos{0,0};
     for (auto tow_it = passive_towers.begin();
          tow_it != passive_towers.end();
          tow_it++)
     {
         // Lokala eller globala koordinater?
         // Global for now
-        btn_pos.x = area.left + spacing * (current_column) + button_size.x * current_column - 1 / 2 * button_size.x;
-        btn_pos.y = area.top + spacing * (current_row) + button_size.x * current_row - 1 / 2 * button_size.y;
-        Tower_button(*tow_it, this, button_size, btn_pos);
+        btn_pos.x = area.left + button_size.x / 2 + spacing
+                    + (current_column * (spacing + button_size.x));
+        cout << "btn_pos.x"<<btn_pos.x << endl;
+        btn_pos.y = area.top + button_size.y / 2 + spacing
+                    + (current_row * (spacing + button_size.y));
+        buttons.push_back(Tower_button{passive_towers.front(), this, button_size, btn_pos, btn_color, btn_select_color});
 
         current_column++;
-        if (current_column > nr_columns)
+        if (current_column >= nr_columns)
         {
             current_row++;
-            current_column = 1;
+            current_column = 0;
         }
     }
 
@@ -59,71 +79,33 @@ void Tower_shop::generate_shop_grid(int nr_columns, IntRect area) // Genera knap
 
 sf::Text Tower_shop::make_text()
 {
-    Font * font = new Font{}; // Minnesläcker!Bör nog laddas i game istället.
+    sf::Font * font = new sf::Font{}; // Minnesläcker!Bör nog laddas i game istället.
     if ( !font->loadFromFile ("resources/fonts/best_font.ttf") )
     {
         // kunde inte ladda typsnitt
         cout << "Unable to load font" << endl;
     }
-    return Text{"Tower Shop", *font}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
+    return sf::Text{"Tower Shop", *font}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
 }
 
-//----------------------------------------------------------------------------
-
-Tower_button::Tower_button(Tower * tw, Tower_shop * ts, Vector2f & btn_size,
-                            Vector2f & position)
-                            : RectangleShape{btn_size}, tower{tw}, tower_shop{ts}, pricetag{make_pricetag(tw)},
-                                tower_pic{make_tower_pic(tw)}
+void Tower_shop::render(sf::RenderWindow & window)
 {
-    // Creates sprite for image of tower, font and text for pricetag and sets
-    // background color
-    pricetag.setPosition(100,100); // Make some smart calculatoins here
-
-    // Scaling sprite
-    float sprite_x{100}; // The size you acctually want.
-    float sprite_y{100};
-    Vector2u old_size{tower_pic.getTexture()->getSize()};
-    tower_pic.setPosition(100, 100); // Do more fancy calculations here
-    tower_pic.setScale(sprite_x / old_size.x, sprite_y / old_size.y);
-
-    //Set background.
-    setFillColor(Color{0,0,100}); // hard coded color, should change
-    setOrigin(btn_size / 2.0f); // Center
-    setPosition(position);
-
-    tower_shop->drawable.push_back(this);
-    tower_shop->drawable.push_back(&pricetag);
-    tower_shop->drawable.push_back(&tower_pic);
-
-}
-
-void Tower_button::on_click()
-{
-    // Set chosen tower i shop.
-    // TODO Ändra sprite på något sätt.
-    tower_shop->chosen_tower = tower;
-}
-
-sf::Text Tower_button::make_pricetag(Tower * tw)
-{
-    Font * font = new Font{}; // Minnesläcker!Bör nog laddas i game istället.
-    if ( !font->loadFromFile ("resources/fonts/best_font.ttf") )
+    window.draw(*this);
+    window.draw(heading);
+    for (auto it = buttons.begin();
+         it != buttons.end();
+         it++)
     {
-        // kunde inte ladda typsnitt
-        cout << "Unable to load font" << endl;
+        it->render(window);
     }
-    string cost {to_string(tw->cost)};
-    return Text{cost, *font}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
 }
 
-sf::Sprite Tower_button::make_tower_pic(Tower * tw)
+// Can probably be done way more efficiently
+void Tower_shop::on_click(sf::Vector2f click)
 {
-    tw->getColor();
-    //Texture const *  texture = tw->getTexture(); // Problem att den är konstant :(
-    Texture * texture = new Texture(); // Yet another memory leak.
-    if ( !texture->loadFromFile ("resources/textures/Santa.png") )
+    chosen_tower = nullptr;
+    for (auto b = buttons.begin(); b != buttons.end(); b++)
     {
-        cout << "Unable to load texture" << endl;
+         b->on_click(click);
     }
-    return Sprite{*texture}; // Again hoping for move construction
 }

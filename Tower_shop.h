@@ -11,42 +11,34 @@
 
 #include "Wallet.h"
 #include "Tower.h"
+#include "Tower_button.h"
 
+class Tower_button;
 class Tower_shop : public sf::RectangleShape
 {
 public:
+    Tower_shop(){};
     Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
-            sf::Vector2f siz, sf::Vector2f btn_size);
+            sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color, sf::Color btn_color,sf::Color btn_select_color);
     Tower* chosen_tower;
-    std::vector<sf::Drawable*> drawable{};
+    //std::vector<sf::Drawable*> drawable{};
+    void render(sf::RenderWindow & window);
+    void on_click(sf::Vector2f click);
+
+
 private:
     std::vector<Tower *> passive_towers;
     Wallet wallet;
     sf::Vector2f button_size;
     sf::Text heading{};
+    std::vector<Tower_button> buttons{};
+
 
     sf::Text make_text();
-    void generate_shop_grid(int nr_columns, sf::IntRect area); // Genera knappar med textur genom att kalla på tower_button många gånger.
+    void generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color); // Genera knappar med textur genom att kalla på tower_button många gånger.
 
 };
 
-// Can we make it position it self relative to its center point?
-class Tower_button : public sf::RectangleShape
-{
-public:
-    Tower_button(Tower * tw, Tower_shop * ts, sf::Vector2f & btn_size, sf::Vector2f & position);
-
-    void on_click();
-
-private:
-    Tower* tower;
-    Tower_shop* tower_shop;
-    sf::Text pricetag;
-    sf::Sprite tower_pic;
-    sf::Text make_pricetag(Tower * tw);
-    sf::Sprite make_tower_pic(Tower * tw);
-
-};
 #endif
 
 

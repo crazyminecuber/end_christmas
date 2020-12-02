@@ -79,5 +79,29 @@
                     "fire_period_init" : 30,
                     "size": [100,100]
                 }
+        },
+    "Shop" :
+        {
+            "start_cash" : 1000,
+            "background_color":
+            {
+                "r": 0,
+                "g": 0,
+                "b": 100
+            },
+            "btn_color":
+            {
+                "r": 100,
+                "g": 0,
+                "b": 0
+            },
+            "btn_select_color":
+            {
+                "r": 50,
+                "g": 30,
+                "b": 0
+            },
+            "shop_size": [300,800],
+            "btn_size": [100,100]
         }
 }
