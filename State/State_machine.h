@@ -14,7 +14,7 @@
 class State_machine
 {
 public:
-    State_machine(unsigned width, unsigned height);
+    State_machine(const std::string &title, unsigned width, unsigned height);
 
     void run();
 

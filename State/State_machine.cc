@@ -8,13 +8,14 @@
 
 using namespace std;
 
-State_machine::State_machine(unsigned width, unsigned height)
-    : window{sf::VideoMode{width,height},"Kill Santa"}
+State_machine::State_machine(const string & title, 
+                             unsigned width, unsigned height)
+    : window{sf::VideoMode{width,height},title}
 {
-    states.insert(make_pair("menu", new State_menu));
+    states.insert(make_pair("menu", new State_menu{title}));
     states.insert(make_pair("pause", new State_pause));
     states.insert(make_pair("wait", new State_wait));
-    states.insert(make_pair("wait", new State_wave));
+    states.insert(make_pair("wave", new State_wave));
     //set initial state
     current_state = states.at("menu");
 }

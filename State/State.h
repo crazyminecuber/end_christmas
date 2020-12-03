@@ -1,7 +1,6 @@
 #ifndef STATE_H
 #define STATE_H
 #include <SFML/Graphics.hpp>
-#include <string>
 
 /* Base class for the states. 
  * 
