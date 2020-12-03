@@ -9,7 +9,7 @@ class State_menu : public State
 public:
     State_menu(sf::RenderWindow & win, const std::string & title);
 
-    void handle_input() override;
+    void handle_input(sf::Event & event) override;
     void update_logic() override;
     void render()       override;
 

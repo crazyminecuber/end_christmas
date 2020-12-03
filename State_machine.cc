@@ -34,7 +34,7 @@ void State_machine::run()
     sf::Clock clock{};
     while ( running() )
     {
-        current_state->handle_input();
+        handle_input();
 
         current_state->update_logic();
 
@@ -72,7 +72,7 @@ void State_machine::handle_input()
             window.close ();
         }
         */
-        current_state->handle_input();
+        current_state->handle_input(event);
     }
 }
 

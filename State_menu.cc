@@ -47,29 +47,25 @@ State_menu::State_menu(sf::RenderWindow & win, const string & title)
 
 }
 
-void State_menu::handle_input()
+void State_menu::handle_input(sf::Event & event)
 {
     start_game = false;
-    sf::Event event;
-    while ( window.pollEvent(event) )
+    if ( event.type == sf::Event::Closed )
+    {
+        window.close ();
+    }
+    // Has a mouse button been pressed?
+    else if ( event.type == sf::Event::MouseButtonPressed )
+    {
+        auto mouse { event.mouseButton };
+        // Is it the left mouse button?
+        if ( mouse.button == sf::Mouse::Button::Left )
         {
-            if ( event.type == sf::Event::Closed )
-            {
-                window.close ();
-            }
-            // Has a mouse button been pressed?
-            else if ( event.type == sf::Event::MouseButtonPressed )
-            {
-                auto mouse { event.mouseButton };
-                // Is it the left mouse button?
-                if ( mouse.button == sf::Mouse::Button::Left )
-                {
-                    float mouseX = mouse.x;
-                    float mouseY = mouse.y;
-                    handle_click(sf::Vector2f{mouseX, mouseY});
-                }
-            }
+            float mouseX = mouse.x;
+            float mouseY = mouse.y;
+            handle_click(sf::Vector2f{mouseX, mouseY});
         }
+    }
 }
 
 void State_menu::update_logic()

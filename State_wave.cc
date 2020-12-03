@@ -6,24 +6,20 @@ void State_wave::init()
     game.create_1_enemy_basic();
 }
 
-void State_wave::handle_input()
+void State_wave::handle_input(sf::Event & event)
 {
     /* reset variables */
     pause_game = false;
 
-    sf::Event event;
-    while (window.pollEvent(event))
+        if ( event.type == sf::Event::Closed )
         {
-            if ( event.type == sf::Event::Closed )
+            window.close ();
+        }
+        if ( event.type == sf::Event::KeyPressed )
+        {
+            if ( event.key.code == sf::Keyboard::P )
             {
-                window.close ();
-            }
-            if ( event.type == sf::Event::KeyPressed )
-            {
-                if ( event.key.code == sf::Keyboard::P )
-                {
-                    pause_game = true;
-                }
+                pause_game = true;
             }
         }
 }

@@ -24,26 +24,22 @@ void State_pause::init()
     text_pause.setPosition(window_size.x / 2.f, window_size.y / 2.f);
 }
 
-void State_pause::handle_input()
+void State_pause::handle_input(sf::Event & event)
 {
     /* reset variables */
     unpause_game = false;
 
-    sf::Event event;
-    while (window.pollEvent(event))
+    if ( event.type == sf::Event::Closed )
+    {
+        window.close ();
+    }
+    if ( event.type == sf::Event::KeyPressed )
+    {
+        if ( event.key.code == sf::Keyboard::P )
         {
-            if ( event.type == sf::Event::Closed )
-            {
-                window.close ();
-            }
-            if ( event.type == sf::Event::KeyPressed )
-            {
-                if ( event.key.code == sf::Keyboard::P )
-                {
-                    unpause_game = true;
-                }
-            }
+            unpause_game = true;
         }
+    }
 }
 
 void State_pause::update_logic()

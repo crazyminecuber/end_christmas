@@ -38,16 +38,12 @@ void State_end::init()
     text2.setPosition(window_size.x / 2.f, window_size.y / 3.f);
 }
 
-void State_end::handle_input()
+void State_end::handle_input(sf::Event & event)
 {
-    sf::Event event;
-    while ( window.pollEvent(event) )
-        {
-            if ( event.type == sf::Event::Closed )
-            {
-                window.close ();
-            }
-        }
+    if ( event.type == sf::Event::Closed )
+    {
+        window.close ();
+    }
 }
 
 void State_end::update_logic()
