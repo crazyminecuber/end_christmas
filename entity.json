@@ -18,6 +18,42 @@
                     "mov_spd": 2
                 }
         },
+    "Waves" :
+        {
+            "Group1" :
+            {
+                "start_wave": 0,
+                "end_wave" : 10,
+                "start_frame": 0,
+                "mov_spd_factor": 1,
+                "spawn_rate" : 2,
+                "num_in_group": 1,
+                "num_of_groups": 1,
+                "group_spawn_interval": 1
+            },
+            "Group2" :
+            {
+                "start_wave": 0,
+                "end_wave" : 10,
+                "start_frame": 500,
+                "mov_spd_factor": 1,
+                "spawn_rate" : 4,
+                "num_in_group": 25,
+                "num_of_groups": 1,
+                "group_spawn_interval": 1
+            },
+            "Group3" :
+            {
+                "start_wave": 0,
+                "end_wave" : 10,
+                "start_frame": 1000,
+                "mov_spd_factor": 1,
+                "spawn_rate" : 4,
+                "num_in_group": 25,
+                "num_of_groups": 1,
+                "group_spawn_interval": 1
+            }
+        },
     "Projectile" :
         {
             "Projectile_basic" :

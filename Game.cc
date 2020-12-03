@@ -267,6 +267,7 @@ void Game::load_entities(string const & file)
         json j_data;
         ifs >> j_data;
         init_enemies(j_data["Enemy"]);
+        init_waves(j_data["Waves"]);
         // init_projectiles(j_data["Projectiles"]);
         // init_towers(j_data["Towers"]);
     }
@@ -305,6 +306,23 @@ void Game::load_entities(string const & file)
     Enemy_boss::prop.hit_rad = enemy_boss["hit_rad"];
     Enemy_boss::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
+}
+
+void Game::init_waves(json const & json_obj)
+{
+    //Get every wave and add to wave_groups
+    for (const auto& wave : json_obj.items())
+    {
+    wave_manager.add_wave(wave.value()["start_wave"],
+                          wave.value()["end_wave"],
+                          wave.value()["start_frame"],
+                          wave.value()["mov_spd_factor"],
+                          wave.value()["spawn_rate"],
+                          wave.value()["num_in_group"],
+                          wave.value()["num_of_groups"],
+                          wave.value()["group_spawn_interval"]);
+    cout << wave.key() << endl;
+    }
 }
 
 

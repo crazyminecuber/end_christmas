@@ -21,6 +21,12 @@ public:
     //std::list<int> spawn_frames_basic;
     //std::list<int> spawn_frames_boss;
     std::vector<Wave_group*> wave_groups;
+    std::vector<Wave_group*> active_wave_groups; //The groups that spawn the current wave
+    void add_wave(int start_wave, int end_wave, int start_frame,
+               float mov_spd_factor, float spawn_rate, int num_in_group,
+               int num_of_groups, float group_spawn_interval);
+    void activate_wave_groups();
+    void deactive_wave_groups();
     void init_waves();
     void next_wave();
     void spawn_enemies(int frame);

@@ -9,10 +9,13 @@ class Wave_group
 public:
     Wave_group(){};
 
-    Wave_group(int start_frame, int amount, float mov_spd_factor,
-               float spawn_rate, int num_of_groups, float group_interval)
-    : start_frame{start_frame}, amount{amount}, mov_spd_factor{mov_spd_factor},
-      spawn_rate{spawn_rate}, num_of_groups{num_of_groups}, group_interval{group_interval}
+    Wave_group(int start_wave, int end_wave, int start_frame,
+               float mov_spd_factor, float spawn_rate, int num_in_group,
+               int num_of_groups, float group_spawn_interval)
+    : start_wave{start_wave}, end_wave{end_wave}, start_frame{start_frame},
+      mov_spd_factor{mov_spd_factor}, spawn_rate{spawn_rate},
+      num_in_group{num_in_group}, num_of_groups{num_of_groups},
+      group_spawn_interval{group_spawn_interval}
     {
         //init();
     }
@@ -25,12 +28,17 @@ public:
 private:
     //Enemy* enemy;
     //int current_wave;
+    int start_wave;
+    int end_wave;
     int start_frame;
-    int amount;
+
     float mov_spd_factor;
+    //Group of enemies
     float spawn_rate; //(Hz)
+    int num_in_group;
     int num_of_groups;
-    float group_interval; //(i sekunder)
+    float group_spawn_interval; //(sec)
+
 };
 
 
