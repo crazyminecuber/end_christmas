@@ -34,4 +34,4 @@ private:
     sf::Font font;
 };
 
-#endif
+#endif // STATE_PAUSE_H

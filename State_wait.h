@@ -13,4 +13,4 @@ public:
 
 };
 
-#endif
+#endif // STATE_WAIT_H

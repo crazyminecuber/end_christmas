@@ -44,4 +44,4 @@ private:
     void quit();
 
 };
-#endif
+#endif // STATE_MACHINE_H

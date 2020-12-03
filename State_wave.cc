@@ -44,9 +44,8 @@ void State_wave::render()
 
 std::string State_wave::get_next_state()
 {
-    if ( game.get_health() <= 0)
+    if ( game.get_health() <= 99)
     {
-        window.close(); // temporary
         return "end";
     }
     else if ( pause_game )

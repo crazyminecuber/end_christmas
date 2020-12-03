@@ -35,4 +35,4 @@ private:
     sf::Font font;
 };
 
-#endif
+#endif // STATE_MENU_H

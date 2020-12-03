@@ -26,4 +26,4 @@ private:
     bool pause_game{false};
 };
 
-#endif
+#endif // STATE_WAVE_H

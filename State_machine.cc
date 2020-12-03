@@ -2,9 +2,10 @@
 #include <utility>
 #include <string>
 #include "State_menu.h"
-#include "State_pause.h"
-//#include "State_wait.h"
 #include "State_wave.h"
+//#include "State_wait.h"
+#include "State_pause.h"
+#include "State_end.h"
 
 using namespace std;
 
@@ -14,10 +15,10 @@ State_machine::State_machine(const string & title,
       game{window, "map.csv", "entity.json", 100}
 {
     states.insert(make_pair("menu", new State_menu(window, title)));
-    states.insert(make_pair("pause", new State_pause(window, game)));
-    //states.insert(make_pair("wait", new State_wait));
     states.insert(make_pair("wave", new State_wave(window, game)));
-    // states.insert(make_pair("end", new State_end(window)));
+    //states.insert(make_pair("wait", new State_wait));
+    states.insert(make_pair("pause", new State_pause(window, game)));
+    states.insert(make_pair("end", new State_end(window, game)));
 
     //set initial state
     current_state = states.at("menu");

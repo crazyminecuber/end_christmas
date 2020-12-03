@@ -10,10 +10,10 @@ State_menu::State_menu(sf::RenderWindow & win, const string & title)
                         "resources/textures/background_start_menu.png")}
 {
     /* text */
-    string file{"resources/fonts/Christmas_Bell.otf"};
+    std::string file{"resources/fonts/Christmas_Bell.otf"};
     if (!font.loadFromFile(file))
     {
-        throw invalid_argument("Unable to load " + file);
+        throw std::invalid_argument("Unable to load " + file);
     }
 
     text_title = sf::Text{'('+title+')', font, 100};
