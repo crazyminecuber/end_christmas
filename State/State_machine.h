@@ -2,11 +2,11 @@
 #define STATE_MACHINE_H
 #include <SFML/Graphics.hpp>
 #include <map>
-#include <string> 
+#include <string>
 #include "State.h"
-#include "../Game.h"
+#include "Game.h"
 
-/* Inspiration taken from Frida Flodin's: 
+/* Inspiration taken from Frida Flodin's:
  * https://gitlab.ida.liu.se/TDDI82/Spelskelett
  * State_machine is the top layer of the game and controlls what part of the
  * game being run.
@@ -25,7 +25,7 @@ private:
 
     sf::RenderWindow window;
 
-    Game game{};
+    Game game;
 
     State* current_state;
 

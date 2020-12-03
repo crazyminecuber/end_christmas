@@ -8,9 +8,10 @@
 
 using namespace std;
 
-State_machine::State_machine(const string & title, 
+State_machine::State_machine(const string & title,
                              unsigned width, unsigned height)
-    : window{sf::VideoMode{width,height},title}
+    : window{sf::VideoMode{width,height}, title},
+      game{window, "map.csv", 100}
 {
     states.insert(make_pair("menu", new State_menu{title}));
     states.insert(make_pair("pause", new State_pause));
@@ -55,13 +56,16 @@ void State_machine::throttle(const double fps, sf::Clock & clock)
 
 void State_machine::set_state(string const & state)
 {
+    cout << "innan" << endl;
+    cout << state << endl;
     current_state = states.at(state);
+    cout << "efter" << endl;
 }
 
 void State_machine::handle_events()
 {
     sf::Event event;
-    
+
     while (window.pollEvent(event))
     {
         /* not sure if needed since we check if closed in running()

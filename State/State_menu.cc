@@ -48,6 +48,6 @@ string State_menu::get_next_state()
 {
     if (game)
     {
-        return "wave"
+        return "wave";
     }
 }

@@ -12,12 +12,13 @@
 class Game final
 {
 public:
-	Game(){};
-	Game(sf::Vector2u win_size, std::string const & map_file, int hp
+	//Game(){};
+	Game(sf::RenderWindow & win, std::string const & map_file, int hp
 		 /* std::string const & entity_file, */
 		 /*std::string const & shop_file,*/
 		 )
-		 : window_size{win_size.x, win_size.y}, health{window, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
+		 : window{win}, window_size{win.getSize()},
+		   health{win, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
 			//load_entities(entity_file); // Kallr vi på explicit i main.cc av
@@ -55,9 +56,10 @@ public:
 	double get_fps(); // ta bort
 
 private:
+	sf::RenderWindow & window;
 	sf::Vector2u window_size;
-    sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
-	 						"Tower defence"};
+    //sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
+	// 						"Tower defence"};
 	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	void init_enemies(nlohmann::json const & json_obj);
