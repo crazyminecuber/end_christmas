@@ -211,6 +211,7 @@ void Game::render()
 
     // render health
     health.render();
+    wave_manager.render();
 
     /*  ---------------------- */
 
@@ -255,8 +256,7 @@ void Game::enemy_update_position()
 
 void Game::next_wave()
 {
-    wave_manager.init_waves();
-    wave_manager.calculate_spawn_frames(fps);
+    // wave_manager.next_wave(fps);
 }
 
 void Game::load_entities(string const & file)
@@ -313,14 +313,16 @@ void Game::init_waves(json const & json_obj)
     //Get every wave and add to wave_groups
     for (const auto& wave : json_obj.items())
     {
-    wave_manager.add_wave(wave.value()["start_wave"],
+    wave_manager.add_wave(new Wave_group(
+                          wave.value()["start_wave"],
                           wave.value()["end_wave"],
                           wave.value()["start_frame"],
                           wave.value()["mov_spd_factor"],
                           wave.value()["spawn_rate"],
+                          wave.value()["num_in_group_inc"],
                           wave.value()["num_in_group"],
                           wave.value()["num_of_groups"],
-                          wave.value()["group_spawn_interval"]);
+                          wave.value()["group_spawn_interval"]));
     cout << wave.key() << endl;
     }
 }
@@ -470,6 +472,12 @@ void Game::handle_input()
 
 void Game::update_logic()
 {
+    cout << Enemy::enemies.size() << endl;
+    if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
+    {
+        cout << "next_wave" << endl;
+        wave_manager.next_wave(frame, fps);
+    }
     wave_manager.spawn_enemies(frame);
     enemy_update_direction();
     enemy_update_position();

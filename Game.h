@@ -16,12 +16,14 @@
 class Game final
 {
 public:
-	Game(){};
+	//Game(){};
 	Game(sf::Vector2u win_size, std::string const & map_file, int hp
 		 /* std::string const & entity_file, */
 		 /*std::string const & shop_file,*/
 		 )
-		 : window_size{win_size.x, win_size.y}, health{window, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
+		 : window_size{win_size.x, win_size.y},
+		 health{window, "resources/textures/heart.png", hp},
+		 wave_manager{window}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
 			//load_entities(entity_file);
@@ -62,7 +64,7 @@ private:
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
 	Health health;
-	Wave_manager wave_manager{};
+	Wave_manager wave_manager;
 
 	//Tower_shop tower_shop;
 	int frame{0};

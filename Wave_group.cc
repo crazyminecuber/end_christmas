@@ -7,8 +7,15 @@
 
 
 
-void Wave_group::next_wave()
+void Wave_group::next_wave(int current_wave, int current_frame, int fps)
 {
+
+    if(current_wave != 1)
+    {
+        num_in_group += num_in_group_inc;
+    }
+    start_frame = current_frame + 1;
+    calculate_spawn_frames(fps);
 }
 
 void Wave_group::calculate_spawn_frames(float fps)
@@ -21,8 +28,8 @@ void Wave_group::calculate_spawn_frames(float fps)
         for(int i = 0; i < num_in_group; i++)
         {
             spawn_frames.push_back(start_frame +
-                                    enemy_interval*i +
-                                    enemy_group_interval*g);
+                                   enemy_interval*i +
+                                   enemy_group_interval*g);
         }
     }
 }
@@ -39,4 +46,9 @@ void Wave_group::spawn_enemies(int frame)
         spawn_frames.pop_front();
         Enemy::new_basic();
     }
+}
+
+bool Wave_group::all_enemies_have_spawned()
+{
+    return (spawn_frames.empty());
 }
