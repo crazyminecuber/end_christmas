@@ -23,6 +23,7 @@ public:
     void render();
     void remove_1_health();
     void remove_n_health(int n);
+    int  get_health();
 
 private:
     void update_text_health();

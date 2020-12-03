@@ -13,15 +13,15 @@ class Game final
 {
 public:
 	//Game(){};
-	Game(sf::RenderWindow & win, std::string const & map_file, int hp
-		 /* std::string const & entity_file, */
+	Game(sf::RenderWindow & win, std::string const & map_file,
+		 std::string const & entity_file, int hp
 		 /*std::string const & shop_file,*/
 		 )
 		 : window{win}, window_size{win.getSize()},
 		   health{win, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
-			//load_entities(entity_file); // Kallr vi på explicit i main.cc av
+			load_entities(entity_file); // Kallr vi på explicit i main.cc av
             //någon anledning.
 		 };
 
@@ -53,6 +53,7 @@ public:
 	void fire_towers();
 
 	static int get_frame();
+	int get_health();
 	double get_fps(); // ta bort
 
 private:

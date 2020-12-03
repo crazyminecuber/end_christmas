@@ -513,6 +513,11 @@ void Game::handle_input()
 //     // way is to use the fact that everything is in a grid and calculate what
 //     // button was pressed. I did the dump way.
 //
+//     // use smoething like this instead:
+//             sf::Vector2f mouse_pos{sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y};
+//             Tile tile = Tile::get_tile_by_coord(mouse_pos);
+//             tile.on_click();
+//
 //     // Itterate over tower_butons
 //     for (auto b = Tower_button.buttons.begin(); b != Tower_button.buttons.end(); b++)
 //     {
@@ -545,4 +550,9 @@ void Game::update_logic()
     }
     check_collision();
     frame++;
+}
+
+int Game::get_health()
+{
+    return health.get_health();
 }

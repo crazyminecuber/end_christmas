@@ -1,11 +1,11 @@
 #include "State_pause.h"
 
-void State_pause::handle_event(sf::Event event)
+void State_pause::handle_input(sf::Event event)
 {
     ;
 }
 
-void State_pause::update()
+void State_pause::update_logic()
 {
     ;
 }

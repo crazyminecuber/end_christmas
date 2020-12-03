@@ -2,8 +2,8 @@
 #include <utility>
 #include <string>
 #include "State_menu.h"
-#include "State_pause.h"
-#include "State_wait.h"
+//#include "State_pause.h"
+//#include "State_wait.h"
 #include "State_wave.h"
 
 using namespace std;
@@ -11,12 +11,14 @@ using namespace std;
 State_machine::State_machine(const string & title,
                              unsigned width, unsigned height)
     : window{sf::VideoMode{width,height}, title},
-      game{window, "map.csv", 100}
+      game{window, "map.csv", "entity.json", 100}
 {
-    states.insert(make_pair("menu", new State_menu{title}));
-    states.insert(make_pair("pause", new State_pause));
-    states.insert(make_pair("wait", new State_wait));
-    states.insert(make_pair("wave", new State_wave));
+    states.insert(make_pair("menu", new State_menu(window, title)));
+    // states.insert(make_pair("pause", new State_pause));
+    //states.insert(make_pair("wait", new State_wait));
+    states.insert(make_pair("wave", new State_wave(window, game)));
+    // states.insert(make_pair("end", new State_end(window)));
+
     //set initial state
     current_state = states.at("menu");
 }
@@ -29,17 +31,15 @@ bool State_machine::running()
 void State_machine::run()
 {
     sf::Clock clock{};
-    while (running())
+    while ( running() )
     {
-        handle_events();
+        current_state->handle_input();
 
-        current_state->update();
-
-        window.clear();
-        current_state->render(window);
-        window.display();
+        current_state->update_logic();
 
         set_state(current_state->get_next_state());
+
+        current_state->render();
 
         throttle(fps, clock);
     }
@@ -56,13 +56,10 @@ void State_machine::throttle(const double fps, sf::Clock & clock)
 
 void State_machine::set_state(string const & state)
 {
-    cout << "innan" << endl;
-    cout << state << endl;
     current_state = states.at(state);
-    cout << "efter" << endl;
 }
 
-void State_machine::handle_events()
+void State_machine::handle_input()
 {
     sf::Event event;
 
@@ -74,7 +71,7 @@ void State_machine::handle_events()
             window.close ();
         }
         */
-        current_state->handle_event(event);
+        current_state->handle_input();
     }
 }
 

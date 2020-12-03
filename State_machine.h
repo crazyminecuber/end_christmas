@@ -39,7 +39,7 @@ private:
     void set_state(std::string const & state);
 
     // Gets the event and passes it over to the state
-    void handle_events();
+    void handle_input();
 
     void quit();
 
