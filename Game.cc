@@ -208,8 +208,6 @@ bool Game::is_tile_enemy_end(sf::Vector2i index)
 
 void Game::render()
 {
-    window.clear();
-
     /* Put stuff to render here */
     // OBS: ORDER MATTERS!
 
@@ -239,10 +237,6 @@ void Game::render()
 
     // render health
     health.render();
-
-    /*  ---------------------- */
-
-    window.display();
 }
 
 bool Game::is_running()
@@ -484,26 +478,26 @@ void Game::fire_towers()
 
 void Game::handle_input()
 {
-    sf::Event event;
-    while (window.pollEvent(event))
-        {
-            if ( event.type == sf::Event::Closed )
-            {
-                window.close ();
-            }
-            // Has a mouse button been pressed?
-            // else if ( event.type == sf::Event::MouseButtonPressed )
-            // {
-            //     auto mouse { event.mouseButton };
-            //     // Is it the left mouse button?
-            //     if ( mouse.button == sf::Mouse::Button::Left )
-            //     {
-            //         float mouseX = mouse.x;
-            //         float mouseY = mouse.y;
-            //         handle_click(sf::Vector2f{mouseX, mouseY});
-            //     }
-            // }
-        }
+    // sf::Event event;
+    // while (window.pollEvent(event))
+    //     {
+    //         if ( event.type == sf::Event::Closed )
+    //         {
+    //             window.close ();
+    //         }
+    //         // Has a mouse button been pressed?
+    //         // else if ( event.type == sf::Event::MouseButtonPressed )
+    //         // {
+    //         //     auto mouse { event.mouseButton };
+    //         //     // Is it the left mouse button?
+    //         //     if ( mouse.button == sf::Mouse::Button::Left )
+    //         //     {
+    //         //         float mouseX = mouse.x;
+    //         //         float mouseY = mouse.y;
+    //         //         handle_click(sf::Vector2f{mouseX, mouseY});
+    //         //     }
+    //         // }
+    //     }
 }
 
 // void Game::handle_click(sf::Vector2f click)

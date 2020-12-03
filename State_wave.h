@@ -13,7 +13,7 @@ public:
     };
 
     void init();
-    
+
     void handle_input() override;
     void update_logic() override;
     void render()       override;
@@ -23,6 +23,7 @@ private:
     sf::RenderWindow & window;
     Game & game;
     std::string this_state{"wave"};
+    bool pause_game{false};
 };
 
 #endif

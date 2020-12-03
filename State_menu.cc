@@ -16,16 +16,16 @@ State_menu::State_menu(sf::RenderWindow & win, const string & title)
         throw invalid_argument("Unable to load " + file);
     }
 
-    title_text = sf::Text{'('+title+')', font, 100};
+    text_title = sf::Text{'('+title+')', font, 100};
     text = sf::Text{"Click santa to start game", font, 50};
 
-    sf::FloatRect bb_title{text.getGlobalBounds()};
+    sf::FloatRect bb_title{text_title.getGlobalBounds()};
     sf::FloatRect bb_text{text.getGlobalBounds()};
     sf::Vector2u window_size{window.getSize()};
-    title_text.setOrigin(bb_title.width  / 2.f, bb_title.height / 2.f);
+    text_title.setOrigin(bb_title.width  / 2.f, bb_title.height / 2.f);
     text.setOrigin(      bb_text.width   / 2.f, bb_text.height  / 2.f);
 
-    title_text.setPosition(665,         window_size.y / 6.f);
+    text_title.setPosition(window_size.x / 2.f, window_size.y / 6.f);
     text.setPosition(window_size.x / 2.f, window_size.y / 2.f);
 
     /* background */
@@ -85,7 +85,7 @@ void State_menu::render()
     window.draw(background_sprite);
     if ( hovering_start )
         window.draw(start_button);
-    window.draw(title_text);
+    window.draw(text_title);
     window.draw(text);
     /*                          */
 

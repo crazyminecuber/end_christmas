@@ -30,9 +30,9 @@ private:
 
     sf::RectangleShape start_button;
 
-    sf::Text title_text;
+    sf::Text text_title;
     sf::Text text;
-    sf::Font font{};
+    sf::Font font;
 };
 
 #endif
