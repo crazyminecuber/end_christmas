@@ -15,6 +15,8 @@ public:
 private:
     bool play{false};
     std::string this_state{"wait"};
+    sf::Text text_wait;
+    sf::Font font;
     sf::RenderWindow & window;
     Game & game;
 };

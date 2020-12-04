@@ -35,13 +35,17 @@ void State_wave::render()
 string State_wave::get_next_state()
 {
     string return_string{this_state};
-    if ( game.get_health() <= 99)
+    if ( game.get_health() <= 0)
     {
         return_string = "end";
     }
     else if ( pause_game )
     {
         return_string = "pause";
+    }
+    else if ( game.wave_complete() )
+    {
+        return_string = "wait";
     }
     /* reset variables */
     pause_game = false;
