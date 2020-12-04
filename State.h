@@ -10,7 +10,7 @@ class State
 public:
     virtual ~State() = default;
     // handles all the user input
-    virtual void handle_input() = 0;
+    virtual void handle_input(sf::Event & event) = 0;
     // handles all the logic each frame
     virtual void update_logic() = 0;
     // render what will be drawn to the window

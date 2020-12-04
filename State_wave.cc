@@ -1,23 +1,13 @@
 #include "State_wave.h"
 #include <iostream> // debugg
-
+using namespace std;
 void State_wave::init()
 {
     game.create_1_enemy_basic();
 }
 
-void State_wave::handle_input()
+void State_wave::handle_input(sf::Event & event)
 {
-    /* reset variables */
-    pause_game = false;
-
-    sf::Event event;
-    while (window.pollEvent(event))
-    {
-        if ( event.type == sf::Event::Closed )
-        {
-            window.close ();
-        }
         if ( event.type == sf::Event::KeyPressed )
         {
             if ( event.key.code == sf::Keyboard::P )
@@ -25,7 +15,6 @@ void State_wave::handle_input()
                 pause_game = true;
             }
         }
-    }
 }
 
 void State_wave::update_logic()
@@ -42,19 +31,18 @@ void State_wave::render()
     window.display();
 }
 
-std::string State_wave::get_next_state()
+string State_wave::get_next_state()
 {
+    string return_string{this_state};
     if ( game.get_health() <= 99)
     {
-        return "end";
+        return_string = "end";
     }
     else if ( pause_game )
     {
-        std::cout << "Pausing" << std::endl;
-        return "pause";
+        return_string = "pause";
     }
-    else
-    {
-        return this_state;
-    }
+    /* reset variables */
+    pause_game = false;
+    return return_string;
 }
