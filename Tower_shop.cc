@@ -100,7 +100,8 @@ void Tower_shop::render(sf::RenderWindow & window)
 // Can probably be done way more efficiently
 void Tower_shop::on_click(sf::Vector2f click)
 {
-    cout << "nullptr"<<endl;
+    cout << "Tower_shop passive_towers length" << passive_towers.size() << endl;
+    //cout << "nullptr"<<endl;
     //set_chosen_tower(nullptr);
     for (auto b = buttons.begin(); b != buttons.end(); b++)
     {

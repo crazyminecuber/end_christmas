@@ -26,8 +26,8 @@ public:
     Tower * get_chosen_tower();
 
 
-private:
     std::vector<Tower *> passive_towers;
+private:
     Wallet wallet;
     sf::Vector2f button_size;
     sf::Text heading{};
