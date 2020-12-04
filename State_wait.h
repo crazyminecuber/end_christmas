@@ -12,7 +12,8 @@ public:
     std::string get_next_state() override;
 
 private:
-
+    bool play{false};
+    std::string this_state{"wait"};
 };
 
 #endif // STATE_WAIT_H

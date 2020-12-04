@@ -40,7 +40,7 @@ void State_end::init()
 
 void State_end::handle_input(sf::Event & event)
 {
-    if ( event.type == sf::Event::Closed )
+    if ( event.type == sf::Event::KeyPressed )
     {
         window.close ();
     }
