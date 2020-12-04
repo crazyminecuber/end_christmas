@@ -47,6 +47,7 @@ public:
 	void create_n_enemy_boss(int start_time, int amount, float interval);
 	void enemy_update_direction();
 	void enemy_update_position();
+	bool wave_complete();
 
 	void projectile_update_position();
 

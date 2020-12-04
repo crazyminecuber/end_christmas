@@ -273,6 +273,11 @@ void Game::enemy_update_position()
     }
 }
 
+bool Game::wave_complete()
+{
+    return get_frame() >= 600; 
+}
+
 void Game::projectile_update_position()
 {
     for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles);)
