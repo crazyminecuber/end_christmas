@@ -14,7 +14,7 @@ class Tower_button : public sf::RectangleShape
 {
 public:
     Tower_button(Tower * tw, Tower_shop * ts, sf::Vector2f btn_size,
-            sf::Vector2f position, sf::Color btn_color,sf::Color btn_select_color);
+            sf::Vector2f position, sf::Color btn_color,sf::Color btn_select_color, std::string font_name);
 
     void on_click(sf::Vector2f click);
     void render(sf::RenderWindow & window);
@@ -26,7 +26,7 @@ private:
     Tower_shop* tower_shop;
     sf::Text pricetag{};
     sf::Sprite tower_pic{};
-    sf::Text make_pricetag(Tower * tw);
+    sf::Text make_pricetag(Tower * tw, std::string font_name);
     sf::Sprite make_tower_pic(Tower * tw);
     sf::Color color{};
     sf::Color select_color{};

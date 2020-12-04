@@ -20,6 +20,8 @@ void Tower::collision(Entity* object)
 
 void Tower_basic::create_active(sf::Vector2f position)
 {
+    cout << "creating active"<< endl;
+    cout << "size" << size.x << ", " << size.y << endl;
     Tower * t = new Tower_basic{
         texture_file, position, size, hitbox_radius, direction, movement_speed, cost, projectile
     };

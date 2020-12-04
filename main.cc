@@ -48,20 +48,9 @@ int main ()
     sf::Vector2f pos2{300,100};
     Tower_ring tow2{};
     tow2.create_active(pos2);
-    Projectile *p = new Projectile_basic(sf::Vector2f(100,100),sf::Vector2f(-1,0));
-    p->clone(sf::Vector2f(0.5,0.5),sf::Vector2f(200,100));
-    p = new Projectile_pierce(sf::Vector2f(100,100),sf::Vector2f(-1,0));
-    p->clone(sf::Vector2f(-0.5,0.5),sf::Vector2f(700,100));
-    p = new Projectile_bomb(sf::Vector2f(100,100),sf::Vector2f(-1,0));
-    // bomb causes segmentation fault on collision
-    p->clone(sf::Vector2f(-0.5,0.5),sf::Vector2f(600,100));
-
-
 
     while ( game.is_running() )
     {
-        game.create_n_enemy_basic(0, 10, 0.5);
-        game.create_n_enemy_basic(8, 4, 0.25);
         //game.create_n_enemy_boss(0, 1, 0.5);
         game.handle_input();
         game.update_logic();

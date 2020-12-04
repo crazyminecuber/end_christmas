@@ -5,8 +5,8 @@
 
 std::ostream& operator<<(std::ostream& os,const Entity & E)
 {
-    os << "Projectile at: (" 
-        << std::to_string(E.getPosition().x) << ", " 
+    os << "Projectile at: ("
+        << std::to_string(E.getPosition().x) << ", "
         << std::to_string(E.getPosition().y);
     return os;
 }
@@ -17,7 +17,7 @@ void Entity::init(sf::Vector2f position)
     // ge rätt storlek
     sf::Vector2u size_original;
     size_original = texture.getSize();
-    setScale(size.x / size_original .x, size.y / size_original.y);
+    setScale(size.x / size_original.x, size.y / size_original.y);
 
     setPosition(position);
     setOrigin(size.x/2.f, size.y/2.f);
@@ -26,4 +26,9 @@ void Entity::init(sf::Vector2f position)
 float Entity::get_hitbox_radius() const
 {
     return hitbox_radius;
+}
+
+std::string Entity::get_texture_file() const
+{
+    return texture_file;
 }

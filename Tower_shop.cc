@@ -1,18 +1,20 @@
 #include "Tower_shop.h"
 #include "Tower_button.h"
+#include "Resource_manager.h"
 #include <iostream>
 using namespace std;
 
 Tower_shop::Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
-        sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color, sf::Color btn_color, sf::Color btn_select_color)
+        sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color, sf::Color btn_color, sf::Color btn_select_color, std::string font_name)
     : RectangleShape(siz), passive_towers{pt}, wallet{w}, button_size{btn_size},
-    heading{make_text()}// Lagra position och size i sfml:objectet.
+    heading{make_text(font_name)}// Lagra position och size i sfml:objectet.
 {
     setPosition(pos);
-    chosen_tower = nullptr;
+    set_chosen_tower(nullptr);
     // Set position of text. Gör smartare!
     // Centered horizontally but top vertically
     heading.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y);
+    cout << "made a shop" << endl;
 
     sf::Vector2f head_orig{};
     sf::FloatRect head_rec = heading.getLocalBounds();
@@ -22,16 +24,16 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
 
     int nr_columns{2};
     sf::IntRect area{int(getPosition().x),int(getPosition().y) + 100, int(siz.x), 400};
-    generate_shop_grid(nr_columns, area, btn_color, btn_select_color);
+    generate_shop_grid(nr_columns, area, btn_color, btn_select_color, font_name);
     //drawable.push_back(this);
     setFillColor(color);
 
-     cout << "shop globalbounds, width: " << getGlobalBounds().width << ", height: " << getGlobalBounds().height
-     << ", left: " << getGlobalBounds().left << ", top:" << getGlobalBounds().top << endl;
-     cout << "shop position, x: " << getPosition().x << ", y: " << getPosition().y << endl;
+     //cout << "shop globalbounds, width: " << getGlobalBounds().width << ", height: " << getGlobalBounds().height
+     //<< ", left: " << getGlobalBounds().left << ", top:" << getGlobalBounds().top << endl;
+     //cout << "shop position, x: " << getPosition().x << ", y: " << getPosition().y << endl;
 }
 
-void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color) // Genera knappar med textur genom att kalla på tower_button många gånger.
+void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color, string font_name) // Genera knappar med textur genom att kalla på tower_button många gånger.
 {
     // Just to test, will add more advanced stuff later.
     // What determins all the sizes? The shop will have a given with. When it
@@ -63,7 +65,7 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
         cout << "btn_pos.x"<<btn_pos.x << endl;
         btn_pos.y = area.top + button_size.y / 2 + spacing
                     + (current_row * (spacing + button_size.y));
-        buttons.push_back(Tower_button{passive_towers.front(), this, button_size, btn_pos, btn_color, btn_select_color});
+        buttons.push_back(Tower_button{passive_towers.front(), this, button_size, btn_pos, btn_color, btn_select_color, font_name});
 
         current_column++;
         if (current_column >= nr_columns)
@@ -77,15 +79,10 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
     //Tower_button(passive_towers.front(), this, button_size);
 }
 
-sf::Text Tower_shop::make_text()
+sf::Text Tower_shop::make_text(string font_name)
 {
     sf::Font * font = new sf::Font{}; // Minnesläcker!Bör nog laddas i game istället.
-    if ( !font->loadFromFile ("resources/fonts/best_font.ttf") )
-    {
-        // kunde inte ladda typsnitt
-        cout << "Unable to load font" << endl;
-    }
-    return sf::Text{"Tower Shop", *font}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
+    return sf::Text{"Tower Shop", Resource_manager::load_font(font_name)}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
 }
 
 void Tower_shop::render(sf::RenderWindow & window)
@@ -103,9 +100,21 @@ void Tower_shop::render(sf::RenderWindow & window)
 // Can probably be done way more efficiently
 void Tower_shop::on_click(sf::Vector2f click)
 {
-    chosen_tower = nullptr;
+    cout << "nullptr"<<endl;
+    //set_chosen_tower(nullptr);
     for (auto b = buttons.begin(); b != buttons.end(); b++)
     {
          b->on_click(click);
     }
+}
+
+void Tower_shop::set_chosen_tower(Tower * tw)
+{
+    cout << "set chosen_tower to: " << tw << endl;
+    chosen_tower = tw;
+}
+Tower * Tower_shop::get_chosen_tower()
+{
+    cout << "returning chosen tower: " << chosen_tower << endl;
+    return chosen_tower;
 }

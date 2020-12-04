@@ -17,12 +17,13 @@ public:
     {
         init(position);
     }
-    Entity(Entity const & other)=default;
+    //Entity(Entity const & other)=default;
     virtual ~Entity()=default;
 
     void init(sf::Vector2f position);
 
     float get_hitbox_radius() const;
+    std::string get_texture_file() const;
 
 
 protected:

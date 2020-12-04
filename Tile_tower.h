@@ -15,7 +15,7 @@ public:
     }
 
     //bool is_occupied();
-    //Tower* on_click() override;
+    void on_click(Tower * tw) override;
 
 private:
     void init();

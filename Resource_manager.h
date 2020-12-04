@@ -20,8 +20,18 @@ class Resource_manager{
         }
         return resources[file];
     }
+    static sf::Font& load_font(std::string const& file){
+        auto it{fonts.find(file)};
+        if(it == end(fonts)){
+          sf::Font font{};
+          font.loadFromFile(file);
+          fonts.insert({file, font});
+        }
+        return fonts[file];
+    }
   private:
     static std::map<std::string, sf::Texture> resources;
+    static std::map<std::string, sf::Font> fonts;
 
 };
 

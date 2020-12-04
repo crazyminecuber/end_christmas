@@ -446,6 +446,7 @@ void Game::init_towers(json const & json_obj)
 void Game::init_shop(json const & j_shop)
 {
     Wallet wallet{j_shop["start_cash"]};
+    string font_name{j_shop["font_name"]};
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0};
@@ -456,7 +457,7 @@ void Game::init_shop(json const & j_shop)
     json btn_select_color = j_shop["btn_select_color"];
     sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
     vector<Tower *> passive_towers{new Tower_basic{}, new Tower_basic, new Tower_basic, new Tower_basic, new Tower_basic}; //TODO! change to other
-    shop = Tower_shop{passive_towers, wallet, shop_pos, shop_size,btn_size, color,button_color,button_select_color};
+    shop = Tower_shop{passive_towers, wallet, shop_pos, shop_size,btn_size, color,button_color,button_select_color,font_name};
 }
 
 
@@ -546,18 +547,18 @@ void Game::handle_input()
      // way is to use the fact that everything is in a grid and calculate what
      // button was pressed. I did the dump way.
 
-             shop.on_click(click);
-
-     // Itterate over tiles
-     /*
-     for (auto t = Tile::tiles.begin();t != Tile::tiles.end(); t++)
+     if(!shop.getGlobalBounds().contains(click))
      {
-         if(t->getGlobalBounds().contains(click))
-         {
-             (*t)->on_click();
-         }
+        //cout << "Tower len before: " << Tower::static_towers.size() << endl;
+        //cout << "Shop memorey game: " << &shop << endl;
+        Tile* tile = Tile::get_tile_by_coord(click);
+        //cout << "Tile: " << tile << endl;
+        Tower * tw = shop.get_chosen_tower();
+        cout << "Chosen tower in game: " << tw << endl;
+        tile->on_click(tw);
+        Tile::get_tile_by_coord(click)->on_click(shop.get_chosen_tower());
      }
-     */
+     shop.on_click(click);
  }
 
 void Game::update_logic()
