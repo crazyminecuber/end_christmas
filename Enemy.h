@@ -24,9 +24,13 @@ public:
         life{arg_life}
     {}
     virtual void collision(Entity* object) = 0;
+    virtual Enemy* clone() = 0;
     int get_damage();
 
     //Statics
+    static Enemy* get_new_enemy_basic();
+    static Enemy* get_new_enemy_boss();
+    static void create_enemy_by_obj(Enemy* enemy);
     static void new_basic();
     static void new_basic(sf::Vector2f position);
     static void new_boss();

@@ -4,6 +4,40 @@
 #include <SFML/Graphics.hpp>
 
 //Static
+Enemy* Enemy::get_new_enemy_basic()
+{
+    Enemy_basic* e = new Enemy_basic{
+        Enemy_basic::prop.texture_file, //Texture
+        Enemy_basic::position_init, //Poistion
+        Enemy_basic::prop.size, //Size
+        Enemy_basic::prop.hit_rad,        //Hit_rad
+        Enemy_basic::prop.dir,       //dir
+        Enemy_basic::prop.mov_spd,          //mov_spd
+        Enemy_basic::life_init           //life
+    };
+    return e;
+}
+
+Enemy* Enemy::get_new_enemy_boss()
+{
+    Enemy_boss* e = new Enemy_boss{
+        Enemy_boss::prop.texture_file, //Texture
+        Enemy_boss::position_init, //Poistion
+        Enemy_boss::prop.size, //Size
+        Enemy_boss::prop.hit_rad,        //Hit_rad
+        Enemy_boss::prop.dir,       //dir
+        Enemy_boss::prop.mov_spd,          //mov_spd
+        Enemy_boss::life_init           //life
+    };
+    return e;
+}
+
+void Enemy::create_enemy_by_obj(Enemy* enemy)
+{
+    Enemy::enemies.push_back(enemy->clone());
+}
+
+
 void Enemy::new_basic()
 {
     Enemy_basic* e = new Enemy_basic{

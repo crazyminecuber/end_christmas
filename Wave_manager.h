@@ -15,17 +15,10 @@ public:
     {
         init();
     }
-    //Wave_manager(sf:;RenderWindow & win){};
+
     int current_wave{0};
 
-    //
-    // spawn_rate (i sekunder)
-    // mov_spd_factor
-    // num_of_groups
-    // group_interval (i sekunder)
 
-    //std::list<int> spawn_frames_basic;
-    //std::list<int> spawn_frames_boss;
     sf::RenderWindow & window;
     sf::Font* font;
     sf::RectangleShape background;

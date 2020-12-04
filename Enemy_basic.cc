@@ -7,6 +7,9 @@ Enemy_basic::~Enemy_basic(){}
 void Enemy_basic::collision(Entity* object){
     std::cout << "krockat" << object << std::endl;
 }
+Enemy* Enemy_basic::clone(){
+    return new Enemy_basic{*this};
+}
 
 //Statics
 int Enemy_basic::life_init;

@@ -313,21 +313,30 @@ void Game::init_waves(json const & json_obj)
     //Get every wave and add to wave_groups
     for (const auto& wave : json_obj.items())
     {
+        Enemy* enemy;
+        if(wave.value()["enemy"] == "Enemy_basic")
+        {
+            enemy = Enemy::get_new_enemy_basic();
+        }
+        else if(wave.value()["enemy"] == "Enemy_boss")
+        {
+            enemy = Enemy::get_new_enemy_boss();
+        }
     wave_manager.add_wave(new Wave_group(
                           wave.value()["start_wave"],
                           wave.value()["end_wave"],
-                          wave.value()["start_frame"],
-                          wave.value()["mov_spd_factor"],
+                          enemy,
+                          wave.value()["spawn_delay"],
                           wave.value()["spawn_rate"],
-                          wave.value()["num_in_group_inc"],
                           wave.value()["num_in_group"],
+                          wave.value()["num_in_group_inc"],
+                          wave.value()["group_spawn_interval"],
                           wave.value()["num_of_groups"],
-                          wave.value()["group_spawn_interval"]));
+                          wave.value()["num_of_groups_inc"],
+                          wave.value()["mov_spd_factor"]));
     cout << wave.key() << endl;
     }
 }
-
-
 
 int Game::get_frame()
 {
@@ -345,7 +354,7 @@ float Game::get_fps()
 //     json proj = json_obj["Projectile_basic"];
 //     Projectile_basic::frames_to_live = proj["frames_to_live"];
 //     Projectile_basic::damage_init = proj["damage_init"];
-//
+//std::cout << "Text begin" << std::endl;
 //     proj = json_obj["Projectile_pierce"];
 //     Projectile_basic::frames_to_live = proj["frames_to_live"];
 //     Projectile_basic::damage_init = proj["damage_init"];
@@ -472,7 +481,6 @@ void Game::handle_input()
 
 void Game::update_logic()
 {
-    cout << Enemy::enemies.size() << endl;
     if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
     {
         cout << "next_wave" << endl;

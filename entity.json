@@ -24,13 +24,15 @@
             {
                 "start_wave": 0,
                 "end_wave" : 10,
-                "start_frame": 0,
-                "mov_spd_factor": 1,
-                "spawn_rate" : 2,
-                "num_in_group_inc": 5,
+                "enemy" : "Enemy_boss",
+                "spawn_delay": 1,
+                "spawn_rate" : 1,
                 "num_in_group": 1,
+                "num_in_group_inc": 5,
+                "group_spawn_interval": 1,
                 "num_of_groups": 1,
-                "group_spawn_interval": 1
+                "num_of_groups_inc": 1,
+                "mov_spd_factor": 1
             }
         },
     "Projectile" :

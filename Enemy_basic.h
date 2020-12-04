@@ -25,6 +25,7 @@ public:
     static entity_properties prop;
 
     void collision(Entity* object);
+    Enemy* clone() override;
 
 };
 

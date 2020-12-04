@@ -45,22 +45,16 @@ void Wave_manager::render()
 
 void Wave_manager::update_text_waves()
 {
-    std::cout << "Text begin" << std::endl;
     text_wave.setString("Wave:" + std::to_string(current_wave));
-    std::cout << "Text end" << std::endl;
 }
 
 void Wave_manager::init_waves()
 {
-    std::cout << "Init waves" << std::endl;
-    // wave_groups.push_back(new Wave_group(0, 20, 1, 5, 2, 0.1));
-    // wave_groups.push_back(new Wave_group(300, 20, 1, 1, 2, 0.1));
 }
 
 void Wave_manager::add_wave(Wave_group* wave_group)
 {
     wave_groups.push_back(wave_group);
-    std::cout << "Waved pushed" << std::endl;
 }
 
 void Wave_manager::next_wave(int current_frame, int fps)

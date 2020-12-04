@@ -9,6 +9,10 @@ Enemy_boss::~Enemy_boss(){}
 void Enemy_boss::collision(Entity* object){
     std::cout << "krockat" << object << std::endl;
 }
+Enemy* Enemy_boss::clone()
+{
+    return new Enemy_boss{*this};
+}
 
 
 //Statics
