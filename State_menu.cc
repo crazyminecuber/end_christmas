@@ -44,7 +44,6 @@ State_menu::State_menu(sf::RenderWindow & win, const string & title)
     start_button.setOutlineThickness(4);
     start_button.setPosition(670, 450);
     start_button.setOutlineColor(sf::Color::Black);
-
 }
 
 void State_menu::handle_input()
@@ -52,24 +51,22 @@ void State_menu::handle_input()
     start_game = false;
     sf::Event event;
     while ( window.pollEvent(event) )
+    {
+        if ( event.type == sf::Event::Closed )
         {
-            if ( event.type == sf::Event::Closed )
+            window.close ();
+        }
+        else if ( event.type == sf::Event::MouseButtonPressed )
+        {
+            auto mouse { event.mouseButton };
+            if ( mouse.button == sf::Mouse::Button::Left )
             {
-                window.close ();
-            }
-            // Has a mouse button been pressed?
-            else if ( event.type == sf::Event::MouseButtonPressed )
-            {
-                auto mouse { event.mouseButton };
-                // Is it the left mouse button?
-                if ( mouse.button == sf::Mouse::Button::Left )
-                {
-                    float mouseX = mouse.x;
-                    float mouseY = mouse.y;
-                    handle_click(sf::Vector2f{mouseX, mouseY});
-                }
+                float mouseX = mouse.x;
+                float mouseY = mouse.y;
+                handle_click(sf::Vector2f{mouseX, mouseY});
             }
         }
+    }
 }
 
 void State_menu::update_logic()
