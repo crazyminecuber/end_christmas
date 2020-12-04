@@ -1,6 +1,7 @@
 //TODO add color variables for background of shop and button?
 //TODO change button size to only be the side length to guarantee it to be
 //TODO place prictag and sprite resonable
+//TODO Returning a local pointer is a bad idea!
 //square?
 #ifndef TOWER_SHOP_H
 #define TOWER_SHOP_H
@@ -27,11 +28,11 @@ public:
 
 
     std::vector<Tower *> passive_towers;
+    std::vector<Tower_button> buttons{};
 private:
     Wallet wallet;
     sf::Vector2f button_size;
     sf::Text heading{};
-    std::vector<Tower_button> buttons{};
     Tower* chosen_tower;
 
     sf::Text make_text(std::string font_name);

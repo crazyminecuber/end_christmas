@@ -51,6 +51,7 @@ Tower_button::Tower_button(Tower * tw, Tower_shop * ts, Vector2f btn_size,
 void Tower_button::on_click(sf::Vector2f click)
 {
     cout << "Tower_buttons passive_towers length" << tower_shop->passive_towers.size() << endl;
+    cout << "Tower_buttons shop nr buttons" << tower_shop->buttons.size()<< endl;
     // Set chosen tower i shop.
      if(getGlobalBounds().contains(click))
      {

@@ -458,6 +458,9 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
     vector<Tower *> passive_towers{new Tower_basic{}, new Tower_basic, new Tower_basic, new Tower_basic, new Tower_basic}; //TODO! change to other
     shop = Tower_shop{passive_towers, wallet, shop_pos, shop_size,btn_size, color,button_color,button_select_color,font_name};
+    cout << "Games shop.buttons[0].size():" << shop.buttons.size()<< endl;
+    cout << "Games shop.buttons[0].tower_shop->buttons.size():" << shop.buttons[0].tower_shop->buttons.size()<< endl;
+
 }
 
 

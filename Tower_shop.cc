@@ -25,6 +25,8 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
     int nr_columns{2};
     sf::IntRect area{int(getPosition().x),int(getPosition().y) + 100, int(siz.x), 400};
     generate_shop_grid(nr_columns, area, btn_color, btn_select_color, font_name);
+    cout << "Constructor of Tower_shop: buttons.size(): " << buttons.size()<< endl;
+    cout << "Constructor of Tower_shop: buttons[0].tower_shop->size(): " << buttons[0].tower_shop->buttons.size()<< endl;
     //drawable.push_back(this);
     setFillColor(color);
 
@@ -65,7 +67,7 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
         cout << "btn_pos.x"<<btn_pos.x << endl;
         btn_pos.y = area.top + button_size.y / 2 + spacing
                     + (current_row * (spacing + button_size.y));
-        buttons.push_back(Tower_button{passive_towers.front(), this, button_size, btn_pos, btn_color, btn_select_color, font_name});
+        buttons.push_back(Tower_button{passive_towers.front(), this, button_size, btn_pos, btn_color, btn_select_color, font_name}); // Shallow copy, does that matter?
 
         current_column++;
         if (current_column >= nr_columns)

@@ -21,9 +21,9 @@ public:
     void select();
     void unselect();
 
+    Tower_shop* tower_shop;
 private:
     Tower* tower;
-    Tower_shop* tower_shop;
     sf::Text pricetag{};
     sf::Sprite tower_pic{};
     sf::Text make_pricetag(Tower * tw, std::string font_name);
