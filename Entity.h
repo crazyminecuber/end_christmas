@@ -42,5 +42,5 @@ struct entity_properties{
     sf::Vector2f dir;
     float mov_spd;
 };
-
+std::ostream& operator<<(std::ostream& os,const Entity & E);
 #endif //ENTITY_H

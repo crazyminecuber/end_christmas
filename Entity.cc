@@ -1,6 +1,15 @@
+#include <string>
+#include <ostream>
 #include "Entity.h"
 #include "Resource_manager.h"
 
+std::ostream& operator<<(std::ostream& os,const Entity & E)
+{
+    os << "Projectile at: (" 
+        << std::to_string(E.getPosition().x) << ", " 
+        << std::to_string(E.getPosition().y);
+    return os;
+}
 void Entity::init(sf::Vector2f position)
 {
     /* sätt utseende */

@@ -2,7 +2,7 @@
 #define GAME_H
 #include <string>
 #include <vector>
-//#include "Tower_shop.h"
+#include "Tower_shop.h"
 #include "Resource_manager.h"
 #include "Entity.h"
 #include "Projectile.h"
@@ -26,7 +26,7 @@ public:
 		 };
 
 
-	void handle_input();
+	void handle_input(sf::Event & event);
 	void update_logic();
 	void render();
 
@@ -66,12 +66,14 @@ private:
 	void init_enemies(nlohmann::json const & json_obj);
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
+	void init_shop(nlohmann::json const & json_obj);
 	Health health;
-	//Tower_shop tower_shop;
 	static int frame;
 	double fps{60}; // ta bort
 
 
+    Tower_shop shop;
+    Wallet wallet;
 
 	Resource_manager resources{};
 

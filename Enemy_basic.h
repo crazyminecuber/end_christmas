@@ -23,7 +23,7 @@ public:
     static int life_init;
     static entity_properties prop;
 
-    void collision(Entity* object);
+    bool collision(Projectile* object);
 
 };
 
