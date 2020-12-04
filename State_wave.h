@@ -6,8 +6,8 @@
 class State_wave : public State
 {
 public:
-    State_wave(sf::RenderWindow & win, Game & gme)
-    : window{win}, game{gme}
+    State_wave(sf::RenderWindow & win, Game & game)
+    : window{win}, game{game}
     {
         init();
     };

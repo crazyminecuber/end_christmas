@@ -7,14 +7,15 @@ void State_wave::init()
 }
 
 void State_wave::handle_input(sf::Event & event)
-{
-        if ( event.type == sf::Event::KeyPressed )
+{       
+    game.handle_input(event);
+    if ( event.type == sf::Event::KeyPressed )
+    {
+        if ( event.key.code == sf::Keyboard::P )
         {
-            if ( event.key.code == sf::Keyboard::P )
-            {
-                pause_game = true;
-            }
+            pause_game = true;
         }
+    }
 }
 
 void State_wave::update_logic()
