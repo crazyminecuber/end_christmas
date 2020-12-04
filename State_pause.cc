@@ -1,5 +1,6 @@
 #include "State_pause.h"
 #include <string>
+using namespace std;
 
 void State_pause::init()
 {
@@ -11,13 +12,13 @@ void State_pause::init()
     shader.setPosition(0, 0);
 
     /* text */
-    std::string file{"resources/fonts/Christmas_Bell.otf"};
+    string file{"resources/fonts/Christmas_Bell.otf"};
     if (!font.loadFromFile(file))
     {
-        throw std::invalid_argument("Unable to load " + file);
+        throw invalid_argument("Unable to load " + file);
     }
 
-    std::string str = "Pause";
+    string str = "Pause";
     text_pause = sf::Text{'('+str+')', font, 100};
     sf::FloatRect bb_pause{text_pause.getGlobalBounds()};
     text_pause.setOrigin(bb_pause.width  / 2.f, bb_pause.height / 2.f);
@@ -26,8 +27,6 @@ void State_pause::init()
 
 void State_pause::handle_input(sf::Event & event)
 {
-    /* reset variables */
-    unpause_game = false;
 
     if ( event.type == sf::Event::Closed )
     {
@@ -60,15 +59,15 @@ void State_pause::render()
     window.display();
 }
 
-std::string State_pause::get_next_state()
+string State_pause::get_next_state()
 {
+    string return_string{this_state};
     if ( unpause_game )
     {
-        std::cout << "Un-pausing" << std::endl;
-        return "wave";
+        return_string = "wave";
     }
-    else
-    {
-        return this_state;
-    }
+    /* reset variables */
+    unpause_game = false;
+
+    return return_string;
 }

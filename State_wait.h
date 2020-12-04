@@ -9,7 +9,9 @@ public:
     void handle_input(sf::Event & event) override;
     void update_logic() override;
     void render() override;
-    std::string get_next_state();
+    std::string get_next_state() override;
+
+private:
 
 };
 

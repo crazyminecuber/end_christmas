@@ -13,11 +13,12 @@ public:
     void update_logic() override;
     void render()       override;
 
-    void handle_click(sf::Vector2f mouse_pos);
-    void check_hover();
-    std::string get_next_state();
+    std::string get_next_state() override;
 
 private:
+    void handle_click(sf::Vector2f mouse_pos);
+    void check_hover();
+    void window_calculations();
     sf::RenderWindow & window;
 
     bool start_game{false};
