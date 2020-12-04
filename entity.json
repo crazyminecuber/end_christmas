@@ -7,7 +7,7 @@
                     "texture" : "resources/textures/Santa.png",
                     "size": [80,60],
                     "hit_rad": 10,
-                    "mov_spd": 3
+                    "mov_spd": 2
                 },
             "Enemy_boss" :
                 {
@@ -25,9 +25,9 @@
                     "frames_to_live" : 1000,
                     "damage_init" : 1100,
                     "texture" : "resources/textures/Snowball.png",
-                    "size" : [100,100],
+                    "size" : [50,50],
                     "hit_rad" : 50,
-                    "mov_spd" : 1
+                    "mov_spd" : 2
                 },
             "Projectile_pierce" :
                 {
@@ -36,7 +36,8 @@
                     "texture" : "resources/textures/icicle.png",
                     "size" : [50,50],
                     "hit_rad" : 25,
-                    "mov_spd" : 2
+                    "mov_spd" : 2,
+                    "nr_pierce_init" : 3
                 },
             "Projectile_bomb" :
                 {
@@ -62,22 +63,23 @@
             "Tower_basic" :
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
-                    "projectile_init" : "Projectile_basic",
+                    "projectile_init" : "Projectile_pierce",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
-                    "detection_radius_init" : 150.0,
-                    "fire_period_init" : 30,
+                    "detection_radius_init" : 250.0,
+                    "fire_period_init" : 60,
                     "size": [100,100]
                 },
             "Tower_ring" :
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
-                    "projectile_init" : "Projectile_basic",
+                    "projectile_init" : "Projectile_bomb",
                     "shop_sprite_init" : "resources/textures/tower_ring_shop.png",
                     "cost_init" : 50,
-                    "detection_radius_init" : 100.0,
+                    "detection_radius_init" : 250.0,
                     "fire_period_init" : 30,
-                    "size": [100,100]
+                    "size": [100,100],
+                    "num_projectile_init": 8
                 }
         }
 }

@@ -31,10 +31,11 @@ int Game::frame =0;
 // Help function to determine init projectile for tower
 Projectile* Game::get_tower_projectile(std::string const & projectile)
 {
+
     sf::Vector2f double0{0,0};//7
     if(projectile == "Projectile_basic")
     {
-        return new Projectile_basic{double0,double0};
+       return new Projectile_basic(double0,double0);
     }
     else if(projectile == "Projectile_pierce")
     {
@@ -299,10 +300,9 @@ void Game::load_entities(string const & file)
         json j_data;
         ifs >> j_data;
         init_enemies(j_data["Enemy"]);
-//        init_projectiles(j_data["Projectiles"]);
-        init_towers(j_data["Tower"]);
         init_projectiles(j_data["Projectile"]);
-        //init_towers(j_data["Tower"]);
+        init_towers(j_data["Tower"]);
+
     }
     ifs.close();
 }
@@ -394,6 +394,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_pierce::prop.hit_rad = proj["hit_rad"];
     Projectile_pierce::prop.dir = sf::Vector2f(0,0);
     Projectile_pierce::prop.mov_spd = proj["mov_spd"];
+    Projectile_pierce::nr_pierce_init = proj["nr_pierce_init"];
 
     proj = json_obj["Projectile_bomb"];
     Projectile_bomb::frames_to_live = proj["frames_to_live"];
@@ -429,7 +430,7 @@ void Game::init_towers(json const & json_obj)
     Tower_basic::entity_prop.mov_spd = 0;
 
     tower = json_obj["Tower_ring"];
-    //Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_ring::tower_prop.cost_init = tower["cost_init"];
     Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
     Tower_ring::entity_prop.texture_file = tower["sprite_init"];
@@ -437,8 +438,8 @@ void Game::init_towers(json const & json_obj)
     Tower_ring::entity_prop.hit_rad = tower["detection_radius_init"];
     Tower_ring::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Tower_ring::entity_prop.mov_spd = 0;
+    Tower_ring::num_projectile_init = tower["num_projectile_init"];
 
-    cout << "laddat towers" << endl;
 }
 
 
@@ -446,35 +447,52 @@ void Game::check_collision()
 {
     //kolla tower - enemy
     for (auto enemy_it = Enemy::enemies.begin();
-         enemy_it != Enemy::enemies.end(); enemy_it++)
+         enemy_it != Enemy::enemies.end();)
     {
+      bool enemy_updated=false;
+      cout<<"for enemy"<<endl;
         // kolla kollision mellan projectile - enemy
         for (auto projectile_it = Projectile::projectiles.begin();
          projectile_it != Projectile::projectiles.end();)
         {
+            cout<<"for proj"<<endl;
             if (collided((*projectile_it),(*enemy_it)))
             {
-                if ((*enemy_it)->collision(*projectile_it))
-                {
-                  delete *enemy_it;
-                  enemy_it = Enemy::enemies.erase(enemy_it);
-                }
+              cout<<"if collided proj"<<endl;
                 if ((*projectile_it)->collision())
                 {
+                  cout << "Before deleted projectile"<<endl;
                   delete *projectile_it;
                   projectile_it = Projectile::projectiles.erase(projectile_it);
+                  cout << "After deleted projectile"<<endl;
+
+                }
+                if ((*enemy_it)->collision(*projectile_it))
+                {
+                  cout << "Before deleted enemy"<<endl;
+                  cout<< "enemy_it:"<< *enemy_it<<endl;
+                  delete *enemy_it;
+                  enemy_it = Enemy::enemies.erase(enemy_it);
+                  enemy_updated = true;
+                  cout << "After deleted enemy"<<endl;
+                  cout<< "enemy_it:"<< *enemy_it<<endl;
                 }
                 else
                 {
+                  cout<<"else not delete proj"<<endl;
                   ++projectile_it;
+                  cout<<"After else not delete proj"<<endl;
                 }
             }
             else
             {
+              cout<<"Before else collided proj"<<endl;
                 ++projectile_it;
+              cout<<"After else collided proj"<<endl;
             }
 
         }
+
         for (auto tower_it = Tower::static_towers.begin();
              tower_it != Tower::static_towers.end();
              tower_it++)
@@ -484,6 +502,10 @@ void Game::check_collision()
                 (*tower_it)->collision((*enemy_it));
             }
         }
+      if(!enemy_updated)
+      {
+        ++enemy_it;
+      }
     }
 }
 

@@ -77,14 +77,13 @@ bool Projectile_basic::collision()
       return true;
     }
 
-
 /*----------------------------------------------------------------------------*/
 //Projectile_pierce
 //static Projectile_pierce
 entity_properties Projectile_pierce::prop;
 int Projectile_pierce::frames_to_live;
 int Projectile_pierce::damage_init;
-int Projectile_pierce::nr_pierce;
+int Projectile_pierce::nr_pierce_init;
 
 Projectile_pierce::Projectile_pierce
 (
@@ -100,7 +99,8 @@ Projectile_pierce::Projectile_pierce
       direction,
       prop.mov_spd,
       damage_init
-    )
+    ),
+    nr_pierce{nr_pierce_init}
 {}
 
 //Copy-constructor, sets frame_to_die
