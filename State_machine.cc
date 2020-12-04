@@ -11,7 +11,7 @@ using namespace std;
 
 State_machine::State_machine(const string & title,
                              unsigned width, unsigned height)
-    : window{sf::VideoMode{width,height}, title},
+    : window{sf::VideoMode{width,height}, title, sf::Style::Close},
       game{window, "map.csv", "entity.json", 100}
 {
     states.insert(make_pair("menu", new State_menu(window, title)));
@@ -66,13 +66,14 @@ void State_machine::handle_input()
 
     while (window.pollEvent(event))
     {
-        /* not sure if needed since we check if closed in running()
         if ( event.type == sf::Event::Closed )
         {
             window.close ();
         }
-        */
+        else 
+        {
         current_state->handle_input(event);
+        }
     }
 }
 
