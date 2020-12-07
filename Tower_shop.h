@@ -19,12 +19,15 @@ class Tower_shop : public sf::RectangleShape
 {
 public:
     Tower_shop(){};
+    ~Tower_shop()
+    {std::cout << "Tower_shop destructor" << std::endl;}
     Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
             sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color, sf::Color btn_color,sf::Color btn_select_color, std::string font_name);
     void render(sf::RenderWindow & window);
     void on_click(sf::Vector2f click);
     void set_chosen_tower(Tower * tw);
     Tower * get_chosen_tower();
+    Tower_shop & operator=(Tower_shop const & tw);
 
 
     std::vector<Tower *> passive_towers;
@@ -36,7 +39,7 @@ private:
     Tower* chosen_tower;
 
     sf::Text make_text(std::string font_name);
-    void generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color, std::string font_name); // Genera knappar med textur genom att kalla på tower_button många gånger.
+    //void generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color, std::string font_name); // Genera knappar med textur genom att kalla på tower_button många gånger.
 
 };
 

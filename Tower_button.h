@@ -15,11 +15,14 @@ class Tower_button : public sf::RectangleShape
 public:
     Tower_button(Tower * tw, Tower_shop * ts, sf::Vector2f btn_size,
             sf::Vector2f position, sf::Color btn_color,sf::Color btn_select_color, std::string font_name);
+    ~Tower_button()
+    {std::cout << "Tower_button destructor" << std::endl;}
 
     void on_click(sf::Vector2f click);
     void render(sf::RenderWindow & window);
     void select();
     void unselect();
+    Tower_button & operator=(Tower_button const & tw);
 
     Tower_shop* tower_shop;
 private:

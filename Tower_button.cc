@@ -48,10 +48,31 @@ Tower_button::Tower_button(Tower * tw, Tower_shop * ts, Vector2f btn_size,
 
 }
 
+Tower_button & Tower_button::operator=(Tower_button const & tw)
+{
+    sf::RectangleShape::operator=(tw);
+    cout << "copy assignment" << endl;
+    tower_shop = tw.tower_shop;
+    tower = tw.tower;
+    pricetag = tw.pricetag;
+    tower_pic = tw.tower_pic;
+    color = tw.color;
+    select_color = tw.select_color;
+    return *this;
+}
+
+
 void Tower_button::on_click(sf::Vector2f click)
 {
     cout << "Tower_buttons passive_towers length" << tower_shop->passive_towers.size() << endl;
     cout << "Tower_buttons shop nr buttons" << tower_shop->buttons.size()<< endl;
+        for (auto it = tower_shop->buttons.begin();
+         it != tower_shop->buttons.end();
+         it++)
+    {
+        cout << "loop thing" << it->tower_shop << endl;
+    }
+
     // Set chosen tower i shop.
      if(getGlobalBounds().contains(click))
      {

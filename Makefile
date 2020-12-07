@@ -1,5 +1,5 @@
 CCC=g++
-CFLAGS=-std=c++17 -g -Wall -Wextra -pedantic -fmax-errors=1
+CFLAGS=-std=c++17 -g -Wall -Wextra -pedantic -fmax-errors=1 -Waggressive-loop-optimizations
 LDFLAGS = -L${SFML_ROOT}/lib -I${SFML_ROOT}/include -lsfml-window -lsfml-graphics -lsfml-system
 
 # Lägg till o-filer som ni vill ska skapas i denna listan!

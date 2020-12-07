@@ -24,17 +24,58 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, Wallet w, sf::Vector2f pos,
 
     int nr_columns{2};
     sf::IntRect area{int(getPosition().x),int(getPosition().y) + 100, int(siz.x), 400};
-    generate_shop_grid(nr_columns, area, btn_color, btn_select_color, font_name);
+    setFillColor(color);
+         cout << "button rectangle, width: " << area.width << ", height: " << area.height
+     << ", left: " << area.left << ", top:" << area.top << endl;
+
+    int spacing = (area.width - nr_columns * button_size.x) / (nr_columns + 1);
+    int current_column{0};
+    int current_row{0};
+    sf::Vector2f btn_pos{0,0};
+    for (auto tow_it = passive_towers.begin();
+         tow_it != passive_towers.end();
+         tow_it++)
+    {
+        // Lokala eller globala koordinater?
+        // Global for now
+        btn_pos.x = area.left + button_size.x / 2 + spacing
+                    + (current_column * (spacing + button_size.x));
+        cout << "btn_pos.x"<<btn_pos.x << endl;
+        btn_pos.y = area.top + button_size.y / 2 + spacing
+                    + (current_row * (spacing + button_size.y));
+        buttons.push_back(Tower_button{passive_towers.front(), this, button_size, btn_pos, btn_color, btn_select_color, font_name}); // Shallow copy, does that matter?
+
+        current_column++;
+        if (current_column >= nr_columns)
+        {
+            current_row++;
+            current_column = 0;
+        }
+    }
+
     cout << "Constructor of Tower_shop: buttons.size(): " << buttons.size()<< endl;
     cout << "Constructor of Tower_shop: buttons[0].tower_shop->size(): " << buttons[0].tower_shop->buttons.size()<< endl;
     //drawable.push_back(this);
-    setFillColor(color);
 
      //cout << "shop globalbounds, width: " << getGlobalBounds().width << ", height: " << getGlobalBounds().height
      //<< ", left: " << getGlobalBounds().left << ", top:" << getGlobalBounds().top << endl;
      //cout << "shop position, x: " << getPosition().x << ", y: " << getPosition().y << endl;
 }
 
+Tower_shop & Tower_shop::operator=(Tower_shop const & tw)
+{
+    sf::RectangleShape::operator=(tw);
+    cout << "copy assignment" << endl;
+    passive_towers = tw.passive_towers;
+    buttons = tw.buttons;
+    wallet = tw.wallet;
+    button_size = tw.button_size;
+    heading = tw.heading;
+    chosen_tower = tw.chosen_tower;
+    return *this;
+}
+
+/*
 void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color, string font_name) // Genera knappar med textur genom att kalla på tower_button många gånger.
 {
     // Just to test, will add more advanced stuff later.
@@ -80,6 +121,7 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
     // Simple one for debugging purposes. Only crates one tower button.
     //Tower_button(passive_towers.front(), this, button_size);
 }
+*/
 
 sf::Text Tower_shop::make_text(string font_name)
 {

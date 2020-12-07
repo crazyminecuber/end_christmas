@@ -67,7 +67,7 @@ private:
 	Health health;
 	static int frame;
 	float fps{60};
-    Tower_shop shop;
+    Tower_shop shop{};
     Wallet wallet;
 
 	Resource_manager resources{};
