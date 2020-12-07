@@ -9,9 +9,12 @@ entity_properties Enemy_basic::prop;
 Enemy_basic::~Enemy_basic(){}
 
 bool Enemy_basic::collision(Projectile* object){
+    std::cout << "life: " << life << std::endl;
     std::cout << "krockat" << *object << std::endl;
-    life_init-= object->damage;
-    if (life_init <= 0)
+    life-= object->damage;
+    std::cout << "damage" << object->damage << std::endl;
+    std::cout << "life: " << life << std::endl;
+    if (life <= 0)
     {
       return true;
     }

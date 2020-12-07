@@ -117,19 +117,25 @@ void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
   p->direction = dir;
   p->setPosition(pos);
   projectiles.push_back(p);
+  std::cout << "Clone nr_pierce" << nr_pierce<< std::endl;
 }
 
 //Counts nr of enemies killed and return true if the projectile should be delete
 //when nr_pierce nr of enemies is killed
 bool Projectile_pierce::collision()
 {
-  if(nr_enemies_killed <= nr_pierce)
+  nr_enemies_killed+= 1;
+  std::cout<<"nr_kill" << nr_enemies_killed<< std::endl;
+  std::cout<<"nr_pierce" << nr_pierce<< std::endl;
+  std::cout<<"nr_pierce" << nr_pierce_init<< std::endl;
+  if(nr_enemies_killed < nr_pierce_init)
   {
-      nr_enemies_killed+= 1;
+    std::cout<<"collision pierce false " << std::endl;
       return false;
   }
   else
   {
+    std::cout<<"collision pierce true " << std::endl;
     return true;
   }
 }
@@ -184,6 +190,8 @@ void  Projectile_bomb::clone(sf::Vector2f dir, sf::Vector2f pos)
 //when collided
 bool Projectile_bomb::collision()
 {
+  std::cout << "Collision bomb" << std::endl;
+  std::cout << "projectile" << *this<<endl;
   blast.clone(sf::Vector2f(0,0), getPosition());
   return true;
 }
@@ -219,14 +227,17 @@ Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
 //clone and adds to vector projectiles
 void Projectile_bomb_blast::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
+  std::cout << " Before Clone bomb_blast" << std::endl;
   Projectile_bomb_blast *p = new Projectile_bomb_blast{*this};
   p->direction = dir;
   p->setPosition(pos);
   projectiles.push_back(p);
+  std::cout << " Aftere Clone bomb_blast" << std::endl;
 }
 
 //Returnes false, will not be deleted when collided
 bool Projectile_bomb_blast::collision()
 {
+  std::cout << "Collision blast" << std::endl;
     return false;
 }

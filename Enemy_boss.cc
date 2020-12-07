@@ -10,8 +10,8 @@ Enemy_boss::~Enemy_boss(){}
 //Overloada collision för olika object?
 bool Enemy_boss::collision(Projectile* object){
     std::cout << "krockat" << *object << std::endl;
-    life_init-= object->damage;
-    if (life_init <= 0)
+    life-= object->damage;
+    if (life <= 0)
     {
       return true;
     }

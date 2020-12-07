@@ -49,7 +49,8 @@ class Projectile_pierce : public Projectile
 {
 public:
   Projectile_pierce(std::string texture_file, sf::Vector2f position,
-        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage, int nr_pier):
+        sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd,
+        int arg_damage, int nr_pier):
         Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage),
         nr_pierce{nr_pier}{}
   Projectile_pierce(sf::Vector2f position,sf::Vector2f direction);
@@ -63,9 +64,9 @@ public:
   static int damage_init;
   static int nr_pierce_init;
   static entity_properties prop;
-  int nr_pierce{};
 
 protected:
+  int nr_pierce;
   int nr_enemies_killed{0};
 };
 
@@ -96,7 +97,7 @@ public:
                    arg_damage), blast{}
   {}
   Projectile_bomb(sf::Vector2f position, sf::Vector2f direction);
-  ~Projectile_bomb() = default;
+  ~Projectile_bomb()= default;
 
   Projectile_bomb(Projectile_bomb const& other); //Copy-constructor
   void clone(sf::Vector2f dir, sf::Vector2f pos);

@@ -37,12 +37,12 @@
                     "size" : [50,50],
                     "hit_rad" : 25,
                     "mov_spd" : 2,
-                    "nr_pierce_init" : 3
+                    "nr_pierce_init" : 2
                 },
             "Projectile_bomb" :
                 {
                     "frames_to_live" : 3000,
-                    "damage_init" : 4000,
+                    "damage_init" : 0,
                     "texture" : "resources/textures/Christmas_cracker.png",
                     "size" : [50, 50],
                     "hit_rad" : 25,
@@ -50,11 +50,11 @@
                 },
             "Projectile_bomb_blast" :
                 {
-                    "frames_to_live" : 20,
+                    "frames_to_live" : 10,
                     "damage_init" : 11000,
                     "texture" : "resources/textures/Bang.png",
                     "size" : [100,100],
-                    "hit_rad" : 50,
+                    "hit_rad" : 10,
                     "mov_spd" : 0
                 }
         },
