@@ -50,7 +50,7 @@
                 },
             "Projectile_bomb_blast" :
                 {
-                    "frames_to_live" : 20,
+                    "frames_to_live" : 50,
                     "damage_init" : 11000,
                     "texture" : "resources/textures/Bang.png",
                     "size" : [100,100],

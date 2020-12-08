@@ -24,6 +24,8 @@ public:
     static entity_properties prop;
 
     bool collision(Projectile* object);
+ protected:
+   int life{life_init};
 
 };
 

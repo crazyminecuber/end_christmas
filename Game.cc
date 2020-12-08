@@ -279,7 +279,7 @@ void Game::enemy_update_position()
 
 void Game::projectile_update_position()
 {
-    for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles);)
+    for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
     {
       if(!(*it)->update_position())
       {
@@ -450,7 +450,7 @@ void Game::check_collision()
          enemy_it != Enemy::enemies.end();)
     {
       bool enemy_updated=false;
-      cout<<"for enemy"<<endl;
+      //cout<<"for enemy"<<endl;
         // kolla kollision mellan projectile - enemy
         for (auto projectile_it = Projectile::projectiles.begin();
          projectile_it != Projectile::projectiles.end();)
@@ -459,24 +459,24 @@ void Game::check_collision()
             if (collided((*projectile_it),(*enemy_it)))
             {
               cout<<"if collided proj"<<endl;
+              if ((*enemy_it)->collision(*projectile_it))
+              {
+                cout << "Before deleted enemy"<<endl;
+                cout<< "enemy_it:"<< *enemy_it<<endl;
+                delete *enemy_it;
+                enemy_it = Enemy::enemies.erase(enemy_it);
+                enemy_updated = true;
+                cout << "After deleted enemy"<<endl;
+                cout<< "enemy_it:"<< *enemy_it<<endl;
+              }
                 if ((*projectile_it)->collision())
                 {
                   cout << "Before deleted projectile"<<endl;
                   delete *projectile_it;
                   projectile_it = Projectile::projectiles.erase(projectile_it);
                   cout << "After deleted projectile"<<endl;
+                }
 
-                }
-                if ((*enemy_it)->collision(*projectile_it))
-                {
-                  cout << "Before deleted enemy"<<endl;
-                  cout<< "enemy_it:"<< *enemy_it<<endl;
-                  delete *enemy_it;
-                  enemy_it = Enemy::enemies.erase(enemy_it);
-                  enemy_updated = true;
-                  cout << "After deleted enemy"<<endl;
-                  cout<< "enemy_it:"<< *enemy_it<<endl;
-                }
                 else
                 {
                   cout<<"else not delete proj"<<endl;
@@ -490,7 +490,6 @@ void Game::check_collision()
                 ++projectile_it;
               cout<<"After else collided proj"<<endl;
             }
-
         }
 
         for (auto tower_it = Tower::static_towers.begin();
@@ -573,12 +572,16 @@ void Game::update_logic()
 {
     if ( Enemy::enemies.size() > 0 )
     {
+      cout<<"Before update position enemy" << endl;
         enemy_update_direction();
         enemy_update_position();
+        cout << "After update position enemy" << endl;
     }
     if (Projectile::projectiles.size() > 0)
     {
+      cout<<"Before update position projectile" << endl;
         projectile_update_position();
+        cout << "After update position projectile" << endl;
     }
     check_collision();
     frame++;
