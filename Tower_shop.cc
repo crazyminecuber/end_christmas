@@ -68,6 +68,10 @@ Tower_shop & Tower_shop::operator=(Tower_shop const & tw)
     cout << "copy assignment" << endl;
     passive_towers = tw.passive_towers;
     buttons = tw.buttons;
+    for (auto it = buttons.begin(); it != buttons.end(); it++)
+    {
+        (*it).tower_shop = this;
+    }
     wallet = tw.wallet;
     button_size = tw.button_size;
     heading = tw.heading;
