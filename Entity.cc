@@ -5,7 +5,7 @@
 
 std::ostream& operator<<(std::ostream& os,const Entity & E)
 {
-    os << "Projectile at: (" 
+    os << "Entity at position : (" 
         << std::to_string(E.getPosition().x) << ", " 
         << std::to_string(E.getPosition().y);
     return os;
