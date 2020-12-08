@@ -239,7 +239,7 @@ void Game::render()
         window.draw(*(*it));
     }
 
-    shop.render(window);
+    shop.render(window, wallet);
     // render health
     health.render();
 
@@ -445,7 +445,7 @@ void Game::init_towers(json const & json_obj)
 
 void Game::init_shop(json const & j_shop)
 {
-    Wallet wallet{j_shop["start_cash"]};
+    wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
@@ -456,8 +456,11 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_color{btn_color["r"], btn_color["g"], btn_color["b"]};
     json btn_select_color = j_shop["btn_select_color"];
     sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
+    json bcc = j_shop["btn_no_cash_color"];
+    sf::Color button_no_cash_color{bcc["r"], bcc["g"], bcc["b"]};
     vector<Tower *> passive_towers{new Tower_basic{}, new Tower_basic, new Tower_basic, new Tower_basic, new Tower_basic}; //TODO! change to other
-    shop = Tower_shop{passive_towers, wallet, shop_pos, shop_size,btn_size, color,button_color,button_select_color,font_name};
+    shop = Tower_shop{passive_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color,font_name};
+    cout << "wallet in game" << wallet.getCash() << endl;
 }
 
 
@@ -549,16 +552,18 @@ void Game::handle_input()
 
      if(!shop.getGlobalBounds().contains(click))
      {
-        //cout << "Tower len before: " << Tower::static_towers.size() << endl;
-        //cout << "Shop memorey game: " << &shop << endl;
-        Tile* tile = Tile::get_tile_by_coord(click);
-        //cout << "Tile: " << tile << endl;
         Tower * tw = shop.get_chosen_tower();
         cout << "Chosen tower in game: " << tw << endl;
-        tile->on_click(tw);
-        Tile::get_tile_by_coord(click)->on_click(shop.get_chosen_tower());
+        if(tw != nullptr && wallet.getCash() >= tw->cost)
+        {
+            Tile* tile = Tile::get_tile_by_coord(click);
+            cout << "Enough money to buy " << endl;
+            tile->on_click(tw);
+            wallet.take(tw->cost);
+        }
      }
-     shop.on_click(click);
+     shop.on_click(click, wallet);
+
  }
 
 void Game::update_logic()

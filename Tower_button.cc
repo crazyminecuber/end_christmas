@@ -3,10 +3,10 @@
 
 using namespace sf;
 using namespace std;
-Tower_button::Tower_button(Tower * tw, Tower_shop * ts, Vector2f btn_size,
-                            Vector2f position, sf::Color btn_color, sf::Color btn_select_color, string font_name)
-                            : RectangleShape{btn_size}, tower{tw}, tower_shop{ts}, pricetag{make_pricetag(tw, font_name)},
-                                tower_pic{make_tower_pic(tw)}, color{btn_color}, select_color{btn_select_color}
+Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
+            Vector2f position, sf::Color btn_color, sf::Color btn_select_color, sf::Color btn_no_cash_color, string font_name)
+            : RectangleShape{btn_size}, tower{tw}, pricetag{make_pricetag(tw, font_name)},
+            tower_pic{make_tower_pic(tw)}, color{btn_color}, select_color{btn_select_color}, no_cash_color{btn_no_cash_color}
 {
     // Creates sprite for image of tower, font and text for pricetag and sets
     // background color
@@ -34,35 +34,24 @@ Tower_button::Tower_button(Tower * tw, Tower_shop * ts, Vector2f btn_size,
     tower_pic.setOrigin(tower_pic.getLocalBounds().width / 2, tower_pic.getLocalBounds().height / 2); // OBS! In local coordinates! Take scale into account! Therefore using localbounds.
 
     tower_pic.setPosition(getPosition());
-
-
-
-    /*
-     cout << "text globalbounds" << pricetag.getGlobalBounds().width << ", " << pricetag.getGlobalBounds().height
-     << ", " << pricetag.getGlobalBounds().left << ", " << pricetag.getGlobalBounds().top << endl;
-     cout << "text localbounds, width: " << pricetag.getLocalBounds().width << ", height: " << pricetag.getLocalBounds().height
-     << ", left: " << pricetag.getLocalBounds().left << ", top:" << pricetag.getLocalBounds().top << endl;
-     */
-     //cout << "button global bounds" << getGlobalBounds().width << ", " << getGlobalBounds().height
-     //<< ", " << getGlobalBounds().left << ", " << getGlobalBounds().top << endl;
-
 }
 
-void Tower_button::on_click(sf::Vector2f click)
+Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
 {
-    // Set chosen tower i shop.
-     if(getGlobalBounds().contains(click))
-     {
-        select();
-        cout << "buttonclick start" << endl;
-        tower_shop->set_chosen_tower(tower);
-        tower_shop->get_chosen_tower();
-        cout << "buttonclick end" << endl;
-     }
-     else
-     {
-         unselect();
-     }
+    // Return chosen_tower to shop.
+    cout << "wallet.getCash()" << wallet.getCash() << endl;
+    if (wallet.getCash() < tower->cost)
+    {
+       not_enought_cash();
+       return nullptr;
+    }
+    if(!getGlobalBounds().contains(click))
+    {
+       unselect();
+       return nullptr;
+    }
+    select();
+    return tower;
 }
 
 sf::Text Tower_button::make_pricetag(Tower * tw, std::string font_name)
@@ -93,5 +82,10 @@ void Tower_button::select()
 void Tower_button::unselect()
 {
     setFillColor(color);
+}
+
+void Tower_button::not_enought_cash()
+{
+    setFillColor(no_cash_color);
 }
 

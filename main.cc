@@ -51,7 +51,7 @@ int main ()
 
     while ( game.is_running() )
     {
-        //game.create_n_enemy_boss(0, 1, 0.5);
+        game.create_n_enemy_boss(0, 1, 0.5);
         game.handle_input();
         game.update_logic();
         game.render();
