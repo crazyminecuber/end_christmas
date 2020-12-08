@@ -26,7 +26,7 @@
                     "damage_init" : 1100,
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [50,50],
-                    "hit_rad" : 50,
+                    "hit_rad" : 25,
                     "mov_spd" : 2
                 },
             "Projectile_pierce" :
@@ -37,7 +37,7 @@
                     "size" : [50,50],
                     "hit_rad" : 25,
                     "mov_spd" : 2,
-                    "nr_pierce_init" : 2
+                    "nr_pierce_init" : 1
                 },
             "Projectile_bomb" :
                 {
@@ -54,7 +54,7 @@
                     "damage_init" : 11000,
                     "texture" : "resources/textures/Bang.png",
                     "size" : [100,100],
-                    "hit_rad" : 10,
+                    "hit_rad" : 100,
                     "mov_spd" : 0
                 }
         },
@@ -63,7 +63,7 @@
             "Tower_basic" :
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
-                    "projectile_init" : "Projectile_pierce",
+                    "projectile_init" : "Projectile_bomb",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 250.0,
@@ -73,7 +73,7 @@
             "Tower_ring" :
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
-                    "projectile_init" : "Projectile_bomb",
+                    "projectile_init" : "Projectile_pierce",
                     "shop_sprite_init" : "resources/textures/tower_ring_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 250.0,

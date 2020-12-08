@@ -37,6 +37,7 @@ public:
 
 	bool is_running(); // remove when we make StateMachine
 	void check_collision();
+	void check_collision_towers();
 	void load_entities(std::string const & file);
 	void handle_click(sf::Vector2f click);
 

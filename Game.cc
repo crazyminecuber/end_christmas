@@ -445,67 +445,70 @@ void Game::init_towers(json const & json_obj)
 
 void Game::check_collision()
 {
-    //kolla tower - enemy
-    for (auto enemy_it = Enemy::enemies.begin();
-         enemy_it != Enemy::enemies.end();)
+    vector<Enemy*> &enemies = Enemy::enemies;
+    vector<Projectile*> &projectiles = Projectile::projectiles;
+    for (size_t enemy_i = 0;
+         enemy_i < enemies.size();
+         enemy_i++)
     {
-      bool enemy_updated=false;
-    //  cout<<"for enemy"<<endl;
+        Enemy *enemy = enemies.at(enemy_i);
+        //  cout<<"for enemy"<<endl;
         // kolla kollision mellan projectile - enemy
-        for (auto projectile_it = Projectile::projectiles.begin();
-         projectile_it != Projectile::projectiles.end();)
+        for (size_t projectile_i = 0;
+         projectile_i  < projectiles.size();
+         projectile_i++)
         {
+            Projectile *projectile = projectiles.at(projectile_i);
             //cout<<"for proj"<<endl;
-            if (collided((*projectile_it),(*enemy_it)))
+            if (collided(projectile,enemy))
             {
               cout<<"if collided proj"<<endl;
-              cout<<*enemy_it<<endl;
-                if ((*enemy_it)->collision(*projectile_it))
+              cout<<(*enemy)<<endl;
+                if (enemy->collision(projectile))
                 {
                   cout << "Before deleted enemy"<<endl;
-                  cout<< "enemy_it:"<< *enemy_it<<endl;
-                  delete *enemy_it;
-                  enemy_it = Enemy::enemies.erase(enemy_it);
-                  enemy_updated = true;
+                  cout<< "enemy_it:"<< *enemy<<endl;
+                  delete enemy;
+                  // detta gör att iteratorn som returneras inte kollas om den har kolliderat med projektil.
+                  enemies.erase(enemies.begin() + enemy_i);
+                  enemy_i--;
                   cout << "After deleted enemy"<<endl;
-                  cout<< "enemy_it:"<< *enemy_it<<endl;
+                  cout<< "enemy_it:"<< *enemy <<endl;
                 }
-                if ((*projectile_it)->collision())
+                if (projectile->collision())
                 {
                   cout << "Before deleted projectile"<<endl;
-                  std::cout << "projectile_it" << *projectile_it<<endl;
-                  std::cout << "projectiles " << Projectile::projectiles.size() << std::endl;
-                  delete *projectile_it;
-                  projectile_it = Projectile::projectiles.erase(projectile_it);
+                  // projektilen finns inte efter att vi har klonat bomb_blast?
+                  std::cout << "projectile_it" << *projectile <<endl;
+                  std::cout << "projectiles " << projectiles.size() << std::endl;
+                  delete projectile;
+                  projectiles.erase(projectiles.begin() + projectile_i);
                   cout << "After deleted projectile"<<endl;
-                }
-                else
-                {
-                  //cout<<"else not delete proj"<<endl;
-                  ++projectile_it;
-                  //cout<<"After else not delete proj"<<endl;
+                  projectile_i--;
                 }
             }
-            else
-            {
-                ++projectile_it;
-            }
-
         }
 
-        for (auto tower_it = Tower::static_towers.begin();
-             tower_it != Tower::static_towers.end();
-             tower_it++)
+    }
+}
+
+void Game::check_collision_towers()
+{
+    for (size_t enemy_i = 0;
+         enemy_i < Enemy::enemies.size();
+         enemy_i++)
+    {
+        for (size_t tower_i = 0;
+                tower_i < Tower::static_towers.size();
+                tower_i++)
         {
-            if (collided((*tower_it),(*enemy_it)))
+            if (collided(Tower::static_towers.at(tower_i),
+                        Enemy::enemies.at(enemy_i)))
             {
-                (*tower_it)->collision((*enemy_it));
+                Tower::static_towers.at(
+                    tower_i)->collision(Enemy::enemies.at(enemy_i));
             }
         }
-      if(!enemy_updated)
-      {
-        ++enemy_it;
-      }
     }
 }
 
@@ -581,5 +584,6 @@ void Game::update_logic()
         projectile_update_position();
     }
     check_collision();
+    check_collision_towers();
     frame++;
 }
