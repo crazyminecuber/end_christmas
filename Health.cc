@@ -65,3 +65,8 @@ void Health::remove_n_health(int n)
     health = std::max(0, health - n);
     update_text_health();
 }
+
+int Health::get_health()
+{
+    return health;
+}

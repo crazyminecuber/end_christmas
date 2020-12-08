@@ -12,20 +12,21 @@
 class Game final
 {
 public:
-	Game(){};
-	Game(sf::Vector2u win_size, std::string const & map_file, int hp
-		 /* std::string const & entity_file, */
+	//Game(){};
+	Game(sf::RenderWindow & win, std::string const & map_file,
+		 std::string const & entity_file, int hp
 		 /*std::string const & shop_file,*/
 		 )
-		 : window_size{win_size.x, win_size.y}, health{window, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
+		 : window{win}, window_size{win.getSize()},
+		   health{win, "resources/textures/heart.png", hp}/*, shop{shop_file}*/
 		 {
 			load_map(map_file);
-			//load_entities(entity_file); // Kallr vi på explicit i main.cc av
+			load_entities(entity_file); // Kallr vi på explicit i main.cc av
             //någon anledning.
 		 };
 
 
-	void handle_input();
+	void handle_input(sf::Event & event);
 	void update_logic();
 	void render();
 
@@ -46,18 +47,21 @@ public:
 	void create_n_enemy_boss(int start_time, int amount, float interval);
 	void enemy_update_direction();
 	void enemy_update_position();
+	bool wave_complete();
 
 	void projectile_update_position();
 
 	void fire_towers();
 
 	static int get_frame();
-	float get_fps();
+	int get_health();
+	double get_fps(); // ta bort
 
 private:
+	sf::RenderWindow & window;
 	sf::Vector2u window_size;
-    sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
-	 						"Tower defence"};
+    //sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
+	// 						"Tower defence"};
 	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	void init_enemies(nlohmann::json const & json_obj);
@@ -66,7 +70,9 @@ private:
 	void init_shop(nlohmann::json const & json_obj);
 	Health health;
 	static int frame;
-	float fps{60};
+	double fps{60}; // ta bort
+
+
     Tower_shop shop;
     Wallet wallet;
 

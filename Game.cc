@@ -209,8 +209,6 @@ bool Game::is_tile_enemy_end(sf::Vector2i index)
 
 void Game::render()
 {
-    window.clear();
-
     /* Put stuff to render here */
     // OBS: ORDER MATTERS!
 
@@ -242,10 +240,6 @@ void Game::render()
     shop.render(window, wallet);
     // render health
     health.render();
-
-    /*  ---------------------- */
-
-    window.display();
 }
 
 bool Game::is_running()
@@ -277,6 +271,11 @@ void Game::enemy_update_position()
     {
         (*it)->move((*it)->direction * (*it)->movement_speed);
     }
+}
+
+bool Game::wave_complete()
+{
+    return get_frame() >= 600; 
 }
 
 void Game::projectile_update_position()
@@ -372,7 +371,7 @@ int Game::get_frame()
 {
     return frame;
 }
-float Game::get_fps()
+double Game::get_fps()
 {
     return fps;
 }
@@ -519,28 +518,20 @@ void Game::fire_towers()
         }
 }
 
-void Game::handle_input()
+void Game::handle_input(sf::Event & event)
 {
-    sf::Event event;
-    while (window.pollEvent(event))
+    // Has a mouse button been pressed?
+    if ( event.type == sf::Event::MouseButtonPressed )
+    {
+        auto mouse { event.mouseButton };
+        // Is it the left mouse button?
+        if ( mouse.button == sf::Mouse::Button::Left )
         {
-            if ( event.type == sf::Event::Closed )
-            {
-                window.close ();
-            }
-            // Has a mouse button been pressed?
-             else if ( event.type == sf::Event::MouseButtonPressed )
-             {
-                 auto mouse { event.mouseButton };
-                 // Is it the left mouse button?
-                 if ( mouse.button == sf::Mouse::Button::Left )
-                 {
-                     float mouseX = mouse.x;
-                     float mouseY = mouse.y;
-                     handle_click(sf::Vector2f{mouseX, mouseY});
-                 }
-             }
+            float mouseX = mouse.x;
+            float mouseY = mouse.y;
+            handle_click(sf::Vector2f{mouseX, mouseY});
         }
+    }
 }
 
  void Game::handle_click(sf::Vector2f click)
@@ -579,4 +570,9 @@ void Game::update_logic()
     }
     check_collision();
     frame++;
+}
+
+int Game::get_health()
+{
+    return health.get_health();
 }

@@ -3,5 +3,6 @@
 test
 del_*
 *.vim
+.vscode
 *.crap
 game
