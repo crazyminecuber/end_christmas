@@ -376,7 +376,7 @@ float Game::get_fps()
 }
 
 void Game::init_projectiles(json const & json_obj)
-{   cout << "ladda in projectile basic" << endl;
+{   
     json proj = json_obj["Projectile_basic"];
     Projectile_basic::frames_to_live = proj["frames_to_live"];
     Projectile_basic::damage_init = proj["damage_init"];
@@ -417,7 +417,6 @@ void Game::init_projectiles(json const & json_obj)
 
 void Game::init_towers(json const & json_obj)
 {
-    cout << "börjar ladda towers" << endl;
     json tower = json_obj["Tower_basic"];
 
     Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
@@ -458,30 +457,20 @@ void Game::check_collision()
          projectile_i++)
         {
             Projectile *projectile = projectiles.at(projectile_i);
-            //cout<<"for proj"<<endl;
             if (collided(projectile,enemy))
             {
-              cout<<"if collided proj"<<endl;
                 if (enemy->collision(projectile))
                 {
-                  cout << "Before deleted enemy"<<endl;
-                  cout<< "enemy_it:"<< *enemy<<endl;
                   delete enemy;
                   // detta gör att iteratorn som returneras inte kollas om den har kolliderat med projektil.
                   enemies.erase(enemies.begin() + enemy_i);
                   enemy_i--;
-                  cout << "After deleted enemy"<<endl;
-                  cout<< "enemy_it:"<< *enemy <<endl;
                 }
                 if (projectile->collision())
                 {
-                  cout << "Before deleted projectile"<<endl;
                   // projektilen finns inte efter att vi har klonat bomb_blast?
-                  std::cout << "projectile_it" << *projectile <<endl;
-                  std::cout << "projectiles " << projectiles.size() << std::endl;
                   delete projectile;
                   projectiles.erase(projectiles.begin() + projectile_i);
-                  cout << "After deleted projectile"<<endl;
                   projectile_i--;
                 }
             }
@@ -573,16 +562,12 @@ void Game::update_logic()
 {
     if ( Enemy::enemies.size() > 0 )
     {
-      cout<<"Before update position enemy" << endl;
         enemy_update_direction();
         enemy_update_position();
-        cout << "After update position enemy" << endl;
     }
     if (Projectile::projectiles.size() > 0)
     {
-      cout<<"Before update position projectile" << endl;
         projectile_update_position();
-        cout << "After update position projectile" << endl;
     }
     check_collision();
     check_collision_towers();
