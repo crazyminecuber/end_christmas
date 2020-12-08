@@ -279,9 +279,13 @@ void Game::enemy_update_position()
 
 void Game::projectile_update_position()
 {
+<<<<<<< HEAD
     for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
+=======
+    for (auto it = Projectile::projectiles.begin(); it !=Projectile::projectiles.end();)
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
     {
-      if(!(*it)->update_position())
+      if(!((*it)->update_position()))
       {
         delete *it;
         it = Projectile::projectiles.erase(it);
@@ -450,15 +454,20 @@ void Game::check_collision()
          enemy_it != Enemy::enemies.end();)
     {
       bool enemy_updated=false;
+<<<<<<< HEAD
       //cout<<"for enemy"<<endl;
+=======
+    //  cout<<"for enemy"<<endl;
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
         // kolla kollision mellan projectile - enemy
         for (auto projectile_it = Projectile::projectiles.begin();
          projectile_it != Projectile::projectiles.end();)
         {
-            cout<<"for proj"<<endl;
+            //cout<<"for proj"<<endl;
             if (collided((*projectile_it),(*enemy_it)))
             {
               cout<<"if collided proj"<<endl;
+<<<<<<< HEAD
               if ((*enemy_it)->collision(*projectile_it))
               {
                 cout << "Before deleted enemy"<<endl;
@@ -477,18 +486,38 @@ void Game::check_collision()
                   cout << "After deleted projectile"<<endl;
                 }
 
+=======
+              cout<<*enemy_it<<endl;
+                if ((*enemy_it)->collision(*projectile_it))
+                {
+                  cout << "Before deleted enemy"<<endl;
+                  cout<< "enemy_it:"<< *enemy_it<<endl;
+                  delete *enemy_it;
+                  enemy_it = Enemy::enemies.erase(enemy_it);
+                  enemy_updated = true;
+                  cout << "After deleted enemy"<<endl;
+                  cout<< "enemy_it:"<< *enemy_it<<endl;
+                }
+                if ((*projectile_it)->collision())
+                {
+                  cout << "Before deleted projectile"<<endl;
+                  std::cout << "projectile_it" << *projectile_it<<endl;
+                  std::cout << "projectiles " << Projectile::projectiles.size() << std::endl;
+                  delete *projectile_it;
+                  projectile_it = Projectile::projectiles.erase(projectile_it);
+                  cout << "After deleted projectile"<<endl;
+                }
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
                 else
                 {
-                  cout<<"else not delete proj"<<endl;
+                  //cout<<"else not delete proj"<<endl;
                   ++projectile_it;
-                  cout<<"After else not delete proj"<<endl;
+                  //cout<<"After else not delete proj"<<endl;
                 }
             }
             else
             {
-              cout<<"Before else collided proj"<<endl;
                 ++projectile_it;
-              cout<<"After else collided proj"<<endl;
             }
         }
 

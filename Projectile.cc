@@ -117,6 +117,7 @@ void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
   p->direction = dir;
   p->setPosition(pos);
   projectiles.push_back(p);
+  std::cout << "Clone nr_pierce" << nr_pierce<< std::endl;
 }
 
 //Counts nr of enemies killed and return true if the projectile should be delete
@@ -124,12 +125,22 @@ void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
 bool Projectile_pierce::collision()
 {
   nr_enemies_killed+= 1;
+<<<<<<< HEAD
   if(nr_enemies_killed < nr_pierce_init)
   {
+=======
+  std::cout<<"nr_kill" << nr_enemies_killed<< std::endl;
+  std::cout<<"nr_pierce" << nr_pierce<< std::endl;
+  std::cout<<"nr_pierce" << nr_pierce_init<< std::endl;
+  if(nr_enemies_killed < nr_pierce_init)
+  {
+    std::cout<<"collision pierce false " << std::endl;
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
       return false;
   }
   else
   {
+    std::cout<<"collision pierce true " << std::endl;
     return true;
   }
 }
@@ -184,7 +195,12 @@ void  Projectile_bomb::clone(sf::Vector2f dir, sf::Vector2f pos)
 //when collided
 bool Projectile_bomb::collision()
 {
+<<<<<<< HEAD
   std::cout << "Before collision bomb" << std::endl;
+=======
+  std::cout << "Collision bomb" << std::endl;
+  std::cout << "projectile" << *this<<endl;
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
   blast.clone(sf::Vector2f(0,0), getPosition());
   std::cout << "After collision bomb" << std::endl;
   return true;
@@ -221,17 +237,29 @@ Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)
 //clone and adds to vector projectiles
 void Projectile_bomb_blast::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
+<<<<<<< HEAD
   std::cout << "Before clone bomb_blast" << std::endl;
+=======
+  std::cout << " Before Clone bomb_blast" << std::endl;
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
   Projectile_bomb_blast *p = new Projectile_bomb_blast{*this};
   p->direction = dir;
   p->setPosition(pos);
   projectiles.push_back(p);
+<<<<<<< HEAD
   std::cout << "After clone bomb_blast" << std::endl;
+=======
+  std::cout << " Aftere Clone bomb_blast" << std::endl;
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
 }
 
 //Returnes false, will not be deleted when collided
 bool Projectile_bomb_blast::collision()
 {
+<<<<<<< HEAD
   std::cout << "Collision bomb_blast" << std::endl;
+=======
+  std::cout << "Collision blast" << std::endl;
+>>>>>>> 9a99dbe386b730e1b77e01fa5c3c88941ed2ecc9
     return false;
 }
