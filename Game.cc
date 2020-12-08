@@ -279,7 +279,7 @@ void Game::enemy_update_position()
 
 void Game::projectile_update_position()
 {
-    for (auto it = Projectile::projectiles.begin(); it !=Projectile::projectiles.end();)
+    for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
     {
       if(!((*it)->update_position()))
       {
@@ -452,7 +452,6 @@ void Game::check_collision()
          enemy_i++)
     {
         Enemy *enemy = enemies.at(enemy_i);
-        //  cout<<"for enemy"<<endl;
         // kolla kollision mellan projectile - enemy
         for (size_t projectile_i = 0;
          projectile_i  < projectiles.size();
@@ -463,7 +462,6 @@ void Game::check_collision()
             if (collided(projectile,enemy))
             {
               cout<<"if collided proj"<<endl;
-              cout<<(*enemy)<<endl;
                 if (enemy->collision(projectile))
                 {
                   cout << "Before deleted enemy"<<endl;
@@ -488,7 +486,6 @@ void Game::check_collision()
                 }
             }
         }
-
     }
 }
 
@@ -576,12 +573,16 @@ void Game::update_logic()
 {
     if ( Enemy::enemies.size() > 0 )
     {
+      cout<<"Before update position enemy" << endl;
         enemy_update_direction();
         enemy_update_position();
+        cout << "After update position enemy" << endl;
     }
     if (Projectile::projectiles.size() > 0)
     {
+      cout<<"Before update position projectile" << endl;
         projectile_update_position();
+        cout << "After update position projectile" << endl;
     }
     check_collision();
     check_collision_towers();
