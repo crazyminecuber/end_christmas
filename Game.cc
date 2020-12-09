@@ -332,10 +332,10 @@ void Game::init_waves(json const & json_obj)
                           wave.value()["num_in_group_inc"],
                           wave.value()["group_spawn_interval"],
                           wave.value()["num_of_groups"],
-                          wave.value()["num_of_groups_inc"],
-                          wave.value()["mov_spd_factor"]));
-    cout << wave.key() << endl;
+                          wave.value()["num_of_groups_inc"]));
     }
+    // cout << wave.key() << endl;
+    wave_manager.init_waves(frame, fps);
 }
 
 int Game::get_frame()
@@ -481,9 +481,14 @@ void Game::handle_input()
 
 void Game::update_logic()
 {
-    if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
+    // if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
+    // {
+        // cout << "next_wave" << endl;
+        // wave_manager.next_wave(frame, fps);
+    // }
+    if(wave_manager.wave_is_finished())
     {
-        cout << "next_wave" << endl;
+        cout << "wave_is_finished" << endl;
         wave_manager.next_wave(frame, fps);
     }
     wave_manager.spawn_enemies(frame);

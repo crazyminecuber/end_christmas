@@ -1,21 +1,32 @@
-#include "Wave_group.h"
 #include <list>
 #include <algorithm>
-#include "Wave_manager.h"
-#include "Enemy.h"
 #include <iostream>
-
+#include "Wave_manager.h"
+#include "Wave_group.h"
+#include "Enemy.h"
 
 
 void Wave_group::next_wave(int current_wave, int current_frame, int fps)
 {
-
-    if(current_wave != 1)
+    if(current_wave != start_wave)
     {
         num_in_group += num_in_group_inc;
+        num_of_groups += num_of_groups_inc;
     }
+
     calculate_spawn_frames(current_frame, fps);
 }
+
+int Wave_group::get_start_wave()
+{
+    return start_wave;
+}
+
+int Wave_group::get_end_wave()
+{
+    return end_wave;
+}
+
 
 void Wave_group::calculate_spawn_frames(int current_frame,float fps)
 {

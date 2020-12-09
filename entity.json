@@ -15,24 +15,38 @@
                     "texture" : "resources/textures/heart.png",
                     "size": [50,50],
                     "hit_rad": 10,
-                    "mov_spd": 2
+                    "mov_spd": 5
                 }
         },
     "Waves" :
         {
             "Group1" :
             {
-                "start_wave": 0,
-                "end_wave" : 10,
-                "enemy" : "Enemy_boss",
+                "start_wave": 1,
+                "end_wave" : 2,
+                "enemy" : "Enemy_basic",
                 "spawn_delay": 1,
-                "spawn_rate" : 1,
+                "spawn_rate" : 10,
                 "num_in_group": 1,
-                "num_in_group_inc": 5,
+                "num_in_group_inc": 1,
                 "group_spawn_interval": 1,
                 "num_of_groups": 1,
                 "num_of_groups_inc": 1,
-                "mov_spd_factor": 1
+                "mov_spd_factor": 3
+            },
+            "Group2" :
+            {
+                "start_wave": 3,
+                "end_wave" : 10,
+                "enemy" : "Enemy_boss",
+                "spawn_delay": 1,
+                "spawn_rate" : 10,
+                "num_in_group": 1,
+                "num_in_group_inc": 1,
+                "group_spawn_interval": 1,
+                "num_of_groups": 1,
+                "num_of_groups_inc": 1,
+                "mov_spd_factor": 3
             }
         },
     "Projectile" :
