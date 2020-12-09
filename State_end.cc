@@ -1,6 +1,8 @@
 #include "State_end.h"
 #include <string>
 
+using namespace std;
+
 void State_end::init()
 {
     /* background */
@@ -14,16 +16,15 @@ void State_end::init()
                                   window.getSize().y / 2.f);
 
     /* text */
-    std::string file{"resources/fonts/Christmas_Bell.otf"};
+    string file{"resources/fonts/Christmas_Bell.otf"};
     if (!font.loadFromFile(file))
     {
-        throw std::invalid_argument("Unable to load " + file);
+        throw invalid_argument("Unable to load " + file);
     }
 
-    std::string str1{"Santa won!"};
-    std::string str2{"You got to level "};
-    // str2 += game.get_level();
-    str2 += "1";
+    string str1{"Santa won!"};
+    string str2{"You got to level "};
+    str2 += to_string(game.get_current_wave());
 
     text1 = sf::Text{'('+str1+')', font, 100};
     text2= sf::Text{str2, font, 80};
@@ -64,7 +65,7 @@ void State_end::render()
     window.display();
 }
 
-std::string State_end::get_next_state()
+string State_end::get_next_state()
 {
     return this_state;
 }
