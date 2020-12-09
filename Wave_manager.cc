@@ -129,3 +129,8 @@ bool Wave_manager::all_enemies_have_spawned()
     }
     return all_have_spawned;
 }
+
+int Wave_manager::get_current_wave() const
+{
+    return current_wave;
+}
