@@ -6,7 +6,8 @@
 #include <SFML/System/Vector2.hpp>
 #include "Entity.h"
 #include "Projectile.h"
-#include "Game.h"
+
+
 
 
 struct Tower_properties
