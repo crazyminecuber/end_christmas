@@ -32,10 +32,11 @@ int Game::frame =0;
 // Help function to determine init projectile for tower
 Projectile* Game::get_tower_projectile(std::string const & projectile)
 {
+
     sf::Vector2f double0{0,0};//7
     if(projectile == "Projectile_basic")
     {
-        return new Projectile_basic{double0,double0};
+       return new Projectile_basic(double0,double0);
     }
     else if(projectile == "Projectile_pierce")
     {
@@ -275,14 +276,14 @@ void Game::enemy_update_position()
 
 bool Game::wave_complete()
 {
-    return get_frame() >= 600; 
+    return get_frame() >= 600;
 }
 
 void Game::projectile_update_position()
 {
-    for (auto it{begin(Projectile::projectiles)}; it != end(Projectile::projectiles);)
+    for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
     {
-      if(!(*it)->update_position())
+      if(!((*it)->update_position()))
       {
         delete *it;
         it = Projectile::projectiles.erase(it);
@@ -377,7 +378,7 @@ double Game::get_fps()
 }
 
 void Game::init_projectiles(json const & json_obj)
-{   cout << "ladda in projectile basic" << endl;
+{
     json proj = json_obj["Projectile_basic"];
     Projectile_basic::frames_to_live = proj["frames_to_live"];
     Projectile_basic::damage_init = proj["damage_init"];
@@ -395,6 +396,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_pierce::prop.hit_rad = proj["hit_rad"];
     Projectile_pierce::prop.dir = sf::Vector2f(0,0);
     Projectile_pierce::prop.mov_spd = proj["mov_spd"];
+    Projectile_pierce::nr_pierce_init = proj["nr_pierce_init"];
 
     proj = json_obj["Projectile_bomb"];
     Projectile_bomb::frames_to_live = proj["frames_to_live"];
@@ -417,7 +419,6 @@ void Game::init_projectiles(json const & json_obj)
 
 void Game::init_towers(json const & json_obj)
 {
-    cout << "börjar ladda towers" << endl;
     json tower = json_obj["Tower_basic"];
 
     Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
@@ -430,7 +431,7 @@ void Game::init_towers(json const & json_obj)
     Tower_basic::entity_prop.mov_spd = 0;
 
     tower = json_obj["Tower_ring"];
-    //Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_ring::tower_prop.cost_init = tower["cost_init"];
     Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
     Tower_ring::entity_prop.texture_file = tower["sprite_init"];
@@ -438,8 +439,8 @@ void Game::init_towers(json const & json_obj)
     Tower_ring::entity_prop.hit_rad = tower["detection_radius_init"];
     Tower_ring::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Tower_ring::entity_prop.mov_spd = 0;
+    Tower_ring::num_projectile_init = tower["num_projectile_init"];
 
-    cout << "laddat towers" << endl;
 }
 
 void Game::init_shop(json const & j_shop)
@@ -465,44 +466,55 @@ void Game::init_shop(json const & j_shop)
 
 void Game::check_collision()
 {
-    //kolla tower - enemy
-    for (auto enemy_it = Enemy::enemies.begin();
-         enemy_it != Enemy::enemies.end(); enemy_it++)
+    vector<Enemy*> &enemies = Enemy::enemies;
+    vector<Projectile*> &projectiles = Projectile::projectiles;
+    for (size_t enemy_i = 0;
+         enemy_i < enemies.size();
+         enemy_i++)
     {
+        Enemy *enemy = enemies.at(enemy_i);
         // kolla kollision mellan projectile - enemy
-        for (auto projectile_it = Projectile::projectiles.begin();
-         projectile_it != Projectile::projectiles.end();)
+        for (size_t projectile_i = 0;
+         projectile_i  < projectiles.size();
+         projectile_i++)
         {
-            if (collided((*projectile_it),(*enemy_it)))
+            Projectile *projectile = projectiles.at(projectile_i);
+            if (collided(projectile,enemy))
             {
-                if ((*enemy_it)->collision(*projectile_it))
+                if (enemy->collision(projectile))
                 {
-                  delete *enemy_it;
-                  enemy_it = Enemy::enemies.erase(enemy_it);
+                  delete enemy;
+                  // detta gör att iteratorn som returneras inte kollas om den har kolliderat med projektil.
+                  enemies.erase(enemies.begin() + enemy_i);
+                  enemy_i--;
                 }
-                if ((*projectile_it)->collision())
+                if (projectile->collision())
                 {
-                  delete *projectile_it;
-                  projectile_it = Projectile::projectiles.erase(projectile_it);
-                }
-                else
-                {
-                  ++projectile_it;
+                  // projektilen finns inte efter att vi har klonat bomb_blast?
+                  delete projectile;
+                  projectiles.erase(projectiles.begin() + projectile_i);
+                  projectile_i--;
                 }
             }
-            else
-            {
-                ++projectile_it;
-            }
-
         }
-        for (auto tower_it = Tower::static_towers.begin();
-             tower_it != Tower::static_towers.end();
-             tower_it++)
+    }
+}
+
+void Game::check_collision_towers()
+{
+    for (size_t enemy_i = 0;
+         enemy_i < Enemy::enemies.size();
+         enemy_i++)
+    {
+        for (size_t tower_i = 0;
+                tower_i < Tower::static_towers.size();
+                tower_i++)
         {
-            if (collided((*tower_it),(*enemy_it)))
+            if (collided(Tower::static_towers.at(tower_i),
+                        Enemy::enemies.at(enemy_i)))
             {
-                (*tower_it)->collision((*enemy_it));
+                Tower::static_towers.at(
+                    tower_i)->collision(Enemy::enemies.at(enemy_i));
             }
         }
     }
@@ -569,6 +581,7 @@ void Game::update_logic()
         projectile_update_position();
     }
     check_collision();
+    check_collision_towers();
     frame++;
 }
 
