@@ -58,7 +58,7 @@
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [50,50],
                     "hit_rad" : 25,
-                    "mov_spd" : 2
+                    "mov_spd" : 5
                 },
             "Projectile_pierce" :
                 {
@@ -94,10 +94,10 @@
             "Tower_basic" :
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
-                    "projectile_init" : "Projectile_bomb",
+                    "projectile_init" : "Projectile_basic",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
-                    "detection_radius_init" : 1000.0,
+                    "detection_radius_init" : 300.0,
                     "fire_period_init" : 60,
                     "size": [100,100]
                 },

@@ -298,8 +298,8 @@ void Game::load_entities(string const & file)
         json j_data;
         ifs >> j_data;
         init_enemies(j_data["Enemy"]);
-        init_towers(j_data["Tower"]);
         init_projectiles(j_data["Projectile"]);
+        init_towers(j_data["Tower"]);
         init_shop(j_data["Shop"]);
         init_waves(j_data["Waves"]);
     }

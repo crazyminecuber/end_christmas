@@ -39,11 +39,10 @@ class Tower : public Entity
 
 
     static std::vector<Tower*> static_towers;
-
+    static std::vector<Entity*> shootable_enemies;
 
 
   protected:
-    std::vector<Entity*> shootable_enemies;
     Entity* target_enemy;
     int frame_last_shot{0};
     int fire_period;

@@ -1,4 +1,5 @@
 #include "State_wait.h"
+#include "Tower.h"
 using namespace std;
 
 State_wait::State_wait(sf::RenderWindow & win, Game & game)
@@ -22,6 +23,8 @@ void State_wait::handle_input(sf::Event & event)
     {
         if ( event.key.code == sf::Keyboard::P )
         {
+            Tower::shootable_enemies.clear();
+            cout << Tower::shootable_enemies.size() << endl;
             play = true;
         }
     }
