@@ -1,6 +1,6 @@
 #include "State_wait.h"
 using namespace std;
-    
+
 State_wait::State_wait(sf::RenderWindow & win, Game & game)
     : window{win}, game{game}
 {
@@ -49,6 +49,7 @@ std::string State_wait::get_next_state()
     if (play)
     {
         return_string = "wave";
+        game.next_wave();
     }
     play = false;
     return return_string;

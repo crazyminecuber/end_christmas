@@ -25,9 +25,13 @@ public:
 
     virtual bool collision(Projectile* object) = 0;
     void set_direction(sf::Vector2f dir);
+    virtual Enemy* clone() = 0;
     int get_damage();
 
     //Statics
+    static Enemy* get_new_enemy_basic();
+    static Enemy* get_new_enemy_boss();
+    static void create_enemy_by_obj(Enemy* enemy);
     static void new_basic();
     static void new_basic(sf::Vector2f position);
     static void new_boss();

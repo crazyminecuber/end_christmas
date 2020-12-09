@@ -23,6 +23,7 @@ public:
     static entity_properties prop;
 
     bool collision(Projectile* object);
+    Enemy* clone() override;
   protected:
     int life{life_init};
 

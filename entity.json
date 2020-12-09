@@ -3,20 +3,51 @@
         {
             "Enemy_basic" :
                 {
-                    "life_init" : 1,
+                    "life_init" : 2,
                     "texture" : "resources/textures/Santa.png",
-                    "size": [80,60],
+                    "size": [50, 50],
                     "hit_rad": 10,
                     "mov_spd": 2
                 },
             "Enemy_boss" :
                 {
-                    "life_init" : 1000,
-                    "texture" : "resources/textures/Snowball.png",
+                    "life_init" : 10,
+                    "texture" : "resources/textures/heart.png",
                     "size": [50,50],
                     "hit_rad": 10,
-                    "mov_spd": 2
+                    "mov_spd": 5
                 }
+        },
+    "Waves" :
+        {
+            "Group1" :
+            {
+                "start_wave": 1,
+                "end_wave" : 2,
+                "enemy" : "Enemy_basic",
+                "spawn_delay": 1,
+                "spawn_rate" : 10,
+                "num_in_group": 1,
+                "num_in_group_inc": 1,
+                "group_spawn_interval": 1,
+                "num_of_groups": 1,
+                "num_of_groups_inc": 1,
+                "mov_spd_factor": 3
+            },
+            "Group2" :
+            {
+                "start_wave": 3,
+                "end_wave" : 10,
+                "enemy" : "Enemy_boss",
+                "spawn_delay": 1,
+                "spawn_rate" : 10,
+                "num_in_group": 1,
+                "num_in_group_inc": 1,
+                "group_spawn_interval": 1,
+                "num_of_groups": 1,
+                "num_of_groups_inc": 1,
+                "mov_spd_factor": 3
+            }
         },
     "Projectile" :
         {
@@ -66,7 +97,7 @@
                     "projectile_init" : "Projectile_bomb",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
-                    "detection_radius_init" : 250.0,
+                    "detection_radius_init" : 1000.0,
                     "fire_period_init" : 60,
                     "size": [100,100]
                 },
@@ -76,7 +107,7 @@
                     "projectile_init" : "Projectile_pierce",
                     "shop_sprite_init" : "resources/textures/tower_ring_shop.png",
                     "cost_init" : 50,
-                    "detection_radius_init" : 250.0,
+                    "detection_radius_init" : 1000.0,
                     "fire_period_init" : 30,
                     "size": [100,100],
                     "num_projectile_init": 8

@@ -2,6 +2,7 @@
 #include <cmath>
 #include <math.h>
 #include <sstream>
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
@@ -21,6 +22,7 @@
 #include "Tile_enemy_start.h"
 #include "Tile_enemy_end.h"
 #include "Tower_shop.h"
+#include "Wave_manager.h"
 
 using namespace std;
 using json = nlohmann::json;
@@ -81,23 +83,23 @@ void Game::load_map(string const & file) //use file "map.csv"
             }
             else if ( num == 0 )
             {
-                new Tile_nothing("resources/textures/stones.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_nothing("resources/textures/stones.jpg", window, tile_index_pos);
             }
             else if ( num == 1 )
             {
-                new Tile_tower("resources/textures/grass.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_tower("resources/textures/grass.jpg", window, tile_index_pos);
             }
             else if ( num == 2 )
             {
-                new Tile_enemy("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy("resources/textures/dirt.jpg", window, tile_index_pos);
             }
             else if ( num == 3 )
             {
-                new Tile_enemy_start("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy_start("resources/textures/dirt.jpg", window, tile_index_pos);
             }
             else if ( num == 4 )
             {
-                new Tile_enemy_end("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy_end("resources/textures/dirt.jpg", window, tile_index_pos);
             }
             else
             {
@@ -137,19 +139,19 @@ void Game::determine_tile_directions()
     /* find enemy_end tile */
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
-        if ( is_tile_enemy_end((*it).first) )
+        if ( Tile::is_tile_enemy_end((*it).first) )
             enemy_end = (*it).second->get_index_position();
     }
     current_tile = enemy_end;
 
     /* loop through enemy path backwards and set set direction of tile */
-    while ( !(is_tile_enemy_start(current_tile)) )
+    while ( !(Tile::is_tile_enemy_start(current_tile)) )
     {
         /* if (tile exists) and (tile is enemy) and (tile is not last tile) */
         // look up
         if ( Tile::tiles.find(current_tile + sf::Vector2i{0, -1})  !=
                 Tile::tiles.end()                                  &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{0, -1})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{0, -1})) &&
              last_tile !=    (current_tile + sf::Vector2i{0, -1})     )
         {
             next_tile = current_tile + sf::Vector2i{0, -1};
@@ -157,7 +159,7 @@ void Game::determine_tile_directions()
         // look right
         if ( Tile::tiles.find(current_tile + sf::Vector2i{1, 0})  !=
                 Tile::tiles.end()                                 &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{1, 0})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{1, 0})) &&
              last_tile !=    (current_tile + sf::Vector2i{1, 0})     )
         {
             next_tile = current_tile + sf::Vector2i{1, 0};
@@ -165,7 +167,7 @@ void Game::determine_tile_directions()
         // look down
         if ( Tile::tiles.find(current_tile + sf::Vector2i{0, 1})  !=
                 Tile::tiles.end()                                 &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{0, 1})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{0, 1})) &&
              last_tile !=    (current_tile + sf::Vector2i{0, 1})     )
         {
             next_tile = current_tile + sf::Vector2i{0, 1};
@@ -173,7 +175,7 @@ void Game::determine_tile_directions()
         // look left
         if ( Tile::tiles.find(current_tile + sf::Vector2i{-1, 0})  !=
                 Tile::tiles.end()                                  &&
-             is_tile_enemy(  (current_tile + sf::Vector2i{-1, 0})) &&
+             Tile::is_tile_enemy(  (current_tile + sf::Vector2i{-1, 0})) &&
              last_tile !=    (current_tile + sf::Vector2i{-1, 0})     )
         {
             next_tile = current_tile + sf::Vector2i{-1, 0};
@@ -188,24 +190,6 @@ void Game::determine_tile_directions()
         direction.y = last_tile.y - current_tile.y;
         Tile::get_tile_by_index(current_tile)->set_direction(direction);
     }
-}
-
-bool Game::is_tile_enemy(sf::Vector2i index)
-{
-    return  ( !(dynamic_cast<Tile_enemy*>
-                (Tile::get_tile_by_index(index)) == nullptr) );
-}
-
-bool Game::is_tile_enemy_start(sf::Vector2i index)
-{
-    return  ( !(dynamic_cast<Tile_enemy_start*>
-                (Tile::get_tile_by_index(index)) == nullptr) );
-}
-
-bool Game::is_tile_enemy_end(sf::Vector2i index)
-{
-    return  ( !(dynamic_cast<Tile_enemy_end*>
-                (Tile::get_tile_by_index(index)) == nullptr) );
 }
 
 void Game::render()
@@ -241,6 +225,7 @@ void Game::render()
     shop.render(window, wallet);
     // render health
     health.render();
+    wave_manager.render();
 }
 
 bool Game::is_running()
@@ -253,10 +238,15 @@ void Game::enemy_update_direction()
     float damage_dealt{0};
     for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
     {
+        float damage_this_enemy{0};
         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
-        if ( tile->update_enemy(*it) > 0 )
+        // maybe change this later so that the deletion is done inside
+        // tile_enemy_end instead. Have to change flow of information
+        // between damage and health then too.
+        damage_this_enemy = tile->update_enemy(*it);
+        if ( damage_this_enemy > 0.f )
         {
-            damage_dealt += tile->update_enemy(*it);
+            damage_dealt += damage_this_enemy;
             delete *it;
             it = Enemy::enemies.erase(it);
         }
@@ -276,7 +266,7 @@ void Game::enemy_update_position()
 
 bool Game::wave_complete()
 {
-    return get_frame() >= 600;
+    return wave_manager.wave_is_finished();
 }
 
 void Game::projectile_update_position()
@@ -294,6 +284,12 @@ void Game::projectile_update_position()
       }
     }
 }
+
+void Game::next_wave()
+{
+    wave_manager.next_wave(frame, Game::fps);
+}
+
 void Game::load_entities(string const & file)
 {
     ifstream ifs(file);
@@ -305,15 +301,23 @@ void Game::load_entities(string const & file)
         init_towers(j_data["Tower"]);
         init_projectiles(j_data["Projectile"]);
         init_shop(j_data["Shop"]);
+        init_waves(j_data["Waves"]);
     }
     ifs.close();
 }
 
  void Game::init_enemies(json const & json_obj)
 {
+    /* position_init */
+    sf::Vector2f tile_enemy_start_position;
+    tile_enemy_start_position = Tile::get_tile_enemy_start()->getPosition() +
+                                sf::Vector2f{(Tile::side_length / 2.f),
+                                             (Tile::side_length / 2.f) };
+    Enemy::position_init = tile_enemy_start_position;
+
+    /* Enemy_basic */
     json enemy_basic = json_obj["Enemy_basic"];
     Enemy_basic::life_init = enemy_basic["life_init"];
-    Enemy_basic::position_init = sf::Vector2f{40, 120};
     Enemy_basic::prop.texture_file = enemy_basic["texture"];
     sf::Vector2f size_basic;
     size_basic.x = enemy_basic["size"][0];
@@ -323,9 +327,9 @@ void Game::load_entities(string const & file)
     Enemy_basic::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Enemy_basic::prop.mov_spd = enemy_basic["mov_spd"];
 
+    /* Enemy_boss */
     json enemy_boss = json_obj["Enemy_boss"];
     Enemy_boss::life_init = enemy_boss["life_init"];
-    //Enemy_boss::position_init = sf::Vector2f{500, 500}; // ERROR, this one seems to write over Enemy_basic::position_init
     Enemy_boss::prop.texture_file = enemy_boss["texture"];
     sf::Vector2f size_boss;
     size_boss.x = enemy_boss["size"][0];
@@ -338,34 +342,34 @@ void Game::load_entities(string const & file)
     cout << "laddat enemies" << endl;
 }
 
-void Game::create_1_enemy_basic()
+void Game::init_waves(json const & json_obj)
 {
-    Enemy::new_basic();
-}
-
-void Game::create_1_enemy_boss()
-{
-    Enemy::new_boss();
-}
-
-void Game::create_n_enemy_basic(int start_time, int amount, float interval)
-{
-    if ( (frame >= (start_time * fps))                              &&
-         (frame <  (start_time * fps) + (fps * interval * amount )) &&
-         (fmod(frame ,(fps * interval)) == 0)                         )
+    //Get every wave and add to wave_groups
+    for (const auto& wave : json_obj.items())
     {
-        create_1_enemy_basic();
+        Enemy* enemy;
+        if(wave.value()["enemy"] == "Enemy_basic")
+        {
+            enemy = Enemy::get_new_enemy_basic();
+        }
+        else if(wave.value()["enemy"] == "Enemy_boss")
+        {
+            enemy = Enemy::get_new_enemy_boss();
+        }
+    wave_manager.add_wave(new Wave_group(
+                          wave.value()["start_wave"],
+                          wave.value()["end_wave"],
+                          enemy,
+                          wave.value()["spawn_delay"],
+                          wave.value()["spawn_rate"],
+                          wave.value()["num_in_group"],
+                          wave.value()["num_in_group_inc"],
+                          wave.value()["group_spawn_interval"],
+                          wave.value()["num_of_groups"],
+                          wave.value()["num_of_groups_inc"]));
     }
-}
-
-void Game::create_n_enemy_boss(int start_time, int amount, float interval)
-{
-    if ( (frame >= (start_time * fps))                              &&
-         (frame <  (start_time * fps) + (fps * interval * amount )) &&
-         (fmod(frame ,(fps * interval)) == 0)                         )
-    {
-        create_1_enemy_boss();
-    }
+    // cout << wave.key() << endl;
+    wave_manager.init_waves(frame, fps);
 }
 
 int Game::get_frame()
@@ -571,11 +575,15 @@ void Game::handle_input(sf::Event & event)
 
 void Game::update_logic()
 {
-    if ( Enemy::enemies.size() > 0 )
-    {
-        enemy_update_direction();
-        enemy_update_position();
-    }
+    // if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
+    // {
+        // cout << "next_wave" << endl;
+        // wave_manager.next_wave(frame, fps);
+    // }
+    wave_manager.spawn_enemies(frame);
+    enemy_update_direction();
+    enemy_update_position();
+
     if (Projectile::projectiles.size() > 0)
     {
         projectile_update_position();

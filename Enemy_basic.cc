@@ -2,11 +2,18 @@
 #include "Entity.h"
 #include "Enemy_basic.h"
 
+Enemy_basic::~Enemy_basic(){}
+
+
+Enemy* Enemy_basic::clone(){
+    return new Enemy_basic{*this};
+}
+
 //Statics
 int Enemy_basic::life_init;
 entity_properties Enemy_basic::prop;
 
-Enemy_basic::~Enemy_basic(){}
+
 
 bool Enemy_basic::collision(Projectile* object){
     life-= object->damage;

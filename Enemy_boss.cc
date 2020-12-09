@@ -19,6 +19,10 @@ bool Enemy_boss::collision(Projectile* object){
       return false;
     }
 }
+Enemy* Enemy_boss::clone()
+{
+    return new Enemy_boss{*this};
+}
 
 
 //Statics

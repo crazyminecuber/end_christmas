@@ -1,5 +1,9 @@
 #include <iostream> //debugg
+#include <cmath>
 #include "Tile.h"
+#include "Tile_enemy.h"
+#include "Tile_enemy_start.h"
+#include "Tile_enemy_end.h"
 
 std::map<sf::Vector2i, Tile*, cmpTileByCoord> Tile::tiles;
 
@@ -21,15 +25,55 @@ void Tile::init()
 
 Tile* Tile::get_tile_by_coord(sf::Vector2f pos)
 {
-    int row = pos.x / Tile::side_length;
-    int col = pos.y / Tile::side_length;
-    sf::Vector2i index{row, col};
+    int x = floor(pos.x / Tile::side_length);
+    int y = floor(pos.y / Tile::side_length);
+    sf::Vector2i index{x, y};
     return tiles[index];
 }
 
 Tile* Tile::get_tile_by_index(sf::Vector2i index)
 {
     return tiles[index];
+}
+
+Tile* Tile::get_tile_enemy_start()
+{
+    Tile* enemy_start = nullptr;
+    for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
+    {
+        if ( is_tile_enemy_start((*it).first) )
+            enemy_start = (*it).second;
+    }
+    return enemy_start;
+}
+
+Tile* Tile::get_tile_enemy_end()
+{
+    Tile* enemy_end = nullptr;
+    for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
+    {
+        if ( is_tile_enemy_end((*it).first) )
+            enemy_end = (*it).second;
+    }
+    return enemy_end;
+}
+
+bool Tile::is_tile_enemy(sf::Vector2i index)
+{
+    return  ( !(dynamic_cast<Tile_enemy*>
+                (Tile::get_tile_by_index(index)) == nullptr) );
+}
+
+bool Tile::is_tile_enemy_start(sf::Vector2i index)
+{
+    return  ( !(dynamic_cast<Tile_enemy_start*>
+                (Tile::get_tile_by_index(index)) == nullptr) );
+}
+
+bool Tile::is_tile_enemy_end(sf::Vector2i index)
+{
+    return  ( !(dynamic_cast<Tile_enemy_end*>
+                (Tile::get_tile_by_index(index)) == nullptr) );
 }
 
 void Tile::update_side_length()

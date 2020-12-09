@@ -3,11 +3,11 @@
 using namespace std;
 void State_wave::init()
 {
-    game.create_1_enemy_basic();
+    //game.create_1_enemy_basic();
 }
 
 void State_wave::handle_input(sf::Event & event)
-{       
+{
     game.handle_input(event);
     if ( event.type == sf::Event::KeyPressed )
     {
