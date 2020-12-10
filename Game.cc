@@ -590,6 +590,7 @@ void Game::check_collision()
                 if (enemy_deleted)
                 {
                     enemy_deleted = false;
+                    projectile_deleted = false;
                     goto next_enemy;
                 }
                 // same here but for projectile
