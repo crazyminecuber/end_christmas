@@ -5,8 +5,8 @@
                 {
                     "life_init" : 2,
                     "reward_init" : 30,
-                    "texture" : "resources/textures/Santa.png",
-                    "size": [50, 50],
+                    "texture" : "resources/textures/Elf2.png",
+                    "size": [30, 70],
                     "hit_rad": 10,
                     "mov_spd": 2
                 },
@@ -14,7 +14,7 @@
                 {
                     "life_init" : 10,
                     "reward_init" : 70,
-                    "texture" : "resources/textures/heart.png",
+                    "texture" : "resources/textures/Santa.png",
                     "size": [50,50],
                     "hit_rad": 10,
                     "mov_spd": 5
@@ -60,7 +60,7 @@
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [50,50],
                     "hit_rad" : 25,
-                    "mov_spd" : 2
+                    "mov_spd" : 5
                 },
             "Projectile_pierce" :
                 {
@@ -96,9 +96,9 @@
             "Tower_basic" :
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
-                    "projectile_init" : "Projectile_bomb",
+                    "projectile_init" : "Projectile_basic",
                     "cost_init" : 50,
-                    "detection_radius_init" : 1000.0,
+                    "detection_radius_init" : 300.0,
                     "fire_period_init" : 60,
                     "size": [100,100]
                 },

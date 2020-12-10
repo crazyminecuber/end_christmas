@@ -11,13 +11,28 @@ entity_properties Tower_ring::entity_prop;
 Tower_properties Tower_basic::tower_prop{};
 entity_properties Tower_basic::entity_prop{};
 std::vector<Tower*> Tower::static_towers{};
-int Tower_ring::num_projectile_init{8}; // Läsa in från fil istället?
+std::vector<Entity*> Tower::shootable_enemies;
+int Tower_ring::num_projectile_init{}; // Läsa in från fil istället?
 //projectile = tower_prop.projectile_init;
 
 //Functions for the class Tower
 void Tower::collision(Entity* object)
 {
   Tower::shootable_enemies.push_back(object);
+  for (size_t enemy_i = 0;
+       enemy_i < shootable_enemies.size();
+       enemy_i++)
+  {
+      Entity *enemy = shootable_enemies.at(enemy_i);
+      if(!(pow(getPosition().x - enemy->getPosition().x,2)
+              < pow(get_hitbox_radius() - enemy->get_hitbox_radius(),2)
+              && pow(getPosition().y - enemy->getPosition().y,2)
+              < pow(get_hitbox_radius()- enemy->get_hitbox_radius(),2)))
+      {
+        shootable_enemies.erase(shootable_enemies.begin() + enemy_i);
+        enemy_i--;
+      }
+  }
   shoot();
 }
 
@@ -87,7 +102,7 @@ sf::Vector2f Tower_basic::aim_direction(Entity * target_enemy)
   // med en konstant (som beror av avståndet mellan fienden och tornet)
   sf::Vector2f aim = (target_enemy->getPosition());
   //Normalize vector
-  sf::Vector2f dir {aim - getPosition()};
+  sf::Vector2f dir {aim + target_enemy->get_direction() - getPosition()};
   float length {sqrt(dir.x * dir.x + dir.y * dir.y)};
 
   sf::Vector2f norm_dir{dir.x / length, dir.y / length};

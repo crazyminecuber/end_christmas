@@ -289,6 +289,11 @@ void Game::next_wave()
     wave_manager.next_wave(frame, Game::fps);
 }
 
+int Game::get_current_wave() const
+{
+    return wave_manager.get_current_wave();
+}
+
 void Game::load_entities(string const & file)
 {
     ifstream ifs(file);
