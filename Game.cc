@@ -29,7 +29,6 @@ using json = nlohmann::json;
 int Game::frame =0;
 
 
-
 // Help function to determine init projectile for tower
 Projectile* Game::get_tower_projectile(std::string const & projectile)
 {
@@ -294,6 +293,11 @@ void Game::next_wave()
     wave_manager.next_wave(frame, Game::fps);
 }
 
+int Game::get_current_wave() const
+{
+    return wave_manager.get_current_wave();
+}
+
 void Game::load_entities(string const & file_entity)
 {
     ifstream ifs(file_entity);
@@ -302,8 +306,8 @@ void Game::load_entities(string const & file_entity)
         json j_data;
         ifs >> j_data;
         init_enemies(j_data["Enemy"]);
-        init_towers(j_data["Tower"]);
         init_projectiles(j_data["Projectile"]);
+        init_towers(j_data["Tower"]);
         init_shop(j_data["Shop"]);
         init_waves(j_data["Waves"]);
     }
@@ -322,6 +326,7 @@ void Game::load_entities(string const & file_entity)
     /* Enemy_basic */
     json enemy_basic = json_obj["Enemy_basic"];
     Enemy_basic::life_init = enemy_basic["life_init"];
+    Enemy_basic::reward_init = enemy_basic["reward_init"];
     Enemy_basic::prop.texture_file = enemy_basic["texture"];
     sf::Vector2f size_basic;
     size_basic.x = enemy_basic["size"][0];
@@ -334,6 +339,7 @@ void Game::load_entities(string const & file_entity)
     /* Enemy_boss */
     json enemy_boss = json_obj["Enemy_boss"];
     Enemy_boss::life_init = enemy_boss["life_init"];
+    Enemy_boss::reward_init = enemy_boss["reward_init"];
     Enemy_boss::prop.texture_file = enemy_boss["texture"];
     sf::Vector2f size_boss;
     size_boss.x = enemy_boss["size"][0];
@@ -518,8 +524,10 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
     json bcc = j_shop["btn_no_cash_color"];
     sf::Color button_no_cash_color{bcc["r"], bcc["g"], bcc["b"]};
-    vector<Tower *> passive_towers{new Tower_basic{}, new Tower_basic, new Tower_basic, new Tower_basic, new Tower_basic}; //TODO! change to other
+    vector<Tower *> passive_towers{new Tower_basic{}, new Tower_ring{}};
     shop = Tower_shop{passive_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color,font_name};
+    wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
+    shop.update_shop_ui(wallet);
     cout << "wallet in game" << wallet.getCash() << endl;
 }
 
@@ -556,6 +564,7 @@ void Game::check_collision()
             {
                 if (enemy->collision(projectile))
                 {
+                  wallet.add(enemy->get_reward());
                   delete enemy;
                   // detta gör att iteratorn som returneras inte kollas om den har kolliderat med projektil.
                   enemies.erase(enemies.begin() + enemy_i);
@@ -633,13 +642,15 @@ void Game::handle_input(sf::Event & event)
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
             Tile* tile = Tile::get_tile_by_coord(click);
-            cout << "Enough money to buy " << endl;
-            tile->on_click(tw);
-            wallet.take(tw->cost);
+
+            cout << "Enough money to buy. Tile: " << tile << endl;
+            if(tile!= nullptr &&tile->on_click(tw))
+            {
+                wallet.take(tw->cost);
+            }
         }
      }
      shop.on_click(click, wallet);
-
  }
 
 void Game::update_logic()

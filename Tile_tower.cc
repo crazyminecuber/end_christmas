@@ -7,14 +7,16 @@ void Tile_tower::init()
     Tile::tiles[index_position] = this;
 }
 
-void Tile_tower::on_click(Tower * tw)
+bool Tile_tower::on_click(Tower * tw)
 {
     cout << "checking out if tower is set" << endl;
     if (!(tw == nullptr))
     {
         cout << "Creating tower. Position: " << getPosition().x << " " << getPosition().y << endl;
         tw->create_active(getPosition() + sf::Vector2f{side_length / 2, side_length / 2});
+        return true;
     }
+    return false;
 }
 
 // bool Tile_tower::is_occupied()

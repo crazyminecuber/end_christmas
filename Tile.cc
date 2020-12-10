@@ -4,6 +4,7 @@
 #include "Tile_enemy.h"
 #include "Tile_enemy_start.h"
 #include "Tile_enemy_end.h"
+using namespace std;
 
 std::map<sf::Vector2i, Tile*, cmpTileByCoord> Tile::tiles;
 float Tile::side_length{-1}; // changes automatically in Game::load_map
@@ -30,7 +31,11 @@ Tile* Tile::get_tile_by_coord(sf::Vector2f pos)
     int x = floor(pos.x / Tile::side_length);
     int y = floor(pos.y / Tile::side_length);
     sf::Vector2i index{x, y};
-    return tiles[index];
+    if (tiles.find(index) != tiles.end())
+    {
+        return tiles[index];
+    }
+    return nullptr;
 }
 
 Tile* Tile::get_tile_by_index(sf::Vector2i index)

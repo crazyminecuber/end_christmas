@@ -15,16 +15,17 @@ public:
     :Enemy(texture_file, position,
         size, hit_rad,
         dir, mov_spd,
-        arg_life)
+        arg_life, reward_init)
     {}
 
     ~Enemy_basic();
 
     //Statics
     static int life_init;
+    static int reward_init;
     static entity_properties prop;
     Enemy* clone() override;
-    bool collision(Projectile* object);
+    bool collision(Projectile* object) override;
 protected:
   int life{life_init};
 

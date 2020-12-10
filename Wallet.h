@@ -1,6 +1,7 @@
 #ifndef WALLET_H
 #define WALLET_H
-#include "iostream"
+#include <iostream>
+#include <functional>
 
 
 
@@ -17,7 +18,8 @@ public:
     bool take(int price);
     void add(int income);
     int getCash();
-
+    void update_ui();
+    std::function<void(Wallet & w)> ui_callback{};
 private:
     int cash{};
 };

@@ -49,6 +49,7 @@ public:
 	void enemy_update_position();
 	bool wave_complete();
 	void next_wave();
+	int get_current_wave() const;
 
 	void projectile_update_position();
 

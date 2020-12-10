@@ -23,6 +23,7 @@ public:
     void init_waves(int current_frame, int fps);
     void spawn_enemies(int frame);
     bool all_enemies_have_spawned();
+    int get_current_wave() const;
 private:
     void init();
     void generate_wave(int current_frame, int fps);

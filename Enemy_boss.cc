@@ -27,4 +27,5 @@ Enemy* Enemy_boss::clone()
 
 //Statics
 int Enemy_boss::life_init;
+int Enemy_boss::reward_init;
 entity_properties Enemy_boss::prop;

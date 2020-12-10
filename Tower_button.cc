@@ -42,7 +42,7 @@ Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
     cout << "wallet.getCash()" << wallet.getCash() << endl;
     if (wallet.getCash() < tower->cost)
     {
-       not_enought_cash();
+       not_enough_cash();
        return nullptr;
     }
     if(!getGlobalBounds().contains(click))
@@ -77,15 +77,28 @@ void Tower_button::render(sf::RenderWindow & window)
 void Tower_button::select()
 {
     setFillColor(select_color);
+    inactive= false;
 }
 
 void Tower_button::unselect()
 {
     setFillColor(color);
+    inactive= false;
 }
-
-void Tower_button::not_enought_cash()
+void Tower_button::not_enough_cash()
 {
     setFillColor(no_cash_color);
+    inactive= true;
 }
 
+void Tower_button::update_ui(Wallet wallet)
+{
+    if (wallet.getCash() < tower->cost)
+    {
+       not_enough_cash();
+    }
+    else if (inactive)
+    {
+       unselect();
+    }
+}
