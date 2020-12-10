@@ -6,7 +6,7 @@
                     "life_init" : 2,
                     "texture" : "resources/textures/Elf2.png",
                     "size": [30, 70],
-                    "hit_rad": 10,
+                    "hit_rad": 50,
                     "mov_spd": 2
                 },
             "Enemy_boss" :
@@ -14,7 +14,7 @@
                     "life_init" : 10,
                     "texture" : "resources/textures/Santa.png",
                     "size": [50,50],
-                    "hit_rad": 10,
+                    "hit_rad": 35,
                     "mov_spd": 5
                 }
         },
@@ -58,17 +58,17 @@
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [50,50],
                     "hit_rad" : 25,
-                    "mov_spd" : 5
+                    "mov_spd" : 6
                 },
             "Projectile_pierce" :
                 {
                     "frames_to_live" : 3000,
                     "damage_init" : 1100,
                     "texture" : "resources/textures/icicle.png",
-                    "size" : [50,50],
+                    "size" : [20,50],
                     "hit_rad" : 25,
-                    "mov_spd" : 2,
-                    "nr_pierce_init" : 1
+                    "mov_spd" : 10,
+                    "nr_pierce_init" : 2
                 },
             "Projectile_bomb" :
                 {
@@ -77,7 +77,7 @@
                     "texture" : "resources/textures/Christmas_cracker.png",
                     "size" : [50, 50],
                     "hit_rad" : 25,
-                    "mov_spd" : 2
+                    "mov_spd" : 4
                 },
             "Projectile_bomb_blast" :
                 {
@@ -94,7 +94,7 @@
             "Tower_basic" :
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
-                    "projectile_init" : "Projectile_basic",
+                    "projectile_init" : "Projectile_pierce",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 300.0,

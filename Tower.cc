@@ -102,7 +102,8 @@ sf::Vector2f Tower_basic::aim_direction(Entity * target_enemy)
   // med en konstant (som beror av avståndet mellan fienden och tornet)
   sf::Vector2f aim = (target_enemy->getPosition());
   //Normalize vector
-  sf::Vector2f dir {aim + target_enemy->get_direction() - getPosition()};
+  sf::Vector2f t_dir = (target_enemy->get_direction() );
+  sf::Vector2f dir {aim + t_dir - getPosition()};
   float length {sqrt(dir.x * dir.x + dir.y * dir.y)};
 
   sf::Vector2f norm_dir{dir.x / length, dir.y / length};
