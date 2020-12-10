@@ -1,6 +1,7 @@
 #include <iostream> // debugg
 #include "Tile.h"
 #include "Entity.h"
+#include "Enemy.h"
 #include "Tile_enemy.h"
 #include "Tile_enemy_end.h"
 

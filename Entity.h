@@ -27,6 +27,7 @@ public:
 
     sf::Vector2f get_direction();
     void set_direction(sf::Vector2f dir);
+    void flip(sf::Vector2f dir);
     float get_hitbox_radius() const;
     std::string get_texture_file() const;
 
@@ -35,6 +36,7 @@ protected:
     std::string texture_file;
     sf::Texture texture;
     sf::Vector2f size; //Ska den vara Vector2u och inte Vector2f?
+    sf::Vector2f scale_moving_right; // used when flipping to remember which direction is right
     float hitbox_radius;
 public:
     sf::Vector2f direction;

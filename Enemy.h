@@ -24,7 +24,6 @@ public:
         life{arg_life}{}
 
     virtual bool collision(Projectile* object) = 0;
-    void set_direction(sf::Vector2f dir);
     virtual Enemy* clone() = 0;
     int get_damage();
 

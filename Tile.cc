@@ -6,6 +6,8 @@
 #include "Tile_enemy_end.h"
 
 std::map<sf::Vector2i, Tile*, cmpTileByCoord> Tile::tiles;
+float Tile::side_length{-1}; // changes automatically in Game::load_map
+
 
 void Tile::init()
 {
