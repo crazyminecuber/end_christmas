@@ -59,6 +59,7 @@ public:
   Projectile_pierce(Projectile_pierce const& other); //Copy-constructor
   void clone(sf::Vector2f dir, sf::Vector2f pos);
   bool collision();
+  void rotate_to_target(sf::Vector2f dir);
   //static
   static int frames_to_live;
   static int damage_init;

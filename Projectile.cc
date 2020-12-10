@@ -116,7 +116,37 @@ void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
   Projectile_pierce* p = new Projectile_pierce{*this};
   p->direction = dir;
   p->setPosition(pos);
+  rotate_to_target(dir);
   projectiles.push_back(p);
+}
+
+void Projectile_pierce::rotate_to_target(sf::Vector2f dir)
+{
+
+    float angle = (180 / M_PI) * atan((dir.y)/(dir.x));
+    if(dir.x < 0 && dir.y > 0)
+    {
+      angle+= 0;
+      std::cout << "second angle" << angle<<endl;
+    }
+    else if(dir.x > 0 && dir.y < 0)
+    {
+      angle-= 0;
+      std::cout << "Fourth angle" << angle<<endl;
+    }
+    else if(dir.x <0 && dir.y < 0)
+    {
+      angle += 90;
+      std::cout << "Third angle" << angle<<endl;
+
+    }
+    else if(dir.x >0 && dir.y > 0)
+    {
+      angle += 0;
+      std::cout << "first angle" << angle<<endl;
+
+    }
+    setRotation(angle);
 }
 
 //Counts nr of enemies killed and return true if the projectile should be delete

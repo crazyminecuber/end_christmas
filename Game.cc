@@ -60,6 +60,12 @@ bool Game::collided(Entity const *object1, Entity const *object2)
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
            );
 }
+
+bool Game::collided_bb(Entity const *object1, Entity const *object2)
+{
+    return (object1->getGlobalBounds().intersects(object2->getGlobalBounds()));
+}
+
 void Game::load_map(string const & file_entity)
 {
     /* prepare variables needed for reading from file */
@@ -564,7 +570,7 @@ void Game::check_collision()
          )
         {
             projectile = projectiles.at(projectile_i);
-            if (collided(projectile,enemy))
+            if (collided_bb(projectile,enemy))
             {
                 if (enemy->collision(projectile))
                 {
