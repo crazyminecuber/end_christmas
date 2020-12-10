@@ -549,36 +549,59 @@ void Game::check_collision()
 {
     vector<Enemy*> &enemies = Enemy::enemies;
     vector<Projectile*> &projectiles = Projectile::projectiles;
+    bool enemy_deleted{false};
+    bool projectile_deleted{false};
+    Enemy *enemy;
+    Projectile *projectile;
     for (size_t enemy_i = 0;
          enemy_i < enemies.size();
-         enemy_i++)
+         ) 
     {
-        Enemy *enemy = enemies.at(enemy_i);
+        enemy = enemies.at(enemy_i);
         // kolla kollision mellan projectile - enemy
         for (size_t projectile_i = 0;
          projectile_i  < projectiles.size();
-         projectile_i++)
+         )
         {
-            Projectile *projectile = projectiles.at(projectile_i);
+            projectile = projectiles.at(projectile_i);
             if (collided(projectile,enemy))
             {
                 if (enemy->collision(projectile))
                 {
                   wallet.add(enemy->get_reward());
                   delete enemy;
-                  // detta gör att iteratorn som returneras inte kollas om den har kolliderat med projektil.
                   enemies.erase(enemies.begin() + enemy_i);
-                  enemy_i--;
+                  enemy_deleted = true;
                 }
                 if (projectile->collision())
                 {
-                  // projektilen finns inte efter att vi har klonat bomb_blast?
                   delete projectile;
                   projectiles.erase(projectiles.begin() + projectile_i);
-                  projectile_i--;
+                  projectile_deleted = true;
                 }
+                
+                // when true, enemy_i will not get updated. We do this because enemy_i will have the correct index for the next enemy we want to check since the list is resized. 
+                if (enemy_deleted)
+                {
+                    enemy_deleted = false;
+                    goto next_enemy;
+                }
+                // same here but for projectile
+                if (projectile_deleted)
+                {
+                    projectile_deleted = false;
+                    goto next_projectile;
+                }
+                
             }
+            projectile_i++;
+            next_projectile:
+            // statement needed after goto label
+            cout << "";
         }
+        enemy_i++;
+        next_enemy:
+        cout << "";
     }
 }
 
