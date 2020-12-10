@@ -19,12 +19,14 @@ public:
 
     Tower * on_click(sf::Vector2f click, Wallet & wallet);
     void render(sf::RenderWindow & window);
-
-    void select();
-    void unselect();
-    void not_enought_cash();
+    void update_ui(Wallet wallet);
 
 private:
+    void select();
+    void unselect();
+    void not_enough_cash();
+
+    bool inactive{};
     Tower* tower;
     sf::Text pricetag{};
     sf::Sprite tower_pic{};

@@ -12,9 +12,9 @@ using namespace std;
 State_machine::State_machine(const string & title,
                              unsigned width, unsigned height)
     : window{sf::VideoMode{width,height}, title, sf::Style::Close},
-      game{window, "map.csv", "entity.json", 100}
+      game{window, "entity.json", 100}
 {
-    states.insert(make_pair("menu", new State_menu(window, title)));
+    states.insert(make_pair("menu", new State_menu(window, game, title)));
     states.insert(make_pair("wave", new State_wave(window, game)));
     states.insert(make_pair("wait", new State_wait(window, game)));
     states.insert(make_pair("pause", new State_pause(window, game)));
@@ -70,7 +70,7 @@ void State_machine::handle_input()
         {
             window.close ();
         }
-        else 
+        else
         {
         current_state->handle_input(event);
         }

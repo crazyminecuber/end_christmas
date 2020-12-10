@@ -27,6 +27,7 @@ public:
     void on_click(sf::Vector2f click, Wallet & wallet);
     void set_chosen_tower(Tower * tw);
     Tower * get_chosen_tower();
+    void update_shop_ui(Wallet wallet);
 
 
 private:

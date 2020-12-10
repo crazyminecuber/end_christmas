@@ -1,5 +1,6 @@
 #include "Tile.h"
 #include "Entity.h"
+#include "Enemy.h"
 #include "Tile_enemy.h"
 #include <iostream> //debugg
 //#include "Enemy.h"
@@ -14,6 +15,7 @@ float Tile_enemy::update_enemy(Enemy* enemy)
     if ( ready_to_update_enemy(enemy) )
     {
         enemy->set_direction(direction);
+        enemy->flip(direction);
     }
     return 0;
 }

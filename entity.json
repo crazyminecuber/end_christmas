@@ -4,6 +4,7 @@
             "Enemy_basic" :
                 {
                     "life_init" : 2,
+                    "reward_init" : 30,
                     "texture" : "resources/textures/Elf2.png",
                     "size": [30, 70],
                     "hit_rad": 50,
@@ -12,6 +13,7 @@
             "Enemy_boss" :
                 {
                     "life_init" : 10,
+                    "reward_init" : 70,
                     "texture" : "resources/textures/Santa.png",
                     "size": [50,50],
                     "hit_rad": 35,
@@ -105,7 +107,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
                     "projectile_init" : "Projectile_pierce",
-                    "shop_sprite_init" : "resources/textures/tower_ring_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 1000.0,
                     "fire_period_init" : 30,
@@ -143,5 +144,64 @@
             },
             "shop_size": [300,800],
             "btn_size": [100,100]
+        },
+    "Maps" :
+    {
+        "map_dev" :
+        {
+            "file_name" : "resources/maps/map_dev.csv",
+            "display_name" : "Dev",
+            "difficulty" : "Hard",
+            "tiles" :
+            {
+                "0" : "resources/textures/stones.jpg",
+                "1" : "resources/textures/snow.jpg",
+                "2" : "resources/textures/dirt.jpg",
+                "3" : "resources/textures/dirt.jpg",
+                "4" : "resources/textures/dirt.jpg"
+            }
+        },
+        "map_beginner" :
+        {
+            "file_name" : "resources/maps/map_beginner.csv",
+            "display_name" : "Beginner",
+            "difficulty" : "Easy",
+            "tiles" :
+            {
+                "0" : "resources/textures/stones.jpg",
+                "1" : "resources/textures/snow.jpg",
+                "2" : "resources/textures/dirt.jpg",
+                "3" : "resources/textures/dirt.jpg",
+                "4" : "resources/textures/dirt.jpg"
+            }
+        },
+        "map_spiral" :
+        {
+            "file_name" : "resources/maps/map_spiral.csv",
+            "display_name" : "Spiral",
+            "difficulty" : "Easy",
+            "tiles" :
+            {
+                "0" : "resources/textures/stones.jpg",
+                "1" : "resources/textures/grass.jpg",
+                "2" : "resources/textures/dirt.jpg",
+                "3" : "resources/textures/dirt.jpg",
+                "4" : "resources/textures/dirt.jpg"
+            }
+        },
+        "map_corson" :
+        {
+            "file_name" : "resources/maps/map_corson.csv",
+            "display_name" : "Corson",
+            "difficulty" : "Hard",
+            "tiles" :
+            {
+                "0" : "resources/textures/stones.jpg",
+                "1" : "resources/textures/grass.jpg",
+                "2" : "resources/textures/dirt.jpg",
+                "3" : "resources/textures/dirt.jpg",
+                "4" : "resources/textures/dirt.jpg"
+            }
         }
+    }
 }

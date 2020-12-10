@@ -11,7 +11,7 @@ void State_wave::handle_input(sf::Event & event)
     game.handle_input(event);
     if ( event.type == sf::Event::KeyPressed )
     {
-        if ( event.key.code == sf::Keyboard::P )
+        if ( event.key.code == sf::Keyboard::Escape )
         {
             pause_game = true;
         }

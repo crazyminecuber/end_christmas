@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Resource_manager.h"
 #include <iostream> // debugg
+#include <cmath> // abs
 
 std::ostream& operator<<(std::ostream& os,const Entity & E)
 {
@@ -23,6 +24,7 @@ void Entity::init(sf::Vector2f position, sf::Vector2f size)
     sf::Vector2u size_original;
     size_original = texture.getSize();
     setScale(size.x / size_original.x, size.y / size_original.y);
+    scale_moving_right = getScale();
 
     setPosition(position);
 }
@@ -41,7 +43,16 @@ sf::Vector2f Entity::get_direction()
 {
     return direction;
 }
+
 std::string Entity::get_texture_file() const
 {
     return texture_file;
+}
+
+void Entity::flip(sf::Vector2f dir)
+{
+    if ( abs(dir.x) > 0.5 ) // if moving left or right
+    {
+        setScale((scale_moving_right.x * dir.x), scale_moving_right.y);
+    }
 }

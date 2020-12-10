@@ -50,10 +50,9 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
     {
         btn_pos.x = area.left + button_size.x / 2 + spacing
                     + (current_column * (spacing + button_size.x));
-        cout << "btn_pos.x"<<btn_pos.x << endl;
         btn_pos.y = area.top + button_size.y / 2 + spacing
                     + (current_row * (spacing + button_size.y));
-        buttons.push_back(Tower_button{passive_towers.front(), button_size, btn_pos, btn_color, btn_select_color, btn_no_cash_color, font_name});
+        buttons.push_back(Tower_button{*tow_it, button_size, btn_pos, btn_color, btn_select_color, btn_no_cash_color, font_name});
 
 
         current_column++;
@@ -73,13 +72,6 @@ sf::Text Tower_shop::make_text(string font_name)
 
 void Tower_shop::render(sf::RenderWindow & window, Wallet wallet)
 {
-    wallet_text.setString("$" + to_string(wallet.getCash()));
-    sf::Vector2f price_orig{};
-    sf::FloatRect price_rec = wallet_text.getLocalBounds();
-    price_orig.x = price_rec.left + price_rec.width / 2;
-    price_orig.y = price_rec.top + price_rec.height / 2;
-    wallet_text.setOrigin(price_orig);
-
     window.draw(*this);
     window.draw(wallet_text);
     window.draw(heading);
@@ -116,4 +108,18 @@ Tower * Tower_shop::get_chosen_tower()
 {
     cout << "returning chosen tower: " << chosen_tower << endl;
     return chosen_tower;
+}
+
+void Tower_shop::update_shop_ui(Wallet wallet)
+{
+    wallet_text.setString("$" + to_string(wallet.getCash()));
+    sf::Vector2f price_orig{};
+    sf::FloatRect price_rec = wallet_text.getLocalBounds();
+    price_orig.x = price_rec.left + price_rec.width / 2;
+    price_orig.y = price_rec.top + price_rec.height / 2;
+    wallet_text.setOrigin(price_orig);
+    for (auto b = buttons.begin(); b != buttons.end(); b++)
+    {
+             b->update_ui(wallet);
+    }
 }

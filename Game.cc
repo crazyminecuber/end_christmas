@@ -26,9 +26,7 @@
 
 using namespace std;
 using json = nlohmann::json;
-float Tile::side_length = 50; // flytta
 int Game::frame =0;
-
 
 
 // Help function to determine init projectile for tower
@@ -62,10 +60,10 @@ bool Game::collided(Entity const *object1, Entity const *object2)
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
            );
 }
-void Game::load_map(string const & file) //use file "map.csv"
+void Game::load_map(string const & file_entity)
 {
     /* prepare variables needed for reading from file */
-    std::ifstream infile{file};
+    std::ifstream infile{maps[selected_map]["file_name"]};
     std::string line;
     int num;
     sf::Vector2i tile_index_pos(-1, -1);
@@ -83,23 +81,28 @@ void Game::load_map(string const & file) //use file "map.csv"
             }
             else if ( num == 0 )
             {
-                Tile::tiles[tile_index_pos] = new Tile_nothing("resources/textures/stones.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_nothing(
+                    map_tiles[selected_map]["0"], window, tile_index_pos);
             }
             else if ( num == 1 )
             {
-                Tile::tiles[tile_index_pos] = new Tile_tower("resources/textures/grass.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_tower(
+                    map_tiles[selected_map]["1"], window, tile_index_pos);
             }
             else if ( num == 2 )
             {
-                Tile::tiles[tile_index_pos] = new Tile_enemy("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy(
+                    map_tiles[selected_map]["2"], window, tile_index_pos);
             }
             else if ( num == 3 )
             {
-                Tile::tiles[tile_index_pos] = new Tile_enemy_start("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy_start(
+                    map_tiles[selected_map]["3"], window, tile_index_pos);
             }
             else if ( num == 4 )
             {
-                Tile::tiles[tile_index_pos] = new Tile_enemy_end("resources/textures/dirt.jpg", window, tile_index_pos);
+                Tile::tiles[tile_index_pos] = new Tile_enemy_end(
+                    map_tiles[selected_map]["4"], window, tile_index_pos);
             }
             else
             {
@@ -115,10 +118,10 @@ void Game::load_map(string const & file) //use file "map.csv"
 
     /* update side_length */
     // calculate Tile::side_length and change all tiles
-    int tiles_per_row = tile_index_pos.y  + (1 - 2);
     int tiles_per_col = tile_index_pos.x + (1 - 2);
-    Tile::side_length = std::min(window_size.x/tiles_per_row,
-                                 window_size.y/tiles_per_col);
+    int tiles_per_row = tile_index_pos.y  + (1 - 2);
+    Tile::side_length = std::min(window_size.x/tiles_per_col,
+                                 window_size.y/tiles_per_row);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -295,9 +298,9 @@ int Game::get_current_wave() const
     return wave_manager.get_current_wave();
 }
 
-void Game::load_entities(string const & file)
+void Game::load_entities(string const & file_entity)
 {
-    ifstream ifs(file);
+    ifstream ifs(file_entity);
     if (ifs.is_open())
     {
         json j_data;
@@ -323,6 +326,7 @@ void Game::load_entities(string const & file)
     /* Enemy_basic */
     json enemy_basic = json_obj["Enemy_basic"];
     Enemy_basic::life_init = enemy_basic["life_init"];
+    Enemy_basic::reward_init = enemy_basic["reward_init"];
     Enemy_basic::prop.texture_file = enemy_basic["texture"];
     sf::Vector2f size_basic;
     size_basic.x = enemy_basic["size"][0];
@@ -335,6 +339,7 @@ void Game::load_entities(string const & file)
     /* Enemy_boss */
     json enemy_boss = json_obj["Enemy_boss"];
     Enemy_boss::life_init = enemy_boss["life_init"];
+    Enemy_boss::reward_init = enemy_boss["reward_init"];
     Enemy_boss::prop.texture_file = enemy_boss["texture"];
     sf::Vector2f size_boss;
     size_boss.x = enemy_boss["size"][0];
@@ -345,6 +350,67 @@ void Game::load_entities(string const & file)
     Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
 
     cout << "laddat enemies" << endl;
+}
+
+void Game::init_tiles(string const & file_entity)
+{
+    // read from file and save data in maps and map_tiles
+    ifstream ifs(file_entity);
+    json json_obj;
+    if (ifs.is_open())
+    {
+        json j_data;
+        ifs >> j_data;
+        json_obj = j_data["Maps"];
+    }
+    ifs.close();
+
+    string map_name;
+    map<string, string> inner_map;
+
+    /* populate maps */
+    string file_name;
+    string display_name;
+    string difficulty;
+    for (const auto& map : json_obj.items())
+    {
+        map_name = map.key();
+        file_name = map.value()["file_name"];
+        display_name = map.value()["display_name"];
+        difficulty = map.value()["difficulty"];
+
+        inner_map.clear();
+        inner_map.insert({"file_name", file_name});
+        inner_map.insert({"display_name", display_name});
+        inner_map.insert({"difficulty", difficulty});
+        maps.insert({map_name, inner_map});
+    }
+    // cout << maps["map_dev"]["file_name"] << endl;
+
+    /* populate map_tiles */
+    string zero;
+    string one;
+    string two;
+    string three;
+    string four;
+    for (const auto& map : json_obj.items())
+    {
+        map_name = map.key();
+        zero = map.value()["tiles"]["0"];
+        one = map.value()["tiles"]["1"];
+        two = map.value()["tiles"]["2"];
+        three = map.value()["tiles"]["3"];
+        four = map.value()["tiles"]["4"];
+
+        inner_map.clear();
+        inner_map.insert({"0", zero});
+        inner_map.insert({"1", one});
+        inner_map.insert({"2", two});
+        inner_map.insert({"3", three});
+        inner_map.insert({"4", four});
+        map_tiles.insert({map_name, inner_map});
+    }
+    // cout << map_tiles["map_dev"]["0"] << endl;
 }
 
 void Game::init_waves(json const & json_obj)
@@ -375,15 +441,6 @@ void Game::init_waves(json const & json_obj)
     }
     // cout << wave.key() << endl;
     wave_manager.init_waves(frame, fps);
-}
-
-int Game::get_frame()
-{
-    return frame;
-}
-double Game::get_fps()
-{
-    return fps;
 }
 
 void Game::init_projectiles(json const & json_obj)
@@ -467,11 +524,26 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
     json bcc = j_shop["btn_no_cash_color"];
     sf::Color button_no_cash_color{bcc["r"], bcc["g"], bcc["b"]};
-    vector<Tower *> passive_towers{new Tower_basic{}, new Tower_basic, new Tower_basic, new Tower_basic, new Tower_basic}; //TODO! change to other
+    vector<Tower *> passive_towers{new Tower_basic{}, new Tower_ring{}};
     shop = Tower_shop{passive_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color,font_name};
+    wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
+    shop.update_shop_ui(wallet);
     cout << "wallet in game" << wallet.getCash() << endl;
 }
 
+int Game::get_frame()
+{
+    return frame;
+}
+double Game::get_fps()
+{
+    return fps;
+}
+
+void Game::set_selected_map(std::string map_name)
+{
+    selected_map = map_name;
+}
 
 void Game::check_collision()
 {
@@ -492,6 +564,7 @@ void Game::check_collision()
             {
                 if (enemy->collision(projectile))
                 {
+                  wallet.add(enemy->get_reward());
                   delete enemy;
                   // detta gör att iteratorn som returneras inte kollas om den har kolliderat med projektil.
                   enemies.erase(enemies.begin() + enemy_i);
@@ -569,13 +642,15 @@ void Game::handle_input(sf::Event & event)
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
             Tile* tile = Tile::get_tile_by_coord(click);
-            cout << "Enough money to buy " << endl;
-            tile->on_click(tw);
-            wallet.take(tw->cost);
+
+            cout << "Enough money to buy. Tile: " << tile << endl;
+            if(tile!= nullptr &&tile->on_click(tw))
+            {
+                wallet.take(tw->cost);
+            }
         }
      }
      shop.on_click(click, wallet);
-
  }
 
 void Game::update_logic()
