@@ -11,6 +11,7 @@ Enemy* Enemy_basic::clone(){
 
 //Statics
 int Enemy_basic::life_init;
+int Enemy_basic::reward_init;
 entity_properties Enemy_basic::prop;
 
 

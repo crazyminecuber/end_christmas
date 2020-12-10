@@ -15,11 +15,12 @@ public:
     :Enemy(texture_file, position,
         size, hit_rad,
         dir, mov_spd,
-        arg_life){}
+        arg_life, reward_init){}
 
     ~Enemy_boss();
 
     static int life_init;
+    static int reward_init;
     static entity_properties prop;
 
     bool collision(Projectile* object);

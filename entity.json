@@ -4,6 +4,7 @@
             "Enemy_basic" :
                 {
                     "life_init" : 2,
+                    "reward_init" : 30,
                     "texture" : "resources/textures/Santa.png",
                     "size": [50, 50],
                     "hit_rad": 10,
@@ -12,6 +13,7 @@
             "Enemy_boss" :
                 {
                     "life_init" : 10,
+                    "reward_init" : 70,
                     "texture" : "resources/textures/heart.png",
                     "size": [50,50],
                     "hit_rad": 10,
@@ -95,7 +97,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_bomb",
-                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 1000.0,
                     "fire_period_init" : 60,
@@ -105,7 +106,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
                     "projectile_init" : "Projectile_pierce",
-                    "shop_sprite_init" : "resources/textures/tower_ring_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 1000.0,
                     "fire_period_init" : 30,
