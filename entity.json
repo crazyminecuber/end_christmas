@@ -150,7 +150,7 @@
         {
             "file_name" : "resources/maps/map_dev.csv",
             "display_name" : "Dev",
-            "difficulty" : "Easy",
+            "difficulty" : "Hard",
             "tiles" :
             {
                 "0" : "resources/textures/stones.jpg",
@@ -178,7 +178,7 @@
         {
             "file_name" : "resources/maps/map_spiral.csv",
             "display_name" : "Spiral",
-            "difficulty" : "Medium",
+            "difficulty" : "Easy",
             "tiles" :
             {
                 "0" : "resources/textures/stones.jpg",
