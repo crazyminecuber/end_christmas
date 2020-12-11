@@ -48,6 +48,7 @@ public:
 	void enemy_update_direction();
 	void enemy_update_position();
 	bool wave_complete();
+	bool player_has_won();
 	void next_wave();
 	int get_current_wave() const;
 

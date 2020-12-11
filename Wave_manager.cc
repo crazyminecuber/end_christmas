@@ -12,6 +12,8 @@
 void Wave_manager::init_waves(int current_frame, int fps)
 {
     generate_wave(current_frame, fps);
+    calculate_win_wave();
+    std::cout << win_wave << std::endl;
 }
 
 void Wave_manager::next_wave(int current_frame, int fps)
@@ -26,6 +28,11 @@ void Wave_manager::next_wave(int current_frame, int fps)
 bool Wave_manager::wave_is_finished()
 {
     return (Enemy::enemies.size() == 0 && all_enemies_have_spawned());
+}
+
+bool Wave_manager::player_has_won()
+{
+    return (current_wave == win_wave);
 }
 
 void Wave_manager::render()
@@ -69,6 +76,19 @@ void Wave_manager::generate_wave(int current_frame, int fps)
     {
         (*it)->next_wave(current_wave, current_frame, fps);
     }
+}
+
+void Wave_manager::calculate_win_wave()
+{
+    int last_wave{0};
+    for (auto it{begin(wave_groups)}; it != end(wave_groups); ++it)
+    {
+        if((*it)->get_end_wave() > last_wave)
+        {
+            last_wave = (*it)->get_end_wave();
+        }
+    }
+    win_wave = last_wave + 1;
 }
 
 void Wave_manager::add_wave(Wave_group* wave_group)

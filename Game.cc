@@ -278,6 +278,11 @@ bool Game::wave_complete()
     return wave_manager.wave_is_finished();
 }
 
+bool Game::player_has_won()
+{
+    return wave_manager.player_has_won();
+}
+
 void Game::projectile_update_position()
 {
     for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
@@ -561,7 +566,7 @@ void Game::check_collision()
     Projectile *projectile;
     for (size_t enemy_i = 0;
          enemy_i < enemies.size();
-         ) 
+         )
     {
         enemy = enemies.at(enemy_i);
         // kolla kollision mellan projectile - enemy
@@ -585,8 +590,8 @@ void Game::check_collision()
                   projectiles.erase(projectiles.begin() + projectile_i);
                   projectile_deleted = true;
                 }
-                
-                // when true, enemy_i will not get updated. We do this because enemy_i will have the correct index for the next enemy we want to check since the list is resized. 
+
+                // when true, enemy_i will not get updated. We do this because enemy_i will have the correct index for the next enemy we want to check since the list is resized.
                 if (enemy_deleted)
                 {
                     enemy_deleted = false;
@@ -599,7 +604,7 @@ void Game::check_collision()
                     projectile_deleted = false;
                     goto next_projectile;
                 }
-                
+
             }
             projectile_i++;
             next_projectile:
