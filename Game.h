@@ -48,6 +48,7 @@ public:
 	void enemy_update_direction();
 	void enemy_update_position();
 	bool wave_complete();
+	bool player_has_won();
 	void next_wave();
 	int get_current_wave() const;
 
@@ -58,6 +59,7 @@ public:
 	static int get_frame();
 	int get_health();
 	double get_fps(); // ta bort
+	sf::Vector2u get_window_size();
 
 	void set_selected_map(std::string map_name);
 

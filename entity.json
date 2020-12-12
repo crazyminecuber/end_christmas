@@ -25,7 +25,7 @@
             "Group1" :
             {
                 "start_wave": 1,
-                "end_wave" : 2,
+                "end_wave" : 200,
                 "enemy" : "Enemy_basic",
                 "spawn_delay": 1,
                 "spawn_rate" : 10,
@@ -39,7 +39,7 @@
             "Group2" :
             {
                 "start_wave": 3,
-                "end_wave" : 10,
+                "end_wave" : 1000,
                 "enemy" : "Enemy_boss",
                 "spawn_delay": 1,
                 "spawn_rate" : 10,

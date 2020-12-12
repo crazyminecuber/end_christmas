@@ -8,3 +8,4 @@ del_*
 game
 /docs
 callgrind.*
+callgrind.out.*

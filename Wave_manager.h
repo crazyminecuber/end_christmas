@@ -18,6 +18,7 @@ public:
 
     void next_wave(int current_frame, int fps);
     bool wave_is_finished();
+    bool player_has_won();
     void add_wave(Wave_group* wave_group);
     void render();
     void init_waves(int current_frame, int fps);
@@ -27,8 +28,10 @@ public:
 private:
     void init();
     void generate_wave(int current_frame, int fps);
+    void calculate_win_wave();
 
     int current_wave{1};
+    int win_wave;
     std::vector<Wave_group*> wave_groups;
     std::vector<Wave_group*> active_wave_groups; //The groups that spawn the current wave
 

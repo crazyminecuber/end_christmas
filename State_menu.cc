@@ -95,7 +95,7 @@ string State_menu::get_next_state()
     {
         game.load_map("entity.json");
         game.load_entities("entity.json");
-        return_string = "wave";
+        return_string = "wait";
     }
     // reset variables
     start_game = false;
