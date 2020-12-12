@@ -713,6 +713,7 @@ void Game::update_logic()
     }
     check_collision();
     check_collision_towers();
+    fire_towers();
     frame++;
 }
 

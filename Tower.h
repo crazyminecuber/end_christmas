@@ -30,7 +30,7 @@ class Tower : public Entity
         dir, mov_spd),
         projectile{proj},
         cost{_cost}{}
-
+    Tower(Tower const & other);
     ~Tower() = default;
     void collision(Entity* object);
     virtual void shoot()=0;
@@ -39,7 +39,7 @@ class Tower : public Entity
 
 
     static std::vector<Tower*> static_towers;
-    static std::vector<Entity*> shootable_enemies;
+    static std::vector<Entity*> shootable_enemies; // Static??!? och varför Entity och inte Enemy?
 
 
   protected:
@@ -69,7 +69,7 @@ public:
           entity_prop.size, entity_prop.hit_rad, entity_prop.dir,
           entity_prop.mov_spd, tower_prop.cost_init, tower_prop.projectile_init)
   {}
-
+  Tower_basic(Tower_basic const & other);
   ~Tower_basic()=default;
 
   void shoot() override;
@@ -97,6 +97,7 @@ public:
           entity_prop.mov_spd, tower_prop.cost_init, tower_prop.projectile_init),
           num_of_projectile{num_projectile_init}
   {}
+  Tower_ring(Tower_ring const & other);
   ~Tower_ring() = default;
 
   void shoot() override;

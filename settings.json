@@ -1,0 +1,13 @@
+{
+    "window" :
+        {
+            "width" : 1200,
+            "height" : 800,
+            "fullscren" : false
+        },
+    "game" :
+        {
+            "hp" : 100,
+            "coins" : 100
+        }
+}

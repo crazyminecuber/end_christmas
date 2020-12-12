@@ -15,10 +15,20 @@ std::vector<Entity*> Tower::shootable_enemies;
 int Tower_ring::num_projectile_init{};
 
 //Functions for the class Tower
+Tower::Tower(Tower const & other) 
+    : Entity(other), 
+    fire_period{other.fire_period},
+    fire_angle{other.fire_angle},
+    projectile{other.projectile},
+    cost{other.cost}
+{
+
+}
+
 void Tower::collision(Entity* object)
 {
   Tower::shootable_enemies.push_back(object);
-  shoot();
+  //shoot();
 }
 
 //Creating ptojectiles
@@ -30,12 +40,17 @@ void Tower::make_projectile(sf::Vector2f dir, sf::Vector2f pos)
 /*---------------------------------------------------------------------*/
 
 //Tower_basic
+Tower_basic::Tower_basic(Tower_basic const & other)
+    : Tower(other)
+{
+
+}
+
 //Making aktiv tower
 void Tower_basic::create_active(sf::Vector2f position)
 {
-    Tower * t = new Tower_basic{
-        texture_file, position, size, hitbox_radius, direction, movement_speed, cost, projectile
-    };
+    Tower * t = new Tower_basic{*this};
+    t->setPosition(position);
     static_towers.push_back(t);
 }
 
@@ -87,12 +102,18 @@ sf::Vector2f Tower_basic::aim_direction(Entity * target_enemy)
 //----------------------------------------------------------------------------
 
 //Tower_ring
+Tower_ring::Tower_ring(Tower_ring const & other)
+    : Tower(other), 
+    num_of_projectile{other.num_of_projectile}
+{
+
+}
+
 //Making aktiv tower
 void Tower_ring::create_active(sf::Vector2f position)
 {
-    Tower * t = new Tower_ring{
-        texture_file, position, size, hitbox_radius, direction, movement_speed, cost, num_of_projectile, projectile
-    };
+    Tower * t = new Tower_ring{*this};
+    t->setPosition(position);
     static_towers.push_back(t);
 }
 
