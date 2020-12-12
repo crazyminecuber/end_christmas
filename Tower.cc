@@ -11,7 +11,6 @@ entity_properties Tower_ring::entity_prop;
 Tower_properties Tower_basic::tower_prop{};
 entity_properties Tower_basic::entity_prop{};
 std::vector<Tower*> Tower::static_towers{};
-std::vector<Entity*> Tower::shootable_enemies;
 int Tower_ring::num_projectile_init{};
 
 //Functions for the class Tower
@@ -25,10 +24,9 @@ Tower::Tower(Tower const & other)
 
 }
 
-void Tower::collision(Entity* object)
+void Tower::collision(Enemy* object)
 {
-  Tower::shootable_enemies.push_back(object);
-  //shoot();
+  shootable_enemies.push_back(object);
 }
 
 //Creating ptojectiles
@@ -120,18 +118,18 @@ void Tower_ring::create_active(sf::Vector2f position)
 //Function shoot in the class Tower_ring. Shoots in num_of_projectile number of directions.
 void Tower_ring::shoot()
 {
-  if (!shootable_enemies.empty())
+  if (Enemy::enemies.size() > 0)
   {
-  if(num_projectile_shoot < num_of_projectile)
+    if(num_projectile_shoot < num_of_projectile)
     {
-      if (Game::get_frame() - frame_last_shot > tower_prop.fire_period_init)
-      {
-        float rad = (2 * M_PI / num_of_projectile) * num_projectile_shoot;
-        sf::Vector2f dir{cos(rad), sin(rad)};
-        make_projectile(dir, getPosition());
-        frame_last_shot = Game::get_frame();
-        ++num_projectile_shoot;
-      }
+        if (Game::get_frame() - frame_last_shot > tower_prop.fire_period_init)
+        {
+          float rad = (2 * M_PI / num_of_projectile) * num_projectile_shoot;
+          sf::Vector2f dir{cos(rad), sin(rad)};
+          make_projectile(dir, getPosition());
+          frame_last_shot = Game::get_frame();
+          ++num_projectile_shoot;
+        }
     }
     else
     {

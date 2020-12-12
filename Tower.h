@@ -5,6 +5,7 @@
 #include <vector>
 #include <SFML/System/Vector2.hpp>
 #include "Entity.h"
+#include "Enemy.h"
 #include "Projectile.h"
 
 
@@ -32,15 +33,14 @@ class Tower : public Entity
         cost{_cost}{}
     Tower(Tower const & other);
     ~Tower() = default;
-    void collision(Entity* object);
+    void collision(Enemy* object);
     virtual void shoot()=0;
     virtual void create_active(sf::Vector2f position) = 0;
     void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
 
 
     static std::vector<Tower*> static_towers;
-    static std::vector<Entity*> shootable_enemies; // Static??!? och varför Entity och inte Enemy?
-
+    std::vector<Enemy*> shootable_enemies; 
 
   protected:
     Entity* target_enemy;
