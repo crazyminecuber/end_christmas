@@ -32,6 +32,10 @@ test_main.o: test_main.cc
 %.o: %.cc %.h
 	$(CCC) $(CFLAGS) -c $< $(LDFLAGS)
 
+dox:
+	doxygen doxyconf
+
+
 clean:
 	rm -f *.o
 	rm -f *.h.gch

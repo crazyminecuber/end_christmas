@@ -6,3 +6,5 @@ del_*
 .vscode
 *.crap
 game
+/docs
+callgrind.*
