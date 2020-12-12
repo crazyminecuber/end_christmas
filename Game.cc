@@ -287,7 +287,7 @@ void Game::projectile_update_position()
 {
     for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
     {
-      if(!((*it)->update_position()))
+      if(!((*it)->update_position(window.getSize())))
       {
         delete *it;
         it = Projectile::projectiles.erase(it);

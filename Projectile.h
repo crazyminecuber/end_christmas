@@ -17,13 +17,14 @@ public:
 
   Projectile(Projectile const& other); //Copy-constructor
   virtual void clone(sf::Vector2f dir, sf::Vector2f pos)=0;
-  bool update_position();
+  bool update_position(sf::Vector2u const & window_size);
   virtual bool collision()=0;
   //static
   static std::vector<Projectile*> projectiles;
   int damage{};
 
 protected:
+  bool outside_screen(sf::Vector2u const & window_size);
   int frame_to_die{};
 };
 

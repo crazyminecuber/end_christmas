@@ -14,9 +14,15 @@ using namespace std;
 vector<Projectile*> Projectile::projectiles;
 
 //Update position and return true if its still alive or false if frame>frame_to_die
-bool Projectile::update_position()
+bool Projectile::outside_screen(sf::Vector2u const & window_size)
 {
-    if (Game::get_frame() < frame_to_die)
+  bool x{0 > getPosition().x || getPosition().x > window_size.x};
+  bool y{0 > getPosition().y || getPosition().y > window_size.y};
+  return x || y;
+}
+bool Projectile::update_position(sf::Vector2u const & window_size)
+{
+    if (Game::get_frame() < frame_to_die || outside_screen(window_size))
     {
         move(direction*movement_speed);
         return true;
@@ -127,23 +133,23 @@ void Projectile_pierce::rotate_to_target(sf::Vector2f dir)
     if(dir.x < 0 && dir.y > 0)
     {
       angle+= 0;
-      std::cout << "second angle" << angle<<endl;
+      //std::cout << "second angle" << angle<<endl;
     }
     else if(dir.x > 0 && dir.y < 0)
     {
       angle-= 0;
-      std::cout << "Fourth angle" << angle<<endl;
+      //std::cout << "Fourth angle" << angle<<endl;
     }
     else if(dir.x <0 && dir.y < 0)
     {
       angle += 90;
-      std::cout << "Third angle" << angle<<endl;
+      //std::cout << "Third angle" << angle<<endl;
 
     }
     else if(dir.x >0 && dir.y > 0)
     {
       angle += 0;
-      std::cout << "first angle" << angle<<endl;
+      //std::cout << "first angle" << angle<<endl;
 
     }
     setRotation(angle);

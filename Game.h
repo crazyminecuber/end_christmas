@@ -59,6 +59,7 @@ public:
 	static int get_frame();
 	int get_health();
 	double get_fps(); // ta bort
+	sf::Vector2u get_window_size();
 
 	void set_selected_map(std::string map_name);
 
