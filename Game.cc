@@ -564,31 +564,38 @@ void Game::set_selected_map(std::string map_name)
     selected_map = map_name;
 }
 
+/* Check collisions between every enemy and projectile.
+ * When collision happens we check if the enemy or projectile should be removed.
+ */
 void Game::check_collision()
 {
+    // variables to ease readability.
     vector<Enemy*> &enemies = Enemy::enemies;
     vector<Projectile*> &projectiles = Projectile::projectiles;
     bool enemy_deleted{false};
     bool projectile_deleted{false};
     Enemy *enemy;
     Projectile *projectile;
+
     for (size_t enemy_i = 0;
          enemy_i < enemies.size();
          )
     {
         enemy = enemies.at(enemy_i);
-        // kolla kollision mellan projectile - enemy
         for (size_t projectile_i = 0;
          projectile_i  < projectiles.size();
          )
         {
             projectile = projectiles.at(projectile_i);
+            // check if enemy and projectile has collided
             if (collided_bb(projectile,enemy))
             {
+                // check if enemy should be deleted
                 if (enemy->collision(projectile))
                 {
                     wallet.add(enemy->get_reward());
                     delete enemy;
+                    // swap and pop for increased performance
                     if (enemies.size() > 1)
                     {
                         swap(enemies.at(enemy_i),enemies.back());
@@ -596,6 +603,7 @@ void Game::check_collision()
                     enemies.pop_back();
                     enemy_deleted = true;
                 }
+                // check if projectile should be deleted
                 if (projectile->collision())
                 {
                     delete projectile;
@@ -607,7 +615,10 @@ void Game::check_collision()
                     projectile_deleted = true;
                 }
 
-                // when true, enemy_i will not get updated. We do this because enemy_i will have the correct index for the next enemy we want to check since the list is resized.
+                /* when true, enemy_i will not get updated. We do this because
+                 * enemy_i will have the correct index for the next enemy we
+                 * want to check since we did a swap.
+                */
                 if (enemy_deleted)
                 {
                     enemy_deleted = false;
