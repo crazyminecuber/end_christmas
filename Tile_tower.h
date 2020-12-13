@@ -14,12 +14,12 @@ public:
         init();
     }
 
-    //bool is_occupied();
+    bool is_occupied();
     bool on_click(Tower * tw) override;
     void init();
 
 private:
-    //Tower* tower{nullptr};
+    Tower* tower{nullptr};
 };
 
 #endif // TILE_TOWER_H

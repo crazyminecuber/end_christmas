@@ -13,14 +13,14 @@ bool Tile_tower::on_click(Tower * tw)
     if (!(tw == nullptr))
     {
         cout << "Creating tower. Position: " << getPosition().x << " " << getPosition().y << endl;
-        tw->create_active(getPosition() + sf::Vector2f{side_length / 2, side_length / 2});
+        tower = tw->create_active(getPosition() + sf::Vector2f{side_length / 2, side_length / 2});
         return true;
     }
     return false;
 }
 
-// bool Tile_tower::is_occupied()
-// {
-//     return  ( !(dynamic_cast<Tower_basic*> (tower) == nullptr) ||
-//               !(dynamic_cast<Tower_ring* > (tower) == nullptr)   );
-// }
+bool Tile_tower::is_occupied()
+{
+    cout << "Tower in tile" << tower << endl;
+    return !(tower == nullptr);
+}

@@ -31,12 +31,13 @@ void Tower::make_projectile(sf::Vector2f dir, sf::Vector2f pos)
 
 //Tower_basic
 //Making aktiv tower
-void Tower_basic::create_active(sf::Vector2f position)
+Tower * Tower_basic::create_active(sf::Vector2f position)
 {
     Tower * t = new Tower_basic{
         texture_file, position, size, hitbox_radius, direction, movement_speed, cost, projectile
     };
     static_towers.push_back(t);
+    return t;
 }
 
 //Shoot if shootable_enemies and if fire_period
@@ -88,12 +89,13 @@ sf::Vector2f Tower_basic::aim_direction(Entity * target_enemy)
 
 //Tower_ring
 //Making aktiv tower
-void Tower_ring::create_active(sf::Vector2f position)
+Tower * Tower_ring::create_active(sf::Vector2f position)
 {
     Tower * t = new Tower_ring{
         texture_file, position, size, hitbox_radius, direction, movement_speed, cost, num_of_projectile, projectile
     };
     static_towers.push_back(t);
+    return t;
 }
 
 //Function shoot in the class Tower_ring. Shoots in num_of_projectile number of directions.

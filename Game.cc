@@ -684,14 +684,15 @@ void Game::handle_input(sf::Event & event)
         cout << "Chosen tower in game: " << tw << endl;
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
-            Tile* tile = Tile::get_tile_by_coord(click);
+            Tile_tower * tile = dynamic_cast<Tile_tower*>(Tile::get_tile_by_coord(click));
 
             cout << "Enough money to buy. Tile: " << tile << endl;
-            if(tile!= nullptr &&tile->on_click(tw))
+            if(tile != nullptr && !tile->is_occupied() && tile->on_click(tw))
             {
                 wallet.take(tw->cost);
             }
         }
+
      }
      shop.on_click(click, wallet);
  }
