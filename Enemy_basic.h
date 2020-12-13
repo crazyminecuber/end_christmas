@@ -11,7 +11,7 @@ public:
     Enemy_basic(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad,
         sf::Vector2f dir, float mov_spd,
-        int arg_life)
+        int arg_life, int reward_init)
     :Enemy(texture_file, position,
         size, hit_rad,
         dir, mov_spd,
@@ -19,15 +19,9 @@ public:
     {}
 
     ~Enemy_basic();
-
-    //Statics
-    static int life_init;
-    static int reward_init;
-    static entity_properties prop;
-    Enemy* clone() override;
+    
+    Enemy* clone() const override;
     bool collision(Projectile* object) override;
-protected:
-  int life{life_init};
 
 };
 

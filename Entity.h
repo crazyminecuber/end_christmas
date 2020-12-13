@@ -14,6 +14,7 @@ public:
     //Entity(Entity const & other)=default;
     virtual ~Entity()=default;
 
+
     void init(sf::Vector2f position);
 
     sf::Vector2f get_direction();
@@ -21,6 +22,8 @@ public:
     void flip(sf::Vector2f dir);
     float get_hitbox_radius() const;
     std::string get_texture_file() const;
+    float get_movement_speed() const;
+    void  set_movement_speed(float mov_spd);
 
 
 protected:
@@ -31,7 +34,7 @@ protected:
     float hitbox_radius;
 public:
     sf::Vector2f direction;
-    float const movement_speed;
+    float movement_speed;
 };
 
 struct entity_properties{

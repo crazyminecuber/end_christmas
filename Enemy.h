@@ -9,6 +9,8 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "Projectile.h"
+#include <string>
+#include "json.hpp"
 
 class Enemy
 : public Entity
@@ -24,25 +26,30 @@ public:
         life{arg_life}, kill_reward{reward}{}
 
     virtual bool collision(Projectile* object) = 0;
-    virtual Enemy* clone() = 0;
+    virtual Enemy* clone() const = 0;
     int get_damage();
     int get_reward(){return kill_reward;}
 
     //Statics
-    static Enemy* get_new_enemy_basic();
-    static Enemy* get_new_enemy_boss();
+
+    static Enemy* get_new_enemy(nlohmann::json const & enemies, std::string chosen_enemy,
+                                                        sf::Vector2f position_init);
     static void create_enemy_by_obj(Enemy* enemy);
-    static void new_basic();
-    static void new_basic(sf::Vector2f position);
-    static void new_boss();
-
-    static void delete_all_enemies();
     static std::vector<Enemy*> enemies;
-    static sf::Vector2f position_init; //Enemies should start at same positions
 
-    protected:
-        int life{};
-        int kill_reward{};
+
+
+protected:
+    int life{};
+    int kill_reward{};
+private:
+    static Enemy* get_new_enemy_basic(nlohmann::json const & enemy_props,
+                                    sf::Vector2f position_init);
+    static Enemy* get_new_enemy_boss(nlohmann::json const & enemy_props,
+                                    sf::Vector2f position_init, Enemy* child);
+    static void delete_all_enemies();
+
+
 };
 
 

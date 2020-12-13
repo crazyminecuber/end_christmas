@@ -126,8 +126,8 @@ void Game::load_map(string const & file_entity)
     // calculate Tile::side_length and change all tiles
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
-    Tile::side_length = std::min(window_size.x/tiles_per_col,
-                                 window_size.y/tiles_per_row);
+    Tile::side_length = std::min(window.getSize().x/tiles_per_col,
+                                 window.getSize().y/tiles_per_row);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -316,51 +316,16 @@ void Game::load_entities(string const & file_entity)
     {
         json j_data;
         ifs >> j_data;
-        init_enemies(j_data["Enemy"]);
         init_projectiles(j_data["Projectile"]);
         init_towers(j_data["Tower"]);
         init_shop(j_data["Shop"]);
-        init_waves(j_data["Waves"]);
+        init_waves(j_data["Waves"], j_data["Enemy"]);
+        ifs.close();
     }
-    ifs.close();
-}
-
- void Game::init_enemies(json const & json_obj)
-{
-    /* position_init */
-    sf::Vector2f tile_enemy_start_position;
-    tile_enemy_start_position = Tile::get_tile_enemy_start()->getPosition() +
-                                sf::Vector2f{(Tile::side_length / 2.f),
-                                             (Tile::side_length / 2.f) };
-    Enemy::position_init = tile_enemy_start_position;
-
-    /* Enemy_basic */
-    json enemy_basic = json_obj["Enemy_basic"];
-    Enemy_basic::life_init = enemy_basic["life_init"];
-    Enemy_basic::reward_init = enemy_basic["reward_init"];
-    Enemy_basic::prop.texture_file = enemy_basic["texture"];
-    sf::Vector2f size_basic;
-    size_basic.x = enemy_basic["size"][0];
-    size_basic.y = enemy_basic["size"][1];
-    Enemy_basic::prop.size = sf::Vector2f{size_basic};
-    Enemy_basic::prop.hit_rad = enemy_basic["hit_rad"];
-    Enemy_basic::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Enemy_basic::prop.mov_spd = enemy_basic["mov_spd"];
-
-    /* Enemy_boss */
-    json enemy_boss = json_obj["Enemy_boss"];
-    Enemy_boss::life_init = enemy_boss["life_init"];
-    Enemy_boss::reward_init = enemy_boss["reward_init"];
-    Enemy_boss::prop.texture_file = enemy_boss["texture"];
-    sf::Vector2f size_boss;
-    size_boss.x = enemy_boss["size"][0];
-    size_boss.y = enemy_boss["size"][1];
-    Enemy_boss::prop.size = sf::Vector2f{size_boss};
-    Enemy_boss::prop.hit_rad = enemy_boss["hit_rad"];
-    Enemy_boss::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
-
-    cout << "laddat enemies" << endl;
+    else
+    {
+        throw invalid_argument("Could not open " + file_entity);
+    }
 }
 
 void Game::init_tiles(string const & file_entity)
@@ -424,20 +389,17 @@ void Game::init_tiles(string const & file_entity)
     // cout << map_tiles["map_dev"]["0"] << endl;
 }
 
-void Game::init_waves(json const & json_obj)
+void Game::init_waves(json const & waves, json const & enemies)
 {
+    sf::Vector2f position_init = Tile::get_tile_enemy_start()->getPosition() +
+                                sf::Vector2f{(Tile::side_length / 2.f),
+                                             (Tile::side_length / 2.f) };
     //Get every wave and add to wave_groups
-    for (const auto& wave : json_obj.items())
+    for (const auto& wave : waves.items())
     {
-        Enemy* enemy;
-        if(wave.value()["enemy"] == "Enemy_basic")
-        {
-            enemy = Enemy::get_new_enemy_basic();
-        }
-        else if(wave.value()["enemy"] == "Enemy_boss")
-        {
-            enemy = Enemy::get_new_enemy_boss();
-        }
+    //Passive enemy for the wave_group
+    Enemy* enemy = Enemy::get_new_enemy(enemies, wave.value()["enemy"], position_init);
+
     wave_manager.add_wave(new Wave_group(
                           wave.value()["start_wave"],
                           wave.value()["end_wave"],
@@ -450,7 +412,6 @@ void Game::init_waves(json const & json_obj)
                           wave.value()["num_of_groups"],
                           wave.value()["num_of_groups_inc"]));
     }
-    // cout << wave.key() << endl;
     wave_manager.init_waves(frame, fps);
 }
 
@@ -550,37 +511,48 @@ double Game::get_fps()
 {
     return fps;
 }
+sf::Vector2u Game::get_window_size()
+{
+    return window.getSize();
+}
 
 void Game::set_selected_map(std::string map_name)
 {
     selected_map = map_name;
 }
 
+/* Check collisions between every enemy and projectile.
+ * When collision happens we check if the enemy or projectile should be removed.
+ */
 void Game::check_collision()
 {
+    // variables to ease readability.
     vector<Enemy*> &enemies = Enemy::enemies;
     vector<Projectile*> &projectiles = Projectile::projectiles;
     bool enemy_deleted{false};
     bool projectile_deleted{false};
     Enemy *enemy;
     Projectile *projectile;
+
     for (size_t enemy_i = 0;
          enemy_i < enemies.size();
          )
     {
         enemy = enemies.at(enemy_i);
-        // kolla kollision mellan projectile - enemy
         for (size_t projectile_i = 0;
          projectile_i  < projectiles.size();
          )
         {
             projectile = projectiles.at(projectile_i);
+            // check if enemy and projectile has collided
             if (collided_bb(projectile,enemy))
             {
+                // check if enemy should be deleted
                 if (enemy->collision(projectile))
                 {
                     wallet.add(enemy->get_reward());
                     delete enemy;
+                    // swap and pop for increased performance
                     if (enemies.size() > 1)
                     {
                         swap(enemies.at(enemy_i),enemies.back());
@@ -588,6 +560,7 @@ void Game::check_collision()
                     enemies.pop_back();
                     enemy_deleted = true;
                 }
+                // check if projectile should be deleted
                 if (projectile->collision())
                 {
                     delete projectile;
@@ -599,7 +572,10 @@ void Game::check_collision()
                     projectile_deleted = true;
                 }
 
-                // when true, enemy_i will not get updated. We do this because enemy_i will have the correct index for the next enemy we want to check since the list is resized.
+                /* when true, enemy_i will not get updated. We do this because
+                 * enemy_i will have the correct index for the next enemy we
+                 * want to check since we did a swap.
+                */
                 if (enemy_deleted)
                 {
                     enemy_deleted = false;
@@ -630,8 +606,8 @@ void Game::check_collision_towers()
     for (size_t tower_i = 0;
             tower_i < Tower::static_towers.size();
             tower_i++)
-    {  
-        Tower::static_towers.at(tower_i)->shootable_enemies.clear(); 
+    {
+        Tower::static_towers.at(tower_i)->shootable_enemies.clear();
         if (!dynamic_cast<Tower_ring*>( Tower::static_towers.at(tower_i) ) )
         {
             for (size_t enemy_i = 0;

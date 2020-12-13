@@ -9,7 +9,7 @@
 class Health
 {
 public:
-    Health();
+    Health() = delete;
 
     Health(sf::RenderWindow & win, std::string texture_file, int hp)
     : window{win}, font{new sf::Font},

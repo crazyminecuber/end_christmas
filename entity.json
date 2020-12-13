@@ -1,23 +1,49 @@
 {
     "Enemy" :
         {
-            "Enemy_basic" :
+            "Enemy1" :
                 {
+                    "type": "Enemy_basic",
                     "life_init" : 2,
                     "reward_init" : 30,
                     "texture" : "resources/textures/Elf2.png",
                     "size": [0.5, 0.7],
                     "hit_rad": 0.25,
-                    "mov_spd": 0.1
+                    "mov_spd": 0.025
                 },
-            "Enemy_boss" :
+            "Enemy2" :
                 {
+                    "type": "Enemy_basic",
                     "life_init" : 10,
                     "reward_init" : 70,
                     "texture" : "resources/textures/Santa.png",
-                    "size": [1,1],
-                    "hit_rad": 0.5,
-                    "mov_spd": 0.3
+                    "size": [0.5, 0.7],
+                    "hit_rad": 0.25,
+                    "mov_spd": 0.1
+                },
+            "Enemy3" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "Enemy1",
+                    "num_of_children": 3,
+                    "life_init" : 10,
+                    "reward_init" : 70,
+                    "texture" : "resources/textures/heart.png",
+                    "size": [0.5,0.5],
+                    "hit_rad": 0.025,
+                    "mov_spd": 0.025
+                },
+            "Enemy4" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "Enemy3",
+                    "num_of_children": 5,
+                    "life_init" : 10,
+                    "reward_init" : 70,
+                    "texture" : "resources/textures/Santa.png",
+                    "size": [0.5,0.5],
+                    "hit_rad": 0.125,
+                    "mov_spd": 0.025
                 }
         },
     "Waves" :
@@ -26,11 +52,11 @@
             {
                 "start_wave": 1,
                 "end_wave" : 200,
-                "enemy" : "Enemy_basic",
+                "enemy" : "Enemy4",
                 "spawn_delay": 1,
                 "spawn_rate" : 10,
                 "num_in_group": 1,
-                "num_in_group_inc": 1,
+                "num_in_group_inc": 0,
                 "group_spawn_interval": 1,
                 "num_of_groups": 1,
                 "num_of_groups_inc": 1,
@@ -38,13 +64,13 @@
             },
             "Group2" :
             {
-                "start_wave": 3,
-                "end_wave" : 1000,
-                "enemy" : "Enemy_boss",
+                "start_wave": 1,
+                "end_wave" : 200,
+                "enemy" : "Enemy1",
                 "spawn_delay": 1,
                 "spawn_rate" : 10,
                 "num_in_group": 1,
-                "num_in_group_inc": 1,
+                "num_in_group_inc": 0,
                 "group_spawn_interval": 1,
                 "num_of_groups": 1,
                 "num_of_groups_inc": 1,
@@ -67,10 +93,10 @@
                     "frames_to_live" : 3000,
                     "damage_init" : 1100,
                     "texture" : "resources/textures/icicle.png",
-                    "size" : [0.4,0.4],
-                    "hit_rad" : 0.2,
-                    "mov_spd" : 0.1,
-                    "nr_pierce_init" : 1
+                    "size" : [0.5,0.5],
+                    "hit_rad" : 0.25,
+                    "mov_spd" : 0.08,
+                    "nr_pierce_init" : 0
                 },
             "Projectile_bomb" :
                 {

@@ -6,15 +6,32 @@
 #include "State_wait.h"
 #include "State_pause.h"
 #include "State_end.h"
+#include "json.hpp"
+#include <fstream>
 
 using namespace std;
+using json = nlohmann::json;
 
 State_machine::State_machine(const string & title,
-                             unsigned width, unsigned height)
-    : window{sf::VideoMode{width,height}, title, sf::Style::Close},
-      game{window, "entity.json", 100}
-{
-    states.insert(make_pair("menu", new State_menu(window, game, title)));
+                             const string & settings_file,
+                             const string & entity_file)
+    :   window
+        { 
+            ( // comma operator
+                load_settings(settings_file),
+                sf::VideoMode
+                {
+                    settings["window"]["width"],
+                    settings["window"]["height"]
+                }
+            ), 
+            title, 
+            sf::Style::Close
+        },
+        game{window, settings["game"]["health_texture"], settings["game"]["hp"]}
+{   
+    states.insert(
+        make_pair("menu", new State_menu(window, game, title, entity_file)));
     states.insert(make_pair("wave", new State_wave(window, game)));
     states.insert(make_pair("wait", new State_wait(window, game)));
     states.insert(make_pair("pause", new State_pause(window, game)));
@@ -45,6 +62,20 @@ void State_machine::run()
         throttle(fps, clock);
     }
     quit();
+}
+
+void State_machine::load_settings(const string & settings_file)
+{
+    ifstream ifs{settings_file};
+    if (ifs.is_open())
+    {
+        ifs >> settings;
+        ifs.close();
+    }
+    else
+    {
+        throw invalid_argument("Could not open " + settings_file);
+    }
 }
 
 void State_machine::throttle(const double fps, sf::Clock & clock)
