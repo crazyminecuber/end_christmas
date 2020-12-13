@@ -11,14 +11,22 @@ entity_properties Tower_ring::entity_prop;
 Tower_properties Tower_basic::tower_prop{};
 entity_properties Tower_basic::entity_prop{};
 std::vector<Tower*> Tower::static_towers{};
-std::vector<Entity*> Tower::shootable_enemies;
 int Tower_ring::num_projectile_init{};
 
 //Functions for the class Tower
-void Tower::collision(Entity* object)
+Tower::Tower(Tower const & other) 
+    : Entity(other), 
+    fire_period{other.fire_period},
+    fire_angle{other.fire_angle},
+    projectile{other.projectile},
+    cost{other.cost}
 {
-  Tower::shootable_enemies.push_back(object);
-  shoot();
+
+}
+
+void Tower::collision(Enemy* object)
+{
+  shootable_enemies.push_back(object);
 }
 
 //Creating ptojectiles
@@ -30,12 +38,17 @@ void Tower::make_projectile(sf::Vector2f dir, sf::Vector2f pos)
 /*---------------------------------------------------------------------*/
 
 //Tower_basic
+Tower_basic::Tower_basic(Tower_basic const & other)
+    : Tower(other)
+{
+
+}
+
 //Making aktiv tower
 Tower * Tower_basic::create_active(sf::Vector2f position)
 {
-    Tower * t = new Tower_basic{
-        texture_file, position, size, hitbox_radius, direction, movement_speed, cost, projectile
-    };
+    Tower * t = new Tower_basic{*this};
+    t->setPosition(position);
     static_towers.push_back(t);
     return t;
 }
@@ -88,12 +101,18 @@ sf::Vector2f Tower_basic::aim_direction(Entity * target_enemy)
 //----------------------------------------------------------------------------
 
 //Tower_ring
+Tower_ring::Tower_ring(Tower_ring const & other)
+    : Tower(other), 
+    num_of_projectile{other.num_of_projectile}
+{
+
+}
+
 //Making aktiv tower
 Tower * Tower_ring::create_active(sf::Vector2f position)
 {
-    Tower * t = new Tower_ring{
-        texture_file, position, size, hitbox_radius, direction, movement_speed, cost, num_of_projectile, projectile
-    };
+    Tower * t = new Tower_ring{*this};
+    t->setPosition(position);
     static_towers.push_back(t);
     return t;
 }
@@ -101,18 +120,18 @@ Tower * Tower_ring::create_active(sf::Vector2f position)
 //Function shoot in the class Tower_ring. Shoots in num_of_projectile number of directions.
 void Tower_ring::shoot()
 {
-  if (!shootable_enemies.empty())
+  if (Enemy::enemies.size() > 0)
   {
-  if(num_projectile_shoot < num_of_projectile)
+    if(num_projectile_shoot < num_of_projectile)
     {
-      if (Game::get_frame() - frame_last_shot > tower_prop.fire_period_init)
-      {
-        float rad = (2 * M_PI / num_of_projectile) * num_projectile_shoot;
-        sf::Vector2f dir{cos(rad), sin(rad)};
-        make_projectile(dir, getPosition());
-        frame_last_shot = Game::get_frame();
-        ++num_projectile_shoot;
-      }
+        if (Game::get_frame() - frame_last_shot > tower_prop.fire_period_init)
+        {
+          float rad = (2 * M_PI / num_of_projectile) * num_projectile_shoot;
+          sf::Vector2f dir{cos(rad), sin(rad)};
+          make_projectile(dir, getPosition());
+          frame_last_shot = Game::get_frame();
+          ++num_projectile_shoot;
+        }
     }
     else
     {

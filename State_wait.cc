@@ -23,8 +23,6 @@ void State_wait::handle_input(sf::Event & event)
     {
         if ( event.key.code == sf::Keyboard::P )
         {
-            Tower::shootable_enemies.clear();
-            cout << Tower::shootable_enemies.size() << endl;
             play = true;
         }
     }

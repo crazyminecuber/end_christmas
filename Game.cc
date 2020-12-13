@@ -627,19 +627,23 @@ void Game::check_collision()
 
 void Game::check_collision_towers()
 {
-    for (size_t enemy_i = 0;
-         enemy_i < Enemy::enemies.size();
-         enemy_i++)
-    {
-        for (size_t tower_i = 0;
-                tower_i < Tower::static_towers.size();
-                tower_i++)
+    for (size_t tower_i = 0;
+            tower_i < Tower::static_towers.size();
+            tower_i++)
+    {  
+        Tower::static_towers.at(tower_i)->shootable_enemies.clear(); 
+        if (!dynamic_cast<Tower_ring*>( Tower::static_towers.at(tower_i) ) )
         {
-            if (collided(Tower::static_towers.at(tower_i),
-                        Enemy::enemies.at(enemy_i)))
+            for (size_t enemy_i = 0;
+                enemy_i < Enemy::enemies.size();
+                enemy_i++)
             {
-                Tower::static_towers.at(
-                    tower_i)->collision(Enemy::enemies.at(enemy_i));
+                        if (collided(Tower::static_towers.at(tower_i),
+                                    Enemy::enemies.at(enemy_i)))
+                        {
+                            Tower::static_towers.at(
+                                tower_i)->collision(Enemy::enemies.at(enemy_i));
+                        }
             }
         }
     }
@@ -714,6 +718,7 @@ void Game::update_logic()
     }
     check_collision();
     check_collision_towers();
+    fire_towers();
     frame++;
 }
 
