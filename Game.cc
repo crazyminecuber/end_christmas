@@ -126,8 +126,8 @@ void Game::load_map(string const & file_entity)
     // calculate Tile::side_length and change all tiles
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
-    Tile::side_length = std::min(window_size.x/tiles_per_col,
-                                 window_size.y/tiles_per_row);
+    Tile::side_length = std::min(window.getSize().x/tiles_per_col,
+                                 window.getSize().y/tiles_per_row);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -321,8 +321,12 @@ void Game::load_entities(string const & file_entity)
         init_towers(j_data["Tower"]);
         init_shop(j_data["Shop"]);
         init_waves(j_data["Waves"]);
+        ifs.close();
     }
-    ifs.close();
+    else 
+    {
+        throw invalid_argument("Could not open " + file_entity);
+    }
 }
 
  void Game::init_enemies(json const & json_obj)
@@ -549,6 +553,10 @@ int Game::get_frame()
 double Game::get_fps()
 {
     return fps;
+}
+sf::Vector2u Game::get_window_size()
+{
+    return window.getSize();
 }
 
 void Game::set_selected_map(std::string map_name)

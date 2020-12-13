@@ -15,20 +15,15 @@
 class Game final
 {
 public:
-	//Game(){};
-	Game(sf::RenderWindow & win, std::string const & file_entity, int hp
+	Game() = delete;
+	Game(sf::RenderWindow & win, std::string const & file_health_texture, int hp
 		 /*std::string const & shop_file,*/
 		 )
-		 : window{win}, window_size{win.getSize()},
-		   health{win, "resources/textures/heart.png", hp},
+		 : window{win}, 
+		   health{win, file_health_texture, hp},
 		   wave_manager{win}/*, shop{shop_file}*/
 		 {
-			// OBS! This is now done in State_menu::get_next_state() because
-			// we need to wait for the user to select a map before
-			// loading map. And we need to load map before loading entities
 
-			// load_map(file_entity);
-			// load_entities(file_entity);
 		 };
 
 
@@ -68,9 +63,6 @@ public:
 
 private:
 	sf::RenderWindow & window;
-	sf::Vector2u window_size;
-    //sf::RenderWindow window{sf::VideoMode{window_size.x, window_size.y},
-	// 						"Tower defence"};
 	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	bool collided_bb(Entity const *object1, Entity const *object2);
