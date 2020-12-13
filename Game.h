@@ -73,8 +73,7 @@ private:
 	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	bool collided_bb(Entity const *object1, Entity const *object2);
-	void init_enemies(nlohmann::json const & json_obj);
-	void init_waves(nlohmann::json const & json_obj);
+	void init_waves(nlohmann::json const & waves, nlohmann::json const & enemies);
 	void init_projectiles(nlohmann::json const & json_obj);
 	void init_towers(nlohmann::json const & json_obj);
 	void init_shop(nlohmann::json const & json_obj);

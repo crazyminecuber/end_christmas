@@ -11,16 +11,13 @@ public:
     Entity(std::string _texture_file,
            sf::Vector2f position, sf::Vector2f size,
            float hit_rad, sf::Vector2f dir, float mov_spd)
-    //: sf::Sprite(),
-    //texture{Resource_manager::load(texture_file)}, hitbox_radius{hit_rad}, direction{dir},
-    //movement_speed{mov_spd}
-    : sf::Sprite(), texture_file{_texture_file},
-     texture{Resource_manager::load(_texture_file)}, size{size}, hitbox_radius{hit_rad}, direction{dir},
-     movement_speed{mov_spd}
+           : sf::Sprite(), texture_file{_texture_file},
+           texture{Resource_manager::load(_texture_file)}, size{size}, hitbox_radius{hit_rad}, direction{dir},
+           movement_speed{mov_spd}
     {
         init(position, size);
     }
-    //Entity(Entity const & other)=default;
+    
     virtual ~Entity()=default;
 
     void init(sf::Vector2f position, sf::Vector2f size);
@@ -30,6 +27,8 @@ public:
     void flip(sf::Vector2f dir);
     float get_hitbox_radius() const;
     std::string get_texture_file() const;
+    float get_movement_speed() const;
+    void  set_movement_speed(float mov_spd);
 
 
 protected:
@@ -40,7 +39,7 @@ protected:
     float hitbox_radius;
 public:
     sf::Vector2f direction;
-    float const movement_speed;
+    float movement_speed;
 };
 
 struct entity_properties{

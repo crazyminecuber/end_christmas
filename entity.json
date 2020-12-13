@@ -1,8 +1,9 @@
 {
     "Enemy" :
         {
-            "Enemy_basic" :
+            "Enemy1" :
                 {
+                    "type": "Enemy_basic",
                     "life_init" : 2,
                     "reward_init" : 30,
                     "texture" : "resources/textures/Elf2.png",
@@ -10,27 +11,52 @@
                     "hit_rad": 50,
                     "mov_spd": 2
                 },
-            "Enemy_boss" :
+            "Enemy2" :
                 {
+                    "type": "Enemy_basic",
                     "life_init" : 10,
                     "reward_init" : 70,
                     "texture" : "resources/textures/Santa.png",
                     "size": [50,50],
                     "hit_rad": 35,
-                    "mov_spd": 5
+                    "mov_spd": 1
+                },
+            "Enemy3" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "Enemy1",
+                    "num_of_children": 3,
+                    "life_init" : 10,
+                    "reward_init" : 70,
+                    "texture" : "resources/textures/heart.png",
+                    "size": [50,50],
+                    "hit_rad": 35,
+                    "mov_spd": 1
+                },
+            "Enemy4" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "Enemy3",
+                    "num_of_children": 5,
+                    "life_init" : 10,
+                    "reward_init" : 70,
+                    "texture" : "resources/textures/Santa.png",
+                    "size": [50,50],
+                    "hit_rad": 35,
+                    "mov_spd": 1
                 }
         },
     "Waves" :
         {
             "Group1" :
             {
-                "start_wave": 1,
-                "end_wave" : 2,
-                "enemy" : "Enemy_basic",
+                "start_wave": 2,
+                "end_wave" : 10,
+                "enemy" : "Enemy4",
                 "spawn_delay": 1,
                 "spawn_rate" : 10,
                 "num_in_group": 1,
-                "num_in_group_inc": 1,
+                "num_in_group_inc": 0,
                 "group_spawn_interval": 1,
                 "num_of_groups": 1,
                 "num_of_groups_inc": 1,
@@ -38,10 +64,10 @@
             },
             "Group2" :
             {
-                "start_wave": 3,
-                "end_wave" : 10,
-                "enemy" : "Enemy_boss",
-                "spawn_delay": 1,
+                "start_wave": 1,
+                "end_wave" : 1,
+                "enemy" : "Enemy1",
+                "spawn_delay": 0,
                 "spawn_rate" : 10,
                 "num_in_group": 1,
                 "num_in_group_inc": 1,
@@ -70,7 +96,7 @@
                     "size" : [20,50],
                     "hit_rad" : 25,
                     "mov_spd" : 10,
-                    "nr_pierce_init" : 2
+                    "nr_pierce_init" : 0
                 },
             "Projectile_bomb" :
                 {
