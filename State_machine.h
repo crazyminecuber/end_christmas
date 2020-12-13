@@ -5,6 +5,7 @@
 #include <string>
 #include "State.h"
 #include "Game.h"
+#include "json.hpp"
 
 /* Inspiration taken from Frida Flodin's:
  * https://gitlab.ida.liu.se/TDDI82/Spelskelett
@@ -14,13 +15,21 @@
 class State_machine
 {
 public:
-    State_machine(const std::string &title, unsigned width, unsigned height);
+    State_machine(
+        const std::string &title, 
+        const std::string & settings_file,
+        const std::string & entity_file
+        );
 
     void run();
 
     bool running();
 
 private:
+    void load_settings(const std::string & settings_file);
+
+    nlohmann::json settings;
+
     double fps{60};
 
     sf::RenderWindow window;

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-State_menu::State_menu(sf::RenderWindow & win, Game & game, const string & title)
+State_menu::State_menu(sf::RenderWindow & win, Game & game, const string & title, const string & entity_file)
     :   window{win}, game{game},
         background_texture{
             Resource_manager::load(
@@ -20,7 +20,7 @@ State_menu::State_menu(sf::RenderWindow & win, Game & game, const string & title
     text_title = sf::Text{'('+title+')', font, 100};
     text = sf::Text{"Select map to start game", font, 50};
 
-    game.init_tiles("entity.json");
+    game.init_tiles(entity_file);
 
     std::map<string, map<string, string>>::iterator it = game.maps.begin();
     text_map_1 = sf::Text{game.maps[(*it).first]["display_name"], font, 50};
@@ -95,7 +95,7 @@ string State_menu::get_next_state()
     {
         game.load_map("entity.json");
         game.load_entities("entity.json");
-        return_string = "wave";
+        return_string = "wait";
     }
     // reset variables
     start_game = false;

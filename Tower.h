@@ -5,6 +5,7 @@
 #include <vector>
 #include <SFML/System/Vector2.hpp>
 #include "Entity.h"
+#include "Enemy.h"
 #include "Projectile.h"
 
 
@@ -30,17 +31,16 @@ class Tower : public Entity
         dir, mov_spd),
         projectile{proj},
         cost{_cost}{}
-
+    Tower(Tower const & other);
     ~Tower() = default;
-    void collision(Entity* object);
+    void collision(Enemy* object);
     virtual void shoot()=0;
     virtual void create_active(sf::Vector2f position) = 0;
     void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
 
 
     static std::vector<Tower*> static_towers;
-    static std::vector<Entity*> shootable_enemies;
-
+    std::vector<Enemy*> shootable_enemies; 
 
   protected:
     Entity* target_enemy;
@@ -69,7 +69,7 @@ public:
           entity_prop.size, entity_prop.hit_rad, entity_prop.dir,
           entity_prop.mov_spd, tower_prop.cost_init, tower_prop.projectile_init)
   {}
-
+  Tower_basic(Tower_basic const & other);
   ~Tower_basic()=default;
 
   void shoot() override;
@@ -97,6 +97,7 @@ public:
           entity_prop.mov_spd, tower_prop.cost_init, tower_prop.projectile_init),
           num_of_projectile{num_projectile_init}
   {}
+  Tower_ring(Tower_ring const & other);
   ~Tower_ring() = default;
 
   void shoot() override;

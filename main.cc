@@ -2,7 +2,10 @@
 
 int main()
 {
-    State_machine machine{"Kill Santa", 1400, 800};
+    State_machine machine
+    {
+        "Kill Santa", "resources/settings.json", "entity.json"
+    };
     machine.run();
     return 0;
 }

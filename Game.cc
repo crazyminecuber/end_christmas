@@ -126,8 +126,8 @@ void Game::load_map(string const & file_entity)
     // calculate Tile::side_length and change all tiles
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
-    Tile::side_length = std::min(window_size.x/tiles_per_col,
-                                 window_size.y/tiles_per_row);
+    Tile::side_length = std::min(window.getSize().x/tiles_per_col,
+                                 window.getSize().y/tiles_per_row);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -287,7 +287,7 @@ void Game::projectile_update_position()
 {
     for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
     {
-      if(!((*it)->update_position()))
+      if(!((*it)->update_position(window.getSize())))
       {
         delete *it;
         it = Projectile::projectiles.erase(it);
@@ -320,8 +320,12 @@ void Game::load_entities(string const & file_entity)
         init_towers(j_data["Tower"]);
         init_shop(j_data["Shop"]);
         init_waves(j_data["Waves"], j_data["Enemy"]);
+        ifs.close();
     }
-    ifs.close();
+    else
+    {
+        throw invalid_argument("Could not open " + file_entity);
+    }
 }
 
 void Game::init_tiles(string const & file_entity)
@@ -507,48 +511,71 @@ double Game::get_fps()
 {
     return fps;
 }
+sf::Vector2u Game::get_window_size()
+{
+    return window.getSize();
+}
 
 void Game::set_selected_map(std::string map_name)
 {
     selected_map = map_name;
 }
 
+/* Check collisions between every enemy and projectile.
+ * When collision happens we check if the enemy or projectile should be removed.
+ */
 void Game::check_collision()
 {
+    // variables to ease readability.
     vector<Enemy*> &enemies = Enemy::enemies;
     vector<Projectile*> &projectiles = Projectile::projectiles;
     bool enemy_deleted{false};
     bool projectile_deleted{false};
     Enemy *enemy;
     Projectile *projectile;
+
     for (size_t enemy_i = 0;
          enemy_i < enemies.size();
          )
     {
         enemy = enemies.at(enemy_i);
-        // kolla kollision mellan projectile - enemy
         for (size_t projectile_i = 0;
          projectile_i  < projectiles.size();
          )
         {
             projectile = projectiles.at(projectile_i);
+            // check if enemy and projectile has collided
             if (collided_bb(projectile,enemy))
             {
+                // check if enemy should be deleted
                 if (enemy->collision(projectile))
                 {
-                  wallet.add(enemy->get_reward());
-                  delete enemy;
-                  enemies.erase(enemies.begin() + enemy_i);
-                  enemy_deleted = true;
+                    wallet.add(enemy->get_reward());
+                    delete enemy;
+                    // swap and pop for increased performance
+                    if (enemies.size() > 1)
+                    {
+                        swap(enemies.at(enemy_i),enemies.back());
+                    }
+                    enemies.pop_back();
+                    enemy_deleted = true;
                 }
+                // check if projectile should be deleted
                 if (projectile->collision())
                 {
-                  delete projectile;
-                  projectiles.erase(projectiles.begin() + projectile_i);
-                  projectile_deleted = true;
+                    delete projectile;
+                    if (projectiles.size() > 1)
+                    {
+                        swap(projectiles.at(projectile_i),projectiles.back());
+                    }
+                    projectiles.pop_back();
+                    projectile_deleted = true;
                 }
 
-                // when true, enemy_i will not get updated. We do this because enemy_i will have the correct index for the next enemy we want to check since the list is resized.
+                /* when true, enemy_i will not get updated. We do this because
+                 * enemy_i will have the correct index for the next enemy we
+                 * want to check since we did a swap.
+                */
                 if (enemy_deleted)
                 {
                     enemy_deleted = false;
@@ -576,19 +603,23 @@ void Game::check_collision()
 
 void Game::check_collision_towers()
 {
-    for (size_t enemy_i = 0;
-         enemy_i < Enemy::enemies.size();
-         enemy_i++)
+    for (size_t tower_i = 0;
+            tower_i < Tower::static_towers.size();
+            tower_i++)
     {
-        for (size_t tower_i = 0;
-                tower_i < Tower::static_towers.size();
-                tower_i++)
+        Tower::static_towers.at(tower_i)->shootable_enemies.clear();
+        if (!dynamic_cast<Tower_ring*>( Tower::static_towers.at(tower_i) ) )
         {
-            if (collided(Tower::static_towers.at(tower_i),
-                        Enemy::enemies.at(enemy_i)))
+            for (size_t enemy_i = 0;
+                enemy_i < Enemy::enemies.size();
+                enemy_i++)
             {
-                Tower::static_towers.at(
-                    tower_i)->collision(Enemy::enemies.at(enemy_i));
+                        if (collided(Tower::static_towers.at(tower_i),
+                                    Enemy::enemies.at(enemy_i)))
+                        {
+                            Tower::static_towers.at(
+                                tower_i)->collision(Enemy::enemies.at(enemy_i));
+                        }
             }
         }
     }
@@ -662,6 +693,7 @@ void Game::update_logic()
     }
     check_collision();
     check_collision_towers();
+    fire_towers();
     frame++;
 }
 

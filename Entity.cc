@@ -4,6 +4,7 @@
 #include "Resource_manager.h"
 #include <iostream> // debugg
 #include <cmath> // abs
+#include "Tile.h"
 
 std::ostream& operator<<(std::ostream& os,const Entity & E)
 {
@@ -12,8 +13,25 @@ std::ostream& operator<<(std::ostream& os,const Entity & E)
         << std::to_string(E.getPosition().y);
     return os;
 }
+/* Beware that size, hitbox_radius, movement_speed will be scaled with 
+ * Tile::side_length.
+ */
+Entity::Entity(std::string _texture_file,
+        sf::Vector2f position, sf::Vector2f siz,
+        float hit_rad, sf::Vector2f dir, float mov_spd)
+: sf::Sprite(), 
+    texture_file{_texture_file},
+    texture{Resource_manager::load(_texture_file)},
+    size{(siz*Tile::side_length)}, 
+    hitbox_radius{(hit_rad*Tile::side_length)},
+    direction{dir},
+    movement_speed{(mov_spd*Tile::side_length)}
+{
+    init(position); // size is not needed as argument. 
+}
+
 //void Entity::init(sf::Vector2f position)
-void Entity::init(sf::Vector2f position, sf::Vector2f size)
+void Entity::init(sf::Vector2f position)
 {
     /* sätt utseende */
     setTexture(texture, false);

@@ -10,17 +10,12 @@ class Entity : public sf::Sprite
 public:
     Entity(std::string _texture_file,
            sf::Vector2f position, sf::Vector2f size,
-           float hit_rad, sf::Vector2f dir, float mov_spd)
-           : sf::Sprite(), texture_file{_texture_file},
-           texture{Resource_manager::load(_texture_file)}, size{size}, hitbox_radius{hit_rad}, direction{dir},
-           movement_speed{mov_spd}
-    {
-        init(position, size);
-    }
-    
+           float hit_rad, sf::Vector2f dir, float mov_spd);
+    //Entity(Entity const & other)=default;
     virtual ~Entity()=default;
 
-    void init(sf::Vector2f position, sf::Vector2f size);
+
+    void init(sf::Vector2f position);
 
     sf::Vector2f get_direction();
     void set_direction(sf::Vector2f dir);

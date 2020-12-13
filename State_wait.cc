@@ -23,8 +23,6 @@ void State_wait::handle_input(sf::Event & event)
     {
         if ( event.key.code == sf::Keyboard::P )
         {
-            Tower::shootable_enemies.clear();
-            cout << Tower::shootable_enemies.size() << endl;
             play = true;
         }
     }
@@ -32,7 +30,7 @@ void State_wait::handle_input(sf::Event & event)
 
 void State_wait::update_logic()
 {
-    /* logic */;
+    game.projectile_update_position();
 }
 
 void State_wait::render()

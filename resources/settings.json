@@ -1,0 +1,15 @@
+{   
+    "font" : "resources/fonts/Christmas_Bell.otf",
+    "window" :
+        {
+            "width" : 1280,
+            "height" : 720,
+            "fullscren" : false
+        },
+    "game" :
+        {
+            "hp" : 100,
+            "coins" : 100,
+            "health_texture" : "resources/textures/heart.png"
+        }
+}
