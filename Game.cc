@@ -133,6 +133,14 @@ void Game::load_map(string const & file_entity)
         (*it).second->update_side_length();
     }
 
+    /* update window size */
+    float shop_sizeX = read_shop_width(file_entity);
+    unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
+    unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
+    window.create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
+    // shop.setPosition(window.getSize().x - shop.getSize().x, 0);
+    cout << "window size changed" << endl;
+
     /* set direction of tiles */
     determine_tile_directions();
 }
@@ -231,9 +239,13 @@ void Game::render()
         window.draw(*(*it));
     }
 
+    // render shop
     shop.render(window, wallet);
+
     // render health
     health.render();
+
+    // render wave_manager
     wave_manager.render();
 }
 
@@ -307,6 +319,28 @@ void Game::next_wave()
 int Game::get_current_wave() const
 {
     return wave_manager.get_current_wave();
+}
+
+float Game::read_shop_width(string const & file_entity)
+/* window needs shop_width and shop needs window size.
+   This function gets around the circular dependency */
+{
+    float shop_sizeX;
+
+    ifstream ifs(file_entity);
+    if (ifs.is_open())
+    {
+        json j_data;
+        ifs >> j_data;
+        shop_sizeX = j_data["Shop"]["shop_size"][0];
+        ifs.close();
+    }
+    else
+    {
+        throw invalid_argument("Could not open " + file_entity);
+    }
+
+    return shop_sizeX;
 }
 
 void Game::load_entities(string const & file_entity)
@@ -508,7 +542,7 @@ void Game::init_shop(json const & j_shop)
     string font_name{j_shop["font_name"]};
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
-    sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0};
+    sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     json back_color = j_shop["background_color"];
     sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
     json btn_color = j_shop["btn_color"];

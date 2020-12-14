@@ -5,6 +5,47 @@ using namespace std;
 
 void State_end::init()
 {
+    on_resize();
+}
+
+void State_end::handle_input(sf::Event & event)
+{
+    if ( event.type == sf::Event::KeyPressed )
+    {
+        window.close ();
+    }
+    
+    if ( event.type == sf::Event::Resized )
+    {
+        on_resize();
+    }
+}
+
+void State_end::update_logic()
+{
+    ;
+}
+
+void State_end::render()
+{
+    window.clear();
+
+    /* put stuff to render here */
+    window.draw(background_sprite);
+    window.draw(text1);
+    window.draw(text2);
+    /*                          */
+
+    window.display();
+}
+
+string State_end::get_next_state()
+{
+    return this_state;
+}
+
+void State_end::on_resize()
+{
     /* background */
     background_sprite.setTexture(background_texture, false);
     sf::Vector2f size{background_sprite.getGlobalBounds().width,
@@ -37,35 +78,4 @@ void State_end::init()
 
     text1.setPosition(window_size.x / 2.f, window_size.y / 6.f);
     text2.setPosition(window_size.x / 2.f, window_size.y / 3.f);
-}
-
-void State_end::handle_input(sf::Event & event)
-{
-    if ( event.type == sf::Event::KeyPressed )
-    {
-        window.close ();
-    }
-}
-
-void State_end::update_logic()
-{
-    ;
-}
-
-void State_end::render()
-{
-    window.clear();
-
-    /* put stuff to render here */
-    window.draw(background_sprite);
-    window.draw(text1);
-    window.draw(text2);
-    /*                          */
-
-    window.display();
-}
-
-string State_end::get_next_state()
-{
-    return this_state;
 }

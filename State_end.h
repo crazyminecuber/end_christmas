@@ -18,12 +18,14 @@ public:
     void init();
 
     void handle_input(sf::Event & event) override;
-    void update_logic() override;
-    void render()       override;
+    void update_logic()                  override;
+    void render()                        override;
 
     std::string get_next_state() override;
 
 private:
+    void on_resize();
+    
     sf::RenderWindow & window;
     Game & game;
     std::string this_state{"end"};
