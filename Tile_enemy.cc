@@ -59,6 +59,10 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
             ready_check = true;
         }
     }
+    else if ( enemy->get_direction() == sf::Vector2f{0, 0} )
+    {
+        ready_check = true;
+    }
 
     return ready_check;
 }

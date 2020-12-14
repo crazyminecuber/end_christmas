@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "Enemy_basic.h"
 #include "Enemy_boss.h"
+#include "Wallet.h"
 using namespace std;
 
 TEST_CASE("Hello world")
@@ -16,6 +17,7 @@ TEST_CASE("Hello world")
     CHECK(1 + 1 == 2);
 }
 
+/*
 // TODO: Lägg till test fall för:
 // Att lägga till fiender i enemy-vektorn
 
@@ -146,3 +148,23 @@ TEST_CASE("Tower_basic")
   Tower_basic::prop.dir = v1;
   Tower_basic::prop.mov_spd = 3;
 }
+*/
+
+void t(Wallet & w)
+{
+
+}
+
+TEST_CASE("Wallet")
+{
+
+    Wallet w{1000};
+    w.ui_callback = t;
+    CHECK(w.getCash() == 1000);
+    CHECK(w.take(200));
+    CHECK(w.getCash() == 800);
+    CHECK(!(w.take(2000)));
+    w.add(91);
+    CHECK(w.getCash() == 891);
+}
+

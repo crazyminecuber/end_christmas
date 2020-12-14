@@ -62,6 +62,16 @@ sf::Vector2f Entity::get_direction()
     return direction;
 }
 
+float Entity::get_movement_speed() const
+{
+    return movement_speed;
+}
+
+void Entity::set_movement_speed(float mov_spd)
+{
+    movement_speed = mov_spd;
+}
+
 std::string Entity::get_texture_file() const
 {
     return texture_file;

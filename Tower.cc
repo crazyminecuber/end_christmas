@@ -45,11 +45,12 @@ Tower_basic::Tower_basic(Tower_basic const & other)
 }
 
 //Making aktiv tower
-void Tower_basic::create_active(sf::Vector2f position)
+Tower * Tower_basic::create_active(sf::Vector2f position)
 {
     Tower * t = new Tower_basic{*this};
     t->setPosition(position);
     static_towers.push_back(t);
+    return t;
 }
 
 //Shoot if shootable_enemies and if fire_period
@@ -108,11 +109,12 @@ Tower_ring::Tower_ring(Tower_ring const & other)
 }
 
 //Making aktiv tower
-void Tower_ring::create_active(sf::Vector2f position)
+Tower * Tower_ring::create_active(sf::Vector2f position)
 {
     Tower * t = new Tower_ring{*this};
     t->setPosition(position);
     static_towers.push_back(t);
+    return t;
 }
 
 //Function shoot in the class Tower_ring. Shoots in num_of_projectile number of directions.

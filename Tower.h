@@ -35,7 +35,7 @@ class Tower : public Entity
     ~Tower() = default;
     void collision(Enemy* object);
     virtual void shoot()=0;
-    virtual void create_active(sf::Vector2f position) = 0;
+    virtual Tower * create_active(sf::Vector2f position) = 0;
     void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
 
 
@@ -73,7 +73,7 @@ public:
   ~Tower_basic()=default;
 
   void shoot() override;
-  void create_active(sf::Vector2f position) override;
+  Tower * create_active(sf::Vector2f position) override;
   Entity * select_target();
   //void rotate_to_target(Entity * target_enemy);
   sf::Vector2f aim_direction(Entity * target_enemy);
@@ -102,7 +102,7 @@ public:
 
   void shoot() override;
   static Tower_properties tower_prop;
-  void create_active(sf::Vector2f postion) override;
+  Tower * create_active(sf::Vector2f postion) override;
   static entity_properties entity_prop;
   static int num_projectile_init;
 

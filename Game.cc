@@ -316,55 +316,16 @@ void Game::load_entities(string const & file_entity)
     {
         json j_data;
         ifs >> j_data;
-        init_enemies(j_data["Enemy"]);
         init_projectiles(j_data["Projectile"]);
         init_towers(j_data["Tower"]);
         init_shop(j_data["Shop"]);
-        init_waves(j_data["Waves"]);
+        init_waves(j_data["Waves"], j_data["Enemy"]);
         ifs.close();
     }
-    else 
+    else
     {
         throw invalid_argument("Could not open " + file_entity);
     }
-}
-
- void Game::init_enemies(json const & json_obj)
-{
-    /* position_init */
-    sf::Vector2f tile_enemy_start_position;
-    tile_enemy_start_position = Tile::get_tile_enemy_start()->getPosition() +
-                                sf::Vector2f{(Tile::side_length / 2.f),
-                                             (Tile::side_length / 2.f) };
-    Enemy::position_init = tile_enemy_start_position;
-
-    /* Enemy_basic */
-    json enemy_basic = json_obj["Enemy_basic"];
-    Enemy_basic::life_init = enemy_basic["life_init"];
-    Enemy_basic::reward_init = enemy_basic["reward_init"];
-    Enemy_basic::prop.texture_file = enemy_basic["texture"];
-    sf::Vector2f size_basic;
-    size_basic.x = enemy_basic["size"][0];
-    size_basic.y = enemy_basic["size"][1];
-    Enemy_basic::prop.size = sf::Vector2f{size_basic};
-    Enemy_basic::prop.hit_rad = enemy_basic["hit_rad"];
-    Enemy_basic::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Enemy_basic::prop.mov_spd = enemy_basic["mov_spd"];
-
-    /* Enemy_boss */
-    json enemy_boss = json_obj["Enemy_boss"];
-    Enemy_boss::life_init = enemy_boss["life_init"];
-    Enemy_boss::reward_init = enemy_boss["reward_init"];
-    Enemy_boss::prop.texture_file = enemy_boss["texture"];
-    sf::Vector2f size_boss;
-    size_boss.x = enemy_boss["size"][0];
-    size_boss.y = enemy_boss["size"][1];
-    Enemy_boss::prop.size = sf::Vector2f{size_boss};
-    Enemy_boss::prop.hit_rad = enemy_boss["hit_rad"];
-    Enemy_boss::prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Enemy_boss::prop.mov_spd = enemy_boss["mov_spd"];
-
-    cout << "laddat enemies" << endl;
 }
 
 void Game::init_tiles(string const & file_entity)
@@ -428,20 +389,17 @@ void Game::init_tiles(string const & file_entity)
     // cout << map_tiles["map_dev"]["0"] << endl;
 }
 
-void Game::init_waves(json const & json_obj)
+void Game::init_waves(json const & waves, json const & enemies)
 {
+    sf::Vector2f position_init = Tile::get_tile_enemy_start()->getPosition() +
+                                sf::Vector2f{(Tile::side_length / 2.f),
+                                             (Tile::side_length / 2.f) };
     //Get every wave and add to wave_groups
-    for (const auto& wave : json_obj.items())
+    for (const auto& wave : waves.items())
     {
-        Enemy* enemy;
-        if(wave.value()["enemy"] == "Enemy_basic")
-        {
-            enemy = Enemy::get_new_enemy_basic();
-        }
-        else if(wave.value()["enemy"] == "Enemy_boss")
-        {
-            enemy = Enemy::get_new_enemy_boss();
-        }
+    //Passive enemy for the wave_group
+    Enemy* enemy = Enemy::get_new_enemy(enemies, wave.value()["enemy"], position_init);
+
     wave_manager.add_wave(new Wave_group(
                           wave.value()["start_wave"],
                           wave.value()["end_wave"],
@@ -454,7 +412,6 @@ void Game::init_waves(json const & json_obj)
                           wave.value()["num_of_groups"],
                           wave.value()["num_of_groups_inc"]));
     }
-    // cout << wave.key() << endl;
     wave_manager.init_waves(frame, fps);
 }
 
@@ -500,7 +457,7 @@ void Game::init_projectiles(json const & json_obj)
 
 void Game::init_towers(json const & json_obj)
 {
-    json tower = json_obj["Tower_basic"];
+    json tower = json_obj["Tower_basic1"];
 
     Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_basic::tower_prop.cost_init = tower["cost_init"];
@@ -511,7 +468,28 @@ void Game::init_towers(json const & json_obj)
     Tower_basic::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Tower_basic::entity_prop.mov_spd = 0;
 
-    tower = json_obj["Tower_ring"];
+    tower = json_obj["Tower_ring1"];
+    Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_ring::tower_prop.cost_init = tower["cost_init"];
+    Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
+    Tower_ring::entity_prop.texture_file = tower["sprite_init"];
+    Tower_ring::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
+    Tower_ring::entity_prop.hit_rad = tower["detection_radius_init"];
+    Tower_ring::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Tower_ring::entity_prop.mov_spd = 0;
+    Tower_ring::num_projectile_init = tower["num_projectile_init"];
+
+    tower = json_obj["Tower_basic2"];
+    Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_basic::tower_prop.cost_init = tower["cost_init"];
+    Tower_basic::tower_prop.fire_period_init = tower["fire_period_init"];
+    Tower_basic::entity_prop.texture_file = tower["sprite_init"];
+    Tower_basic::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
+    Tower_basic::entity_prop.hit_rad = tower["detection_radius_init"];
+    Tower_basic::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Tower_basic::entity_prop.mov_spd = 0;
+
+    tower = json_obj["Tower_ring2"];
     Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_ring::tower_prop.cost_init = tower["cost_init"];
     Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
@@ -646,8 +624,8 @@ void Game::check_collision_towers()
     for (size_t tower_i = 0;
             tower_i < Tower::static_towers.size();
             tower_i++)
-    {  
-        Tower::static_towers.at(tower_i)->shootable_enemies.clear(); 
+    {
+        Tower::static_towers.at(tower_i)->shootable_enemies.clear();
         if (!dynamic_cast<Tower_ring*>( Tower::static_towers.at(tower_i) ) )
         {
             for (size_t enemy_i = 0;
@@ -704,14 +682,15 @@ void Game::handle_input(sf::Event & event)
         cout << "Chosen tower in game: " << tw << endl;
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
-            Tile* tile = Tile::get_tile_by_coord(click);
+            Tile_tower * tile = dynamic_cast<Tile_tower*>(Tile::get_tile_by_coord(click));
 
             cout << "Enough money to buy. Tile: " << tile << endl;
-            if(tile!= nullptr &&tile->on_click(tw))
+            if(tile != nullptr && !tile->is_occupied() && tile->on_click(tw))
             {
                 wallet.take(tw->cost);
             }
         }
+
      }
      shop.on_click(click, wallet);
  }
