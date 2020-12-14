@@ -1,80 +1,213 @@
 {
     "Enemy" :
         {
-            "Enemy1" :
+            "elf" :
                 {
                     "type": "Enemy_basic",
-                    "life_init" : 2,
-                    "reward_init" : 30,
+                    "life_init" : 1,
+                    "reward_init" : 2,
                     "texture" : "resources/textures/Elf2.png",
-                    "size": [0.25, 0.25],
+                    "size": [0.75, 0.75],
                     "hit_rad": 0.25,
                     "mov_spd": 0.025
                 },
-            "Enemy2" :
+            "reindeer" :
                 {
                     "type": "Enemy_basic",
-                    "life_init" : 10,
-                    "reward_init" : 70,
-                    "texture" : "resources/textures/Santa.png",
+                    "life_init" : 2,
+                    "reward_init" : 2,
+                    "texture" : "resources/textures/reindeer.png",
                     "size": [0.5, 0.7],
                     "hit_rad": 0.25,
-                    "mov_spd": 0.1
+                    "mov_spd": 0.05
                 },
-            "Enemy3" :
+            "reindeer_expert" :
                 {
-                    "type": "Enemy_boss",
-                    "child": "Enemy1",
-                    "num_of_children": 5,
-                    "life_init" : 2500,
-                    "reward_init" : 70,
+                    "type": "Enemy_basic",
+                    "life_init" : 3,
+                    "reward_init" : 5,
+                    "texture" : "resources/textures/reindeer.png",
+                    "size": [0.7, 0.9],
+                    "hit_rad": 0.25,
+                    "mov_spd": 0.075
+                },
+            "santa" :
+                {
+                    "type": "Enemy_basic",
+                    "life_init" : 40,
+                    "reward_init" : 10,
                     "texture" : "resources/textures/Santa.png",
                     "size": [1,1],
                     "hit_rad": 0.025,
                     "mov_spd": 0.015
                 },
-            "Enemy4" :
+            "santa_medium" :
                 {
                     "type": "Enemy_boss",
-                    "child": "Enemy3",
-                    "num_of_children": 3,
-                    "life_init" : 2000,
-                    "reward_init" : 70,
+                    "child": "santa",
+                    "num_of_children": 5,
+                    "life_init" : 40,
+                    "reward_init" : 10,
+                    "texture" : "resources/textures/Santa.png",
+                    "size": [1.5,1.5],
+                    "hit_rad": 0.025,
+                    "mov_spd": 0.015
+                },
+            "santa_big" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "santa",
+                    "num_of_children": 5,
+                    "life_init" : 150,
+                    "reward_init" : 50,
                     "texture" : "resources/textures/Santa.png",
                     "size": [2,2],
+                    "hit_rad": 0.025,
+                    "mov_spd": 0.015
+                },
+            "sled_elf" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "elf",
+                    "num_of_children": 40,
+                    "life_init" : 50,
+                    "reward_init" : 100,
+                    "texture" : "resources/textures/santaandsled.png",
+                    "size": [3,1.5],
+                    "hit_rad": 0.125,
+                    "mov_spd": 0.01
+                },
+            "sled_reindeer" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "reindeer_expert",
+                    "num_of_children": 100,
+                    "life_init" : 10,
+                    "reward_init" : 70,
+                    "texture" : "resources/textures/santaandsled.png",
+                    "size": [3,1.5],
+                    "hit_rad": 0.125,
+                    "mov_spd": 0.01
+                },
+            "sled_santa" :
+                {
+                    "type": "Enemy_boss",
+                    "child": "santa_big",
+                    "num_of_children": 100,
+                    "life_init" : 10,
+                    "reward_init" : 70,
+                    "texture" : "resources/textures/santaandsled.png",
+                    "size": [3,1.5],
                     "hit_rad": 0.125,
                     "mov_spd": 0.01
                 }
         },
     "Waves" :
         {
-            "Group1" :
+            "elf_group" :
             {
                 "start_wave": 1,
-                "end_wave" : 1,
-                "enemy" : "Enemy1",
+                "end_wave" : 3,
+                "enemy" : "elf",
                 "spawn_delay": 1,
-                "spawn_rate" : 5,
+                "spawn_rate" : 2.5,
                 "num_in_group": 5,
                 "num_in_group_inc": 10,
-                "group_spawn_interval": 5,
-                "num_of_groups": 1,
-                "num_of_groups_inc": 5,
-                "mov_spd_factor": 3
+                "group_spawn_interval": 2,
+                "num_of_groups": 2,
+                "num_of_groups_inc": 1
             },
-            "Group2" :
+            "elf_group_better" :
             {
-                "start_wave": 2,
-                "end_wave" : 3,
-                "enemy" : "Enemy4",
+                "start_wave": 3,
+                "end_wave" : 5,
+                "enemy" : "elf",
+                "spawn_delay": 1,
+                "spawn_rate" : 7,
+                "num_in_group": 5,
+                "num_in_group_inc": 10,
+                "group_spawn_interval": 2,
+                "num_of_groups": 2,
+                "num_of_groups_inc": 1
+            },
+            "reindeer_group" :
+            {
+                "start_wave": 3,
+                "end_wave" : 5,
+                "enemy" : "reindeer",
                 "spawn_delay": 1,
                 "spawn_rate" : 5,
-                "num_in_group": 1,
-                "num_in_group_inc": 1,
+                "num_in_group": 2,
+                "num_in_group_inc": 2,
                 "group_spawn_interval": 5,
                 "num_of_groups": 4,
-                "num_of_groups_inc": 0,
-                "mov_spd_factor": 3
+                "num_of_groups_inc": 0
+            },
+            "reindeer_group_expertA" :
+            {
+                "start_wave": 6,
+                "end_wave" : 6,
+                "enemy" : "reindeer",
+                "spawn_delay": 2,
+                "spawn_rate" : 10,
+                "num_in_group": 5,
+                "num_in_group_inc": 2,
+                "group_spawn_interval": 2,
+                "num_of_groups": 4,
+                "num_of_groups_inc": 0
+            },
+            "reindeer_group_expertB" :
+            {
+                "start_wave": 6,
+                "end_wave" : 6,
+                "enemy" : "reindeer_expert",
+                "spawn_delay": 2,
+                "spawn_rate" : 0.5,
+                "num_in_group": 10,
+                "num_in_group_inc": 0,
+                "group_spawn_interval": 0,
+                "num_of_groups": 1,
+                "num_of_groups_inc": 0
+            }
+            ,
+            "sled_elf_group" :
+            {
+                "start_wave": 7,
+                "end_wave" : 7,
+                "enemy" : "sled_elf",
+                "spawn_delay": 0,
+                "spawn_rate" : 0.5,
+                "num_in_group": 1,
+                "num_in_group_inc": 0,
+                "group_spawn_interval": 0,
+                "num_of_groups": 1,
+                "num_of_groups_inc": 0
+            },
+            "sled_reindeer_group" :
+            {
+                "start_wave": 7,
+                "end_wave" : 7,
+                "enemy" : "sled_reindeer",
+                "spawn_delay": 10,
+                "spawn_rate" : 0.5,
+                "num_in_group": 1,
+                "num_in_group_inc": 0,
+                "group_spawn_interval": 0,
+                "num_of_groups": 1,
+                "num_of_groups_inc": 0
+            },
+            "sled_santa_group" :
+            {
+                "start_wave": 7,
+                "end_wave" : 7,
+                "enemy" : "sled_santa",
+                "spawn_delay": 20,
+                "spawn_rate" : 0.5,
+                "num_in_group": 1,
+                "num_in_group_inc": 0,
+                "group_spawn_interval": 0,
+                "num_of_groups": 1,
+                "num_of_groups_inc": 0
             }
         },
     "Projectile" :
@@ -82,7 +215,7 @@
             "Projectile_basic" :
                 {
                     "frames_to_live" : 1000,
-                    "damage_init" : 1100,
+                    "damage_init" : 1,
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [0.25,0.25],
                     "hit_rad" : 0.125,
@@ -92,7 +225,7 @@
             "Projectile_pierce" :
                 {
                     "frames_to_live" : 3000,
-                    "damage_init" : 1100,
+                    "damage_init" : 1,
                     "texture" : "resources/textures/icicle.png",
                     "size" : [0.5,0.5],
                     "hit_rad" : 0.25,
@@ -112,8 +245,8 @@
                 },
             "Projectile_bomb_blast" :
                 {
-                    "frames_to_live" : 10,
-                    "damage_init" : 11000,
+                    "frames_to_live" : 1,
+                    "damage_init" : 2,
                     "texture" : "resources/textures/Bang.png",
                     "size" : [1,1],
                     "hit_rad" : 0.5,
@@ -157,7 +290,7 @@
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
                     "projectile_init" : "Projectile_bomb",
-                    "cost_init" : 50,
+                    "cost_init" : 150,
                     "detection_radius_init" : 6,
                     "fire_period_init" : 30,
                     "size": [1,1],
@@ -166,7 +299,7 @@
         },
     "Shop" :
         {
-            "start_cash" : 100,
+            "start_cash" : 150,
             "font_name" : "resources/fonts/best_font.ttf",
             "background_color":
             {
