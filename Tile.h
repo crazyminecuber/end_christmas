@@ -24,7 +24,7 @@ public:
     void init();
     void update_side_length();
     sf::Vector2i get_index_position();
-    virtual bool on_click(Tower * tw) {return false;};
+    virtual bool on_click(Tower * tw) {tw->getPosition();return false;};
     virtual void set_direction(sf::Vector2f dir);
     virtual float update_enemy(Enemy* enemy);
 

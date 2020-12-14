@@ -238,7 +238,7 @@ void Game::render()
     }
 
     // render shop
-    shop.render(window, wallet);
+    shop.render(window);
 
     // render health
     health.render();
@@ -280,7 +280,7 @@ bool Game::is_running()
 void Game::enemy_update_direction()
 {
     float damage_dealt{0};
-    for (int i = 0; i < Enemy::enemies.size(); i++)
+    for (size_t i = 0; i < Enemy::enemies.size(); i++)
     {
         // cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
         float damage_this_enemy{0};
@@ -569,7 +569,9 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
     json bcc = j_shop["btn_no_cash_color"];
     sf::Color button_no_cash_color{bcc["r"], bcc["g"], bcc["b"]};
-    shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color,font_name};
+    json fc = j_shop["font_color"];
+    sf::Color font_color{fc["r"], fc["g"], fc["b"]};
+    shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color, font_color, font_name};
     wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
     shop.update_shop_ui(wallet);
     // cout << "wallet in game" << wallet.getCash() << endl;

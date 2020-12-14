@@ -8,13 +8,6 @@
 #include "Enemy.h"
 #include "Projectile.h"
 
-struct Tower_properties
-{
-  Projectile* projectile_init;
-  int cost_init{};
-  int fire_period_init{};
-};
-
 
 class Tower : public Entity
 {
@@ -25,9 +18,9 @@ class Tower : public Entity
     :Entity(texture_file, sf::Vector2f{0,0},
         size, hit_rad,
         sf::Vector2f{1,0}, 0),
+        fire_period{f_period},
         projectile{proj},
-        cost{_cost},
-        fire_period{f_period}{}
+        cost{_cost}{}
     Tower(Tower const & other);
     ~Tower() = default;
     void collision(Enemy* object);
@@ -46,7 +39,7 @@ class Tower : public Entity
     int fire_angle;
 
     Projectile * projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren? (Abstrakt klass går ej att instansiera, bästa jag vet är att använda unique_ptr, men kräver en del jobb)
-  public:
+ public:
     int cost{};
 };
 
