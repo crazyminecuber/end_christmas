@@ -457,7 +457,7 @@ void Game::init_projectiles(json const & json_obj)
 
 void Game::init_towers(json const & json_obj)
 {
-    json tower = json_obj["Tower_basic"];
+    json tower = json_obj["Tower_basic1"];
 
     Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_basic::tower_prop.cost_init = tower["cost_init"];
@@ -468,7 +468,28 @@ void Game::init_towers(json const & json_obj)
     Tower_basic::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
     Tower_basic::entity_prop.mov_spd = 0;
 
-    tower = json_obj["Tower_ring"];
+    tower = json_obj["Tower_ring1"];
+    Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_ring::tower_prop.cost_init = tower["cost_init"];
+    Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
+    Tower_ring::entity_prop.texture_file = tower["sprite_init"];
+    Tower_ring::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
+    Tower_ring::entity_prop.hit_rad = tower["detection_radius_init"];
+    Tower_ring::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Tower_ring::entity_prop.mov_spd = 0;
+    Tower_ring::num_projectile_init = tower["num_projectile_init"];
+
+    tower = json_obj["Tower_basic2"];
+    Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
+    Tower_basic::tower_prop.cost_init = tower["cost_init"];
+    Tower_basic::tower_prop.fire_period_init = tower["fire_period_init"];
+    Tower_basic::entity_prop.texture_file = tower["sprite_init"];
+    Tower_basic::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
+    Tower_basic::entity_prop.hit_rad = tower["detection_radius_init"];
+    Tower_basic::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
+    Tower_basic::entity_prop.mov_spd = 0;
+
+    tower = json_obj["Tower_ring2"];
     Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
     Tower_ring::tower_prop.cost_init = tower["cost_init"];
     Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
