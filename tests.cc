@@ -44,10 +44,10 @@ TEST_CASE("Projectile_basic")
   Projectile* p3 = new Projectile_basic(v2,v2);
   p3 -> clone(v_dir,v1);
   Projectile* p1 = new Projectile_basic("resources/textures/Santa.png",
-                  v1, v2, 5, v1, 3, 2);
+                  v1, v2, 5, v1, 3, 2, 0);
   Projectile::projectiles.push_back(p1);
   Projectile* p2 = new Projectile_basic("resources/textures/Santa.png",
-                  v1, v2, 6, v1, 7, 9);
+                  v1, v2, 6, v1, 7, 9, 0);
   Projectile::projectiles.push_back(p2);
 
   //Checking vector projectiles and if clone works
@@ -95,10 +95,10 @@ TEST_CASE("Projectile_pierce")
   Projectile* p3 = new Projectile_pierce(v2,v2);
   p3 -> clone(v_dir,v1);
   Projectile* p1 = new Projectile_pierce("resources/textures/icicle1.png",
-                  v1, v2, 5, v1, 3, 2, 2);
+                  v1, v2, 5, v1, 3, 2, 2, 0);
   Projectile::projectiles.push_back(p1);
   Projectile* p2 = new Projectile_pierce("resources/textures/icicle1.png",
-                  v1, v2, 6, v1, 7, 9, 2);
+                  v1, v2, 6, v1, 7, 9, 2, 0);
   Projectile::projectiles.push_back(p2);
 
   //Checking vector projectiles and if clone works
@@ -145,10 +145,10 @@ TEST_CASE("Projectile_bomb")
   Projectile* p3 = new Projectile_bomb(v2,v2);
   p3 -> clone(v_dir,v1);
   Projectile* p1 = new Projectile_bomb("resources/textures/Santa.png",
-                  v1, v2, 5, v1, 3, 2 );
+                  v1, v2, 5, v1, 3, 2, 0 );
   Projectile::projectiles.push_back(p1);
   Projectile* p2 = new Projectile_bomb("resources/textures/Santa.png",
-                  v1, v2, 6, v1, 7, 9);
+                  v1, v2, 6, v1, 7, 9, 0);
   Projectile::projectiles.push_back(p2);
 
   //Checking vector projectiles and if clone works
