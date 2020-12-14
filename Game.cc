@@ -572,8 +572,6 @@ void Game::check_collision()
     // variables to ease readability.
     vector<Enemy*> &enemies = Enemy::enemies;
     vector<Projectile*> &projectiles = Projectile::projectiles;
-    bool enemy_deleted{false};
-    bool projectile_deleted{false};
     Enemy *enemy;
     Projectile *projectile;
 
@@ -595,52 +593,51 @@ void Game::check_collision()
                 {
                     wallet.add(enemy->get_reward());
                     delete enemy;
+                    enemy = nullptr;
                     // swap and pop for increased performance
                     if (enemies.size() > 1)
                     {
                         swap(enemies.at(enemy_i),enemies.back());
                     }
                     enemies.pop_back();
-                    enemy_deleted = true;
                 }
                 // check if projectile should be deleted
                 if (projectile->collision())
                 {
                     delete projectile;
+                    projectile = nullptr;
                     if (projectiles.size() > 1)
                     {
                         swap(projectiles.at(projectile_i),projectiles.back());
                     }
                     projectiles.pop_back();
-                    projectile_deleted = true;
                 }
 
                 /* when true, enemy_i will not get updated. We do this because
                  * enemy_i will have the correct index for the next enemy we
                  * want to check since we did a swap.
                 */
-                if (enemy_deleted)
+                if (!enemy)
                 {
-                    enemy_deleted = false;
-                    projectile_deleted = false;
-                    goto next_enemy;
+                    break;
                 }
                 // same here but for projectile
-                if (projectile_deleted)
+                if (!projectile)
                 {
-                    projectile_deleted = false;
-                    goto next_projectile;
+                    continue;
                 }
 
             }
             projectile_i++;
-            next_projectile:
-            // statement needed after goto label
-            cout << "";
         }
-        enemy_i++;
-        next_enemy:
-        cout << "";
+        /* if enemy is not nullptr no enemy has been deleted and we want to 
+         * update enemy_i
+         */        
+        if (enemy)
+        {
+            enemy_i++;
+        }
+        
     }
 }
 
