@@ -425,6 +425,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_basic::prop.hit_rad = proj["hit_rad"];
     Projectile_basic::prop.dir = sf::Vector2f(0,0);
     Projectile_basic::prop.mov_spd = proj["mov_spd"];
+    Projectile_basic::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_pierce"];
     Projectile_pierce::frames_to_live = proj["frames_to_live"];
@@ -435,6 +436,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_pierce::prop.dir = sf::Vector2f(0,0);
     Projectile_pierce::prop.mov_spd = proj["mov_spd"];
     Projectile_pierce::nr_pierce_init = proj["nr_pierce_init"];
+    Projectile_pierce::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_bomb"];
     Projectile_bomb::frames_to_live = proj["frames_to_live"];
@@ -444,6 +446,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_bomb::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb::prop.dir = sf::Vector2f(0,0);
     Projectile_bomb::prop.mov_spd = proj["mov_spd"];
+    Projectile_bomb::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_bomb_blast"];
     Projectile_bomb_blast::frames_to_live = proj["frames_to_live"];
@@ -453,6 +456,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_bomb_blast::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb_blast::prop.dir = sf::Vector2f(0,0);
     Projectile_bomb_blast::prop.mov_spd = proj["mov_spd"];
+    Projectile_bomb_blast::rotation_offset_init = proj["rotation_offset"];
 }
 
 void Game::init_towers(json const & json_obj)
