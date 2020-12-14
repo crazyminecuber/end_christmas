@@ -22,7 +22,7 @@ bool Projectile::outside_screen(sf::Vector2u const & window_size)
 }
 bool Projectile::update_position(sf::Vector2u const & window_size)
 {
-    if (Game::get_frame() < frame_to_die || outside_screen(window_size))
+    if (Game::get_frame() <= frame_to_die && !(outside_screen(window_size)))
     {
         move(direction*movement_speed);
         return true;
