@@ -138,8 +138,6 @@ void Game::load_map(string const & file_entity)
     unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
     unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
     window.create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
-    // shop.setPosition(window.getSize().x - shop.getSize().x, 0);
-    cout << "window size changed" << endl;
 
     /* set direction of tiles */
     determine_tile_directions();
@@ -559,7 +557,7 @@ void Game::init_shop(json const & j_shop)
     shop = Tower_shop{passive_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color,font_name};
     wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
     shop.update_shop_ui(wallet);
-    cout << "wallet in game" << wallet.getCash() << endl;
+    // cout << "wallet in game" << wallet.getCash() << endl;
 }
 
 int Game::get_frame()
@@ -720,12 +718,12 @@ void Game::handle_input(sf::Event & event)
      if(!shop.getGlobalBounds().contains(click))
      {
         Tower * tw = shop.get_chosen_tower();
-        cout << "Chosen tower in game: " << tw << endl;
+        // cout << "Chosen tower in game: " << tw << endl;
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
             Tile_tower * tile = dynamic_cast<Tile_tower*>(Tile::get_tile_by_coord(click));
 
-            cout << "Enough money to buy. Tile: " << tile << endl;
+            // cout << "Enough money to buy. Tile: " << tile << endl;
             if(tile != nullptr && !tile->is_occupied() && tile->on_click(tw))
             {
                 wallet.take(tw->cost);

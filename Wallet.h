@@ -11,7 +11,7 @@ public:
     Wallet(){};
     Wallet(int starting_cash): cash{starting_cash}
     {
-        std::cout << "made a wallet" << std::endl;
+        std::cout << "Wallet created" << std::endl;
 
     }
 
@@ -25,4 +25,3 @@ private:
 };
 
 #endif //ENTITY_H
-

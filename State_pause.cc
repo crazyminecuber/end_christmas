@@ -76,5 +76,4 @@ void State_pause::on_resize()
     shader.setPosition(0, 0);
 
     text_pause.setPosition(window_size.x / 2.f, window_size.y / 2.f);
-    cout << "text position: " << text_pause.getPosition().x << ", " << text_pause.getPosition().y << endl;
 }
