@@ -39,7 +39,7 @@ Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
 Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
 {
     // Return chosen_tower to shop.
-    cout << "wallet.getCash()" << wallet.getCash() << endl;
+    // cout << "wallet.getCash()" << wallet.getCash() << endl;
     if (wallet.getCash() < tower->cost)
     {
        not_enough_cash();
@@ -57,7 +57,7 @@ Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
 sf::Text Tower_button::make_pricetag(Tower * tw, std::string font_name)
 {
     string cost {to_string(tw->cost)};
-    cout << "cost: " << cost << endl;
+    // cout << "cost: " << cost << endl;
     return Text{cost, Resource_manager::load_font(font_name)}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
 }
 

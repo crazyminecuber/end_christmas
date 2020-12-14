@@ -13,7 +13,7 @@ void Wave_manager::init_waves(int current_frame, int fps)
 {
     generate_wave(current_frame, fps);
     calculate_win_wave();
-    std::cout << win_wave << std::endl;
+    // std::cout << win_wave << std::endl;
 }
 
 void Wave_manager::next_wave(int current_frame, int fps)
@@ -49,7 +49,8 @@ void Wave_manager::init()
     /* text */
     if ( !font->loadFromFile("resources/fonts/font.ttf") )
     {
-     std::cout << "Kunde inte ladda font för wave_manager" << std::endl;
+        std::cout << "Error: could not load font " << font
+                  << " in wave_manager" << std::endl;
     }
     sf::Vector2f text_pos{0,50};
     float text_size{50};
@@ -71,7 +72,7 @@ void Wave_manager::init()
 
 void Wave_manager::generate_wave(int current_frame, int fps)
 {
-    std::cout << "generate wave" << std::endl;
+    // std::cout << "generate wave" << std::endl;
     add_active_wave_groups();
     remove_inactive_wave_groups();
     for (auto it{begin(active_wave_groups)}; it != end(active_wave_groups); ++it)
@@ -109,7 +110,7 @@ void Wave_manager::add_active_wave_groups()
     {
         if(current_wave == (*it)->get_start_wave())
         {
-            std::cout << "Add wave: " << (*it)->get_start_wave() << std::endl;
+            // std::cout << "Add wave: " << (*it)->get_start_wave() << std::endl;
             active_wave_groups.push_back((*it));
         }
     }
@@ -121,7 +122,7 @@ void Wave_manager::remove_inactive_wave_groups()
     {
         if(current_wave == (*it)->get_end_wave() + 1)
         {
-            std::cout << "Erase wave" << std::endl;
+            // std::cout << "Erase wave" << std::endl;
             active_wave_groups.erase(it);
         }
     }

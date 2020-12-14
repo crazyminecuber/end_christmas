@@ -133,6 +133,12 @@ void Game::load_map(string const & file_entity)
         (*it).second->update_side_length();
     }
 
+    /* update window size */
+    float shop_sizeX = read_shop_width(file_entity);
+    unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
+    unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
+    window.create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
+
     /* set direction of tiles */
     determine_tile_directions();
 }
@@ -231,9 +237,13 @@ void Game::render()
         window.draw(*(*it));
     }
 
+    // render shop
     shop.render(window, wallet);
+
     // render health
     health.render();
+
+    // render wave_manager
     wave_manager.render();
 }
 
@@ -337,6 +347,28 @@ void Game::next_wave()
 int Game::get_current_wave() const
 {
     return wave_manager.get_current_wave();
+}
+
+float Game::read_shop_width(string const & file_entity)
+/* window needs shop_width and shop needs window size.
+   This function gets around the circular dependency */
+{
+    float shop_sizeX;
+
+    ifstream ifs(file_entity);
+    if (ifs.is_open())
+    {
+        json j_data;
+        ifs >> j_data;
+        shop_sizeX = j_data["Shop"]["shop_size"][0];
+        ifs.close();
+    }
+    else
+    {
+        throw invalid_argument("Could not open " + file_entity);
+    }
+
+    return shop_sizeX;
 }
 
 void Game::load_entities(string const & file_entity)
@@ -455,6 +487,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_basic::prop.hit_rad = proj["hit_rad"];
     Projectile_basic::prop.dir = sf::Vector2f(0,0);
     Projectile_basic::prop.mov_spd = proj["mov_spd"];
+    Projectile_basic::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_pierce"];
     Projectile_pierce::frames_to_live = proj["frames_to_live"];
@@ -465,6 +498,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_pierce::prop.dir = sf::Vector2f(0,0);
     Projectile_pierce::prop.mov_spd = proj["mov_spd"];
     Projectile_pierce::nr_pierce_init = proj["nr_pierce_init"];
+    Projectile_pierce::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_bomb"];
     Projectile_bomb::frames_to_live = proj["frames_to_live"];
@@ -474,6 +508,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_bomb::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb::prop.dir = sf::Vector2f(0,0);
     Projectile_bomb::prop.mov_spd = proj["mov_spd"];
+    Projectile_bomb::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_bomb_blast"];
     Projectile_bomb_blast::frames_to_live = proj["frames_to_live"];
@@ -483,6 +518,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_bomb_blast::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb_blast::prop.dir = sf::Vector2f(0,0);
     Projectile_bomb_blast::prop.mov_spd = proj["mov_spd"];
+    Projectile_bomb_blast::rotation_offset_init = proj["rotation_offset"];
 }
 
 void Game::init_towers(json const & json_obj)
@@ -538,7 +574,7 @@ void Game::init_shop(json const & j_shop)
     string font_name{j_shop["font_name"]};
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
-    sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0};
+    sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     json back_color = j_shop["background_color"];
     sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
     json btn_color = j_shop["btn_color"];
@@ -551,7 +587,7 @@ void Game::init_shop(json const & j_shop)
     shop = Tower_shop{passive_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color,font_name};
     wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
     shop.update_shop_ui(wallet);
-    cout << "wallet in game" << wallet.getCash() << endl;
+    // cout << "wallet in game" << wallet.getCash() << endl;
 }
 
 int Game::get_frame()
@@ -712,12 +748,12 @@ void Game::handle_input(sf::Event & event)
      if(!shop.getGlobalBounds().contains(click))
      {
         Tower * tw = shop.get_chosen_tower();
-        cout << "Chosen tower in game: " << tw << endl;
+        // cout << "Chosen tower in game: " << tw << endl;
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
             Tile_tower * tile = dynamic_cast<Tile_tower*>(Tile::get_tile_by_coord(click));
 
-            cout << "Enough money to buy. Tile: " << tile << endl;
+            // cout << "Enough money to buy. Tile: " << tile << endl;
             if(tile != nullptr && !tile->is_occupied() && tile->on_click(tw))
             {
                 wallet.take(tw->cost);

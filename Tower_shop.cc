@@ -27,7 +27,7 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
     sf::IntRect area{int(getPosition().x),int(getPosition().y) + 130, int(siz.x), 400};
     generate_shop_grid(nr_columns, area, btn_color, btn_select_color, btn_no_cash_color, font_name);
 
-    cout << "made a shop" << endl;
+    cout << "Shop created" << endl;
 }
 
 // Make a button for every tower
@@ -86,7 +86,7 @@ void Tower_shop::render(sf::RenderWindow & window, Wallet wallet)
 // Can probably be done way more efficiently
 void Tower_shop::on_click(sf::Vector2f click, Wallet & wallet)
 {
-    cout << "nullptr"<<endl;
+    // cout << "nullptr"<<endl;
     set_chosen_tower(nullptr);
     Tower * tw{};
     for (auto b = buttons.begin(); b != buttons.end(); b++)
@@ -101,12 +101,12 @@ void Tower_shop::on_click(sf::Vector2f click, Wallet & wallet)
 
 void Tower_shop::set_chosen_tower(Tower * tw)
 {
-    cout << "set chosen_tower to: " << tw << endl;
+    // cout << "set chosen_tower to: " << tw << endl;
     chosen_tower = tw;
 }
 Tower * Tower_shop::get_chosen_tower()
 {
-    cout << "returning chosen tower: " << chosen_tower << endl;
+    // cout << "returning chosen tower: " << chosen_tower << endl;
     return chosen_tower;
 }
 
