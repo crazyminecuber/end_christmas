@@ -123,46 +123,45 @@
         },
     "Tower" :
         {
-            "Tower_basic1" :
-                {
+            "Tower_basics" :
+            [{
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_pierce",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 5,
-                    "fire_period_init" : 60,
+                    "fire_period_init" : 100,
                     "size": [1,1]
                 },
-            "Tower_basic2" :
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_basic",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
-                    "cost_init" : 50,
+                    "cost_init" : 75,
                     "detection_radius_init" : 6,
-                    "fire_period_init" : 60,
+                    "fire_period_init" : 10,
                     "size": [1,1]
-                },
-            "Tower_ring1" :
-                {
+                }],
+
+            "Tower_rings" :
+            [{
                     "sprite_init" : "resources/textures/tower_ring.png",
                     "projectile_init" : "Projectile_pierce",
                     "cost_init" : 50,
                     "detection_radius_init" : 5,
-                    "fire_period_init" : 30,
+                    "fire_period_init" : 100,
                     "size": [1,1],
                     "num_projectile_init": 6
                 },
-            "Tower_ring2" :
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
                     "projectile_init" : "Projectile_bomb",
-                    "cost_init" : 50,
+                    "cost_init" : 75,
                     "detection_radius_init" : 6,
-                    "fire_period_init" : 30,
+                    "fire_period_init" : 10,
                     "size": [1,1],
                     "num_projectile_init": 8
-                }
+                }]
         },
     "Shop" :
         {
