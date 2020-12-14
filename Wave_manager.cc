@@ -18,11 +18,13 @@ void Wave_manager::init_waves(int current_frame, int fps)
 
 void Wave_manager::next_wave(int current_frame, int fps)
 {
-
-    ++current_wave;
-    std::cout << "next wave: " << current_wave << std::endl;
-    update_text_waves();
-    generate_wave(current_frame, fps);
+    if(wave_is_finished())
+    {
+        ++current_wave;
+        std::cout << "next wave: " << current_wave << std::endl;
+        update_text_waves();
+        generate_wave(current_frame, fps);
+    }
 }
 
 bool Wave_manager::wave_is_finished()
@@ -32,7 +34,7 @@ bool Wave_manager::wave_is_finished()
 
 bool Wave_manager::player_has_won()
 {
-    return (current_wave == win_wave);
+    return ((current_wave == win_wave) && wave_is_finished());
 }
 
 void Wave_manager::render()
@@ -88,7 +90,7 @@ void Wave_manager::calculate_win_wave()
             last_wave = (*it)->get_end_wave();
         }
     }
-    win_wave = last_wave + 1;
+    win_wave = last_wave;
 }
 
 void Wave_manager::add_wave(Wave_group* wave_group)
