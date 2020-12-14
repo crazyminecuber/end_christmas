@@ -24,9 +24,6 @@ bool Projectile::update_position(sf::Vector2u const & window_size)
 {
     if (Game::get_frame() <= frame_to_die && !(outside_screen(window_size)))
     {
-        cout<< "move" << (direction*movement_speed).x <<endl;
-        cout<< "dir" << direction.x <<endl;
-        cout<< "mov_spd" << movement_speed <<endl;
         move(direction*movement_speed);
         return true;
     }
@@ -65,9 +62,7 @@ Projectile_basic::Projectile_basic(sf::Vector2f position,sf::Vector2f direction)
     damage_init,
     rotation_offset_init
   )
-{
-  cout << "mov_spd in con" << movement_speed << endl;
-}
+{}
 
 //Copy-constructor, sets frame_to_die
 Projectile_basic::Projectile_basic(Projectile_basic const& other)
