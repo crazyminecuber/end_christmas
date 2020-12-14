@@ -92,7 +92,7 @@
                 {
                     "frames_to_live" : 3000,
                     "damage_init" : 1100,
-                    "texture" : "resources/textures/icicle.png",
+                    "texture" : "resources/textures/icicle1.png",
                     "size" : [0.5,0.5],
                     "hit_rad" : 0.25,
                     "mov_spd" : 0.08,
