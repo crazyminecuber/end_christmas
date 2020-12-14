@@ -8,18 +8,22 @@
 class State_menu : public State
 {
 public:
-    State_menu(sf::RenderWindow & win, Game & game, const std::string & title,const std::string & entity_file);
+    State_menu(sf::RenderWindow & win,
+               Game & game,
+               const std::string & title,
+               const std::string & entity_file);
 
     void handle_input(sf::Event & event) override;
-    void update_logic() override;
-    void render()       override;
+    void update_logic()                  override;
+    void render()                        override;
 
     std::string get_next_state() override;
 
 private:
     void handle_click(sf::Vector2f mouse_pos);
     void check_hover();
-    void window_calculations();
+    // void window_calculations1();
+    void on_resize();
     sf::RenderWindow & window;
     Game & game;
 

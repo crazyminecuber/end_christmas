@@ -7,7 +7,7 @@
                     "life_init" : 2,
                     "reward_init" : 30,
                     "texture" : "resources/textures/Elf2.png",
-                    "size": [0.5, 0.7],
+                    "size": [0.25, 0.25],
                     "hit_rad": 0.25,
                     "mov_spd": 0.025
                 },
@@ -25,25 +25,25 @@
                 {
                     "type": "Enemy_boss",
                     "child": "Enemy1",
-                    "num_of_children": 3,
-                    "life_init" : 10,
+                    "num_of_children": 5,
+                    "life_init" : 2500,
                     "reward_init" : 70,
-                    "texture" : "resources/textures/heart.png",
-                    "size": [0.5,0.5],
+                    "texture" : "resources/textures/Santa.png",
+                    "size": [1,1],
                     "hit_rad": 0.025,
-                    "mov_spd": 0.025
+                    "mov_spd": 0.015
                 },
             "Enemy4" :
                 {
                     "type": "Enemy_boss",
                     "child": "Enemy3",
-                    "num_of_children": 5,
-                    "life_init" : 10,
+                    "num_of_children": 3,
+                    "life_init" : 2000,
                     "reward_init" : 70,
                     "texture" : "resources/textures/Santa.png",
-                    "size": [0.5,0.5],
+                    "size": [2,2],
                     "hit_rad": 0.125,
-                    "mov_spd": 0.025
+                    "mov_spd": 0.01
                 }
         },
     "Waves" :
@@ -51,29 +51,29 @@
             "Group1" :
             {
                 "start_wave": 1,
-                "end_wave" : 200,
-                "enemy" : "Enemy4",
+                "end_wave" : 1,
+                "enemy" : "Enemy1",
                 "spawn_delay": 1,
-                "spawn_rate" : 10,
-                "num_in_group": 1,
-                "num_in_group_inc": 0,
-                "group_spawn_interval": 1,
+                "spawn_rate" : 5,
+                "num_in_group": 5,
+                "num_in_group_inc": 10,
+                "group_spawn_interval": 5,
                 "num_of_groups": 1,
-                "num_of_groups_inc": 1,
+                "num_of_groups_inc": 5,
                 "mov_spd_factor": 3
             },
             "Group2" :
             {
-                "start_wave": 1,
-                "end_wave" : 200,
-                "enemy" : "Enemy1",
+                "start_wave": 2,
+                "end_wave" : 3,
+                "enemy" : "Enemy4",
                 "spawn_delay": 1,
-                "spawn_rate" : 10,
+                "spawn_rate" : 5,
                 "num_in_group": 1,
-                "num_in_group_inc": 0,
-                "group_spawn_interval": 1,
-                "num_of_groups": 1,
-                "num_of_groups_inc": 1,
+                "num_in_group_inc": 1,
+                "group_spawn_interval": 5,
+                "num_of_groups": 4,
+                "num_of_groups_inc": 0,
                 "mov_spd_factor": 3
             }
         },
@@ -86,6 +86,7 @@
                     "texture" : "resources/textures/Snowball.png",
                     "size" : [0.25,0.25],
                     "hit_rad" : 0.125,
+                    "rotation_offset" : 0,
                     "mov_spd" : 0.1
                 },
             "Projectile_pierce" :
@@ -96,6 +97,7 @@
                     "size" : [0.5,0.5],
                     "hit_rad" : 0.25,
                     "mov_spd" : 0.08,
+                    "rotation_offset" : -90,
                     "nr_pierce_init" : 0
                 },
             "Projectile_bomb" :
@@ -105,6 +107,7 @@
                     "texture" : "resources/textures/Christmas_cracker.png",
                     "size" : [0.5, 0.5],
                     "hit_rad" : 0.25,
+                    "rotation_offset" : 0,
                     "mov_spd" : 0.08
                 },
             "Projectile_bomb_blast" :
@@ -114,6 +117,7 @@
                     "texture" : "resources/textures/Bang.png",
                     "size" : [1,1],
                     "hit_rad" : 0.5,
+                    "rotation_offset" : 0,
                     "mov_spd" : 0
                 }
         },

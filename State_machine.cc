@@ -16,7 +16,7 @@ State_machine::State_machine(const string & title,
                              const string & settings_file,
                              const string & entity_file)
     :   window
-        { 
+        {
             ( // comma operator
                 load_settings(settings_file),
                 sf::VideoMode
@@ -24,12 +24,12 @@ State_machine::State_machine(const string & title,
                     settings["window"]["width"],
                     settings["window"]["height"]
                 }
-            ), 
-            title, 
+            ),
+            title,
             sf::Style::Close
         },
         game{window, settings["game"]["health_texture"], settings["game"]["hp"]}
-{   
+{
     states.insert(
         make_pair("menu", new State_menu(window, game, title, entity_file)));
     states.insert(make_pair("wave", new State_wave(window, game)));
@@ -104,6 +104,14 @@ void State_machine::handle_input()
         else
         {
         current_state->handle_input(event);
+        }
+
+        if ( event.type == sf::Event::Resized )
+        {
+            for (std::map<std::string, State*>::iterator it=states.begin(); it!=states.end(); ++it)
+            {
+                (*it).second->handle_input(event);
+            }
         }
     }
 }

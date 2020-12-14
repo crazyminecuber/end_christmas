@@ -33,15 +33,16 @@ void Wave_group::calculate_spawn_frames(int current_frame,float fps)
     int start_frame = spawn_delay * fps + current_frame;
     int enemy_interval = (1/spawn_rate) * fps;
     int enemy_group_interval = group_spawn_interval * fps;
+
     //start_frame and interval is in frames
     for(int g = 0; g < num_of_groups; g++)
     {
         for(int i = 0; i < num_in_group; i++)
         {
             spawn_frames.push_back(start_frame +
-                                   enemy_interval*i +
-                                   enemy_group_interval*g);
+                                   enemy_interval*i);
         }
+        start_frame += enemy_interval * (num_in_group-1) + enemy_group_interval;
     }
 }
 
@@ -55,7 +56,7 @@ void Wave_group::spawn_enemies(int frame)
     // same as current frame
     {
         spawn_frames.pop_front();
-        Enemy::create_enemy_by_obj(enemy);
+        Enemy::create_enemy_by_obj(enemy->clone());
     }
 }
 

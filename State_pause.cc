@@ -4,13 +4,6 @@ using namespace std;
 
 void State_pause::init()
 {
-    /* shader */
-    sf::Vector2f window_size(window.getSize().x,
-                             window.getSize().y);
-    shader.setSize(window_size);
-    shader.setFillColor(sf::Color(0, 0, 0, 140));
-    shader.setPosition(0, 0);
-
     /* text */
     string file{"resources/fonts/Christmas_Bell.otf"};
     if (!font.loadFromFile(file))
@@ -21,8 +14,9 @@ void State_pause::init()
     string str = "Pause";
     text_pause = sf::Text{'('+str+')', font, 100};
     sf::FloatRect bb_pause{text_pause.getGlobalBounds()};
-    text_pause.setOrigin(bb_pause.width  / 2.f, bb_pause.height / 2.f);
-    text_pause.setPosition(window_size.x / 2.f, window_size.y / 2.f);
+    text_pause.setOrigin(bb_pause.width / 2.f, bb_pause.height / 2.f);
+
+    on_resize();
 }
 
 void State_pause::handle_input(sf::Event & event)
@@ -33,6 +27,11 @@ void State_pause::handle_input(sf::Event & event)
         {
             unpause_game = true;
         }
+    }
+
+    if ( event.type == sf::Event::Resized )
+    {
+        on_resize();
     }
 }
 
@@ -65,4 +64,16 @@ string State_pause::get_next_state()
     unpause_game = false;
 
     return return_string;
+}
+
+void State_pause::on_resize()
+{
+    /* shader */
+    sf::Vector2f window_size(window.getSize().x,
+                             window.getSize().y);
+    shader.setSize(window_size);
+    shader.setFillColor(sf::Color(0, 0, 0, 140));
+    shader.setPosition(0, 0);
+
+    text_pause.setPosition(window_size.x / 2.f, window_size.y / 2.f);
 }
