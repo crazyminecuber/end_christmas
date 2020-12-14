@@ -31,6 +31,7 @@ void State_wait::handle_input(sf::Event & event)
 void State_wait::update_logic()
 {
     game.projectile_update_position();
+    game.update_frame();
 }
 
 void State_wait::render()
@@ -49,6 +50,7 @@ std::string State_wait::get_next_state()
     string return_string{this_state};
     if (play)
     {
+        Projectile::projectiles.clear();
         return_string = "wave";
         game.next_wave();
     }
