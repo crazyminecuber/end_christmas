@@ -39,6 +39,7 @@ Projectile::Projectile(Projectile const& other):Entity(other)
 {
   damage = other.damage;
   frame_to_die = other.frame_to_die;
+  rotation_offset = other.rotation_offset;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -71,6 +72,7 @@ Projectile_basic::Projectile_basic(Projectile_basic const& other)
 }
 
 //clone and add direction void clone(sf::Vector2f direction, sf::Vector2f position)
+
 void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_basic* p = new Projectile_basic{*this};
@@ -81,9 +83,9 @@ void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 
 // Returns true if the porjectile should be deleted when collided with an enemy
 bool Projectile_basic::collision()
-    {
-      return true;
-    }
+{
+  return true;
+}
 
 /*----------------------------------------------------------------------------*/
 //Projectile_pierce

@@ -14,6 +14,7 @@ bool Tile_tower::on_click(Tower * tw)
     {
         cout << "Creating tower. Position: " << getPosition().x << " " << getPosition().y << endl;
         tower = tw->create_active(getPosition() + sf::Vector2f{side_length / 2, side_length / 2});
+
         return true;
     }
     return false;

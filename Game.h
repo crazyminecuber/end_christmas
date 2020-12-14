@@ -19,7 +19,7 @@ public:
 	Game(sf::RenderWindow & win, std::string const & file_health_texture, int hp
 		 /*std::string const & shop_file,*/
 		 )
-		 : window{win}, 
+		 : window{win},
 		   health{win, file_health_texture, hp},
 		   wave_manager{win}/*, shop{shop_file}*/
 		 {
@@ -63,7 +63,7 @@ public:
 
 private:
 	sf::RenderWindow & window;
-	Projectile* get_tower_projectile(std::string const & projectile);
+    Projectile * get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	bool collided_bb(Entity const *object1, Entity const *object2);
 	void init_waves(nlohmann::json const & waves, nlohmann::json const & enemies);
