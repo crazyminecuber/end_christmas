@@ -1,12 +1,21 @@
 #include "State_pause.h"
+#include <memory> // shared_ptr
 #include <string>
 using namespace std;
+
+State_pause::State_pause(std::shared_ptr<sf::RenderWindow> _window,
+    std::shared_ptr<Game> _game, 
+    const sf::Font & _font)
+: State(_window, _game, _font)
+{
+    init();
+}
 
 void State_pause::init()
 {
     /* shader */
-    sf::Vector2f window_size(window.getSize().x,
-                             window.getSize().y);
+    sf::Vector2f window_size(window->getSize().x,
+                             window->getSize().y);
     shader.setSize(window_size);
     shader.setFillColor(sf::Color(0, 0, 0, 140));
     shader.setPosition(0, 0);
@@ -43,26 +52,26 @@ void State_pause::update_logic()
 
 void State_pause::render()
 {
-    window.clear();
+    window->clear();
 
     /* put stuff to render here */
-    game.render();
-    window.draw(shader);
-    window.draw(text_pause);
+    game->render();
+    window->draw(shader);
+    window->draw(text_pause);
     /*                          */
 
-    window.display();
+    window->display();
 }
 
-string State_pause::get_next_state()
+int State_pause::get_next_state()
 {
-    string return_string{this_state};
+    int return_value{PAUSE};
     if ( unpause_game )
     {
-        return_string = "wave";
+        return_value = WAVE;
     }
     /* reset variables */
     unpause_game = false;
 
-    return return_string;
+    return return_value;
 }

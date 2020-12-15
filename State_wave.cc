@@ -1,14 +1,17 @@
 #include "State_wave.h"
+#include <memory> // shared_ptr
 #include <iostream> // debugg
 using namespace std;
-void State_wave::init()
-{
-    //game.create_1_enemy_basic();
-}
+
+State_wave::State_wave(std::shared_ptr<sf::RenderWindow> _window, 
+        std::shared_ptr<Game> _game,
+    const sf::Font & _font)
+: State(_window, _game, _font)
+{}
 
 void State_wave::handle_input(sf::Event & event)
 {
-    game.handle_input(event);
+    game->handle_input(event);
     if ( event.type == sf::Event::KeyPressed )
     {
         if ( event.key.code == sf::Keyboard::Escape )
@@ -20,34 +23,34 @@ void State_wave::handle_input(sf::Event & event)
 
 void State_wave::update_logic()
 {
-    game.update_logic();
+    game->update_logic();
 }
 
 void State_wave::render()
 {
-    window.clear();
+    window->clear();
 
-    game.render();
+    game->render();
 
-    window.display();
+    window->display();
 }
 
-string State_wave::get_next_state()
+int State_wave::get_next_state()
 {
-    string return_string{this_state};
-    if ( game.get_health() <= 0)
+    int return_value{WAVE};
+    if ( game->get_health() <= 0)
     {
-        return_string = "end";
+        return_value = END;
     }
     else if ( pause_game )
     {
-        return_string = "pause";
+        return_value = PAUSE;
     }
-    else if ( game.wave_complete() )
+    else if ( game->wave_complete() )
     {
-        return_string = "wait";
+        return_value = WAIT;
     }
     /* reset variables */
     pause_game = false;
-    return return_string;
+    return return_value;
 }

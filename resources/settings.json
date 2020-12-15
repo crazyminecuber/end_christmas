@@ -11,5 +11,15 @@
             "hp" : 100,
             "coins" : 100,
             "health_texture" : "resources/textures/heart.png"
+        },
+    "menu" :
+        {
+            "background" : "resources/textures/background_start_menu.png",
+            "welcome_text" : "Select map to start game",
+            "title" : "(Kill Santa)"
+        },
+    "end" :
+        {
+            "background" : "resources/textures/background_start_menu.png"
         }
 }

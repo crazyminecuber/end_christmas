@@ -1,7 +1,8 @@
 #ifndef STATE_MACHINE_H
 #define STATE_MACHINE_H
 #include <SFML/Graphics.hpp>
-#include <map>
+#include <unordered_map>
+#include <memory> // shared_ptr
 #include <string>
 #include "State.h"
 #include "Game.h"
@@ -32,20 +33,20 @@ private:
 
     double fps{60};
 
-    sf::RenderWindow window;
+    std::shared_ptr<sf::RenderWindow> window;
 
-    Game game;
+    std::shared_ptr<Game> game;
 
-    State* current_state;
+    int current_state;
 
-    std::map<std::string, State*> states;
+    std::unordered_map<int, std::unique_ptr<State>> states;
 
     bool _running{true};
 
     void throttle(double fps, sf::Clock & clock);
 
     // Changes next_state_ptr to states.at(state)
-    void set_state(std::string const & state);
+    void set_state(int state);
 
     // Gets the event and passes it over to the state
     void handle_input();

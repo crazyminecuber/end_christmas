@@ -12,38 +12,47 @@
 using namespace std;
 using json = nlohmann::json;
 
-State_machine::State_machine(const string & title,
-                             const string & settings_file,
-                             const string & entity_file)
-    :   window
-        { 
-            ( // comma operator
-                load_settings(settings_file),
-                sf::VideoMode
-                {
-                    settings["window"]["width"],
-                    settings["window"]["height"]
-                }
+State_machine::State_machine(const string &title,
+                             const string &settings_file,
+                             const string &entity_file)
+    :   window{make_shared<sf::RenderWindow>( 
+            (load_settings(settings_file),  // comma operator
+             sf::VideoMode
+                {settings["window"]["width"],
+                 settings["window"]["height"]}
             ), 
             title, 
             sf::Style::Close
-        },
-        game{window, settings["game"]["health_texture"], settings["game"]["hp"]}
+        )},
+        game{make_shared<Game>(
+                window, 
+                settings["game"]["health_texture"], 
+                settings["game"]["hp"] ) }
 {   
+    game->init_tiles(entity_file);
+    sf::Font font{Resource_manager::load_font(settings["font"])};
     states.insert(
-        make_pair("menu", new State_menu(window, game, title, entity_file)));
-    states.insert(make_pair("wave", new State_wave(window, game)));
-    states.insert(make_pair("wait", new State_wait(window, game)));
-    states.insert(make_pair("pause", new State_pause(window, game)));
-    states.insert(make_pair("end", new State_end(window, game)));
+        make_pair(MENU, 
+            make_unique<State_menu>(window, game, font, settings["menu"]))
+        );
+    states.insert(
+        make_pair(WAVE, 
+            make_unique<State_wave>(window, game, font))
+        );
+    states.insert(
+        make_pair(WAIT,
+            make_unique<State_wait>(window, game, font))
+        );
+    states.insert(make_pair(PAUSE, make_unique<State_pause>(window, game, font)));
+    states.insert(make_pair(END, make_unique<State_end>(window, game, font, settings["end"])));
 
     //set initial state
-    current_state = states.at("menu");
+    current_state = MENU;
 }
 
 bool State_machine::running()
 {
-    return _running && window.isOpen();
+    return _running && window->isOpen();
 }
 
 void State_machine::run()
@@ -53,11 +62,11 @@ void State_machine::run()
     {
         handle_input();
 
-        current_state->update_logic();
+        states.at(current_state)->update_logic();
 
-        set_state(current_state->get_next_state());
+        states.at(current_state)->render();
 
-        current_state->render();
+        current_state = states.at(current_state)->get_next_state();
 
         throttle(fps, clock);
     }
@@ -86,24 +95,19 @@ void State_machine::throttle(const double fps, sf::Clock & clock)
     clock.restart();
 }
 
-void State_machine::set_state(string const & state)
-{
-    current_state = states.at(state);
-}
-
 void State_machine::handle_input()
 {
     sf::Event event;
 
-    while (window.pollEvent(event))
+    while (window->pollEvent(event))
     {
         if ( event.type == sf::Event::Closed )
         {
-            window.close ();
+            window->close ();
         }
         else
         {
-        current_state->handle_input(event);
+        states.at(current_state)->handle_input(event);
         }
     }
 }
@@ -111,5 +115,5 @@ void State_machine::handle_input()
 void State_machine::quit()
 {
     // what more?
-    window.close();
+    window->close();
 }
