@@ -8,9 +8,9 @@
 class Tile_enemy_start : public Tile_enemy
 {
 public:
-    Tile_enemy_start(std::string texture_file, sf::RenderWindow const& win,
+    Tile_enemy_start(std::string texture_file,
                sf::Vector2i index_pos)
-    : Tile_enemy(texture_file, win, index_pos)
+    : Tile_enemy(texture_file, index_pos)
     {}
 
     float update_enemy(Enemy* enemy) override;

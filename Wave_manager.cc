@@ -39,8 +39,8 @@ bool Wave_manager::player_has_won()
 
 void Wave_manager::render()
 {
-    window.draw(background);
-    window.draw(text_wave);
+    window->draw(background);
+    window->draw(text_wave);
 }
 
 //Private

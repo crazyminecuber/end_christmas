@@ -44,9 +44,9 @@ void Health::init()
 
 void Health::render()
 {
-    window.draw(background);
-    window.draw(sprite_heart);
-    window.draw(text_health);
+    window->draw(background);
+    window->draw(sprite_heart);
+    window->draw(text_health);
 }
 
 void Health::update_text_health()

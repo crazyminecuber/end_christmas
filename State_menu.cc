@@ -1,38 +1,47 @@
 #include "State_menu.h"
+#include <memory> // shared_ptr
 #include "Resource_manager.h"
+#include "json.hpp"
 #include <iostream> // debugg
 
 using namespace std;
+using json = nlohmann::json;
 
-State_menu::State_menu(sf::RenderWindow & win, Game & game, const string & title, const string & entity_file)
-    :   window{win}, game{game},
+/* expects json object settings_menu to have the following:
+ * ____________________________________________________________
+ * key:                     | value type:   | value:
+ * "background"             | string        | source to image
+ * "title"                  | string        | title of game
+ * "welcome_text"           | string        | message to player
+ * ____________________________________________________________
+ */
+State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
+        std::shared_ptr<Game> _game, 
+        const sf::Font & _font,
+        json & settings_menu)
+    :   State(_window, _game, _font),
         background_texture{
             Resource_manager::load(
-                "resources/textures/background_start_menu.png")}
+                settings_menu["background"])}
 {
     /* text */
-    string file{"resources/fonts/Christmas_Bell.otf"};
-    if (!font.loadFromFile(file))
-    {
-        throw invalid_argument("Unable to load " + file);
-    }
+    string tmp_str{settings_menu["title"]};
+    text_title = sf::Text{tmp_str, font, 100};
+    tmp_str = settings_menu["welcome_text"];
+    text = sf::Text{tmp_str, font, 50};
 
-    text_title = sf::Text{'('+title+')', font, 100};
-    text = sf::Text{"Select map to start game", font, 50};
 
-    game.init_tiles(entity_file);
-
-    std::map<string, map<string, string>>::iterator it = game.maps.begin();
-    text_map_1 = sf::Text{game.maps[(*it).first]["display_name"], font, 50};
+    std::map<string, map<string, string>>::iterator it = game->maps.begin();
+    text_map_1 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
     map1 = (*it).first;
     it++;
-    text_map_2 = sf::Text{game.maps[(*it).first]["display_name"], font, 50};
+    text_map_2 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
     map2 = (*it).first;
     it++;
-    text_map_3 = sf::Text{game.maps[(*it).first]["display_name"], font, 50};
+    text_map_3 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
     map3 = (*it).first;
     it++;
-    text_map_4 = sf::Text{game.maps[(*it).first]["display_name"], font, 50};
+    text_map_4 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
     map4 = (*it).first;
 
     background_sprite.setTexture(background_texture, false);
@@ -61,67 +70,67 @@ void State_menu::update_logic()
 
 void State_menu::render()
 {
-    window.clear();
+    window->clear();
 
     /* put stuff to render here */
-    window.draw(background_sprite);
+    window->draw(background_sprite);
 
-    window.draw(text_title);
-    window.draw(text);
+    window->draw(text_title);
+    window->draw(text);
 
     if ( hovering_map_1 )
-        window.draw(button_map_1);
+        window->draw(button_map_1);
     if ( hovering_map_2 )
-        window.draw(button_map_2);
+        window->draw(button_map_2);
     if ( hovering_map_3 )
-        window.draw(button_map_3);
+        window->draw(button_map_3);
     if ( hovering_map_4 )
-        window.draw(button_map_4);
+        window->draw(button_map_4);
 
-    window.draw(text_map_1);
-    window.draw(text_map_2);
-    window.draw(text_map_3);
-    window.draw(text_map_4);
+    window->draw(text_map_1);
+    window->draw(text_map_2);
+    window->draw(text_map_3);
+    window->draw(text_map_4);
     /*                          */
 
-    window.display();
+    window->display();
 }
 
-string State_menu::get_next_state()
+int State_menu::get_next_state()
 {
-    string return_string{this_state};
+    int return_value{MENU};
     if ( start_game )
     {
-        game.load_map("entity.json");
-        game.load_entities("entity.json");
-        return_string = "wait";
+        game->load_map("entity.json");
+        game->load_entities("entity.json");
+        return_value = WAIT;
     }
     // reset variables
     start_game = false;
 
-    return return_string;
+    return return_value;
 }
 
 void State_menu::handle_click(sf::Vector2f mouse_pos)
 {
     if ( button_map_1.getGlobalBounds().contains(mouse_pos) )
     {
-        game.set_selected_map(map1);
+        game->set_selected_map(map1);
         start_game = true;
     }
     if ( button_map_2.getGlobalBounds().contains(mouse_pos) )
     {
-        game.set_selected_map(map2);
+        game->set_selected_map(map2);
         start_game = true;
     }
     if ( button_map_3.getGlobalBounds().contains(mouse_pos) )
     {
-        game.set_selected_map(map3);
+        game->set_selected_map(map3);
         start_game = true;
     }
     if ( button_map_4.getGlobalBounds().contains(mouse_pos) )
     {
-        game.set_selected_map(map4);
+        game->set_selected_map(map4);
         start_game = true;
     }
 }
@@ -132,8 +141,8 @@ void State_menu::check_hover()
     hovering_map_2 = false;
     hovering_map_3 = false;
     hovering_map_4 = false;
-    sf::Vector2f mouse_pos(sf::Mouse::getPosition(window).x,
-                           sf::Mouse::getPosition(window).y);
+    sf::Vector2f mouse_pos(sf::Mouse::getPosition(*window).x,
+                           sf::Mouse::getPosition(*window).y);
     if ( button_map_1.getGlobalBounds().contains(mouse_pos) )
         hovering_map_1 = true;
     if ( button_map_2.getGlobalBounds().contains(mouse_pos) )
@@ -149,7 +158,7 @@ void State_menu::on_resize()
     /* text */
     sf::FloatRect bb_title{text_title.getGlobalBounds()};
     sf::FloatRect bb_text{text.getGlobalBounds()};
-    sf::Vector2u window_size{window.getSize()};
+    sf::Vector2u window_size{window->getSize()};
     text_title.setOrigin(bb_title.width  / 2.f, bb_title.height / 2.f);
     text.setOrigin(      bb_text.width   / 2.f, bb_text.height  / 2.f);
 
@@ -160,10 +169,10 @@ void State_menu::on_resize()
     sf::Vector2f size{background_sprite.getGlobalBounds().width,
                       background_sprite.getGlobalBounds().height};
     background_sprite.setOrigin(size.x / 2, size.y / 2);
-    background_sprite.setScale(((-(window.getSize().x * 1.0) / size.x) * background_sprite.getScale().x),
-                               ((  window.getSize().y * 1.0) / size.y) * background_sprite.getScale().y);
-    background_sprite.setPosition(window.getSize().x / 2.f,
-                                  window.getSize().y / 2.f);
+    background_sprite.setScale(((-(window->getSize().x * 1.0) / size.x) * background_sprite.getScale().x),
+                               ((  window->getSize().y * 1.0) / size.y) * background_sprite.getScale().y);
+    background_sprite.setPosition(window->getSize().x / 2.f,
+                                  window->getSize().y / 2.f);
 
     /* map buttons and text*/
     float button_side_length = 250;

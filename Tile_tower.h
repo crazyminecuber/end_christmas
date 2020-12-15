@@ -7,9 +7,9 @@
 class Tile_tower : public Tile
 {
 public:
-    Tile_tower(std::string texture_file, sf::RenderWindow const& win,
+    Tile_tower(std::string texture_file,
                sf::Vector2i index_pos)
-    : Tile(texture_file, win, index_pos)
+    : Tile(texture_file, index_pos)
     {
         init();
     }

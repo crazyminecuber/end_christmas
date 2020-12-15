@@ -2,6 +2,7 @@
 #define WAVE_MANAGER_H
 
 #include <list>
+#include <memory> // shared_ptr
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Wave_group.h"
@@ -10,7 +11,7 @@
 class Wave_manager
 {
 public:
-    Wave_manager(sf::RenderWindow & win)
+    Wave_manager(std::shared_ptr<sf::RenderWindow> win)
     : window{win}, font{new sf::Font}
     {
         init();
@@ -35,7 +36,7 @@ private:
     std::vector<Wave_group*> wave_groups;
     std::vector<Wave_group*> active_wave_groups; //The groups that spawn the current wave
 
-    sf::RenderWindow & window;
+    std::shared_ptr<sf::RenderWindow> window;
     sf::Font* font;
     sf::RectangleShape background;
     sf::Text text_wave;

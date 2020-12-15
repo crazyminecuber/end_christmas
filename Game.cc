@@ -89,27 +89,27 @@ void Game::load_map(string const & file_entity)
             else if ( num == 0 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_nothing(
-                    map_tiles[selected_map]["0"], window, tile_index_pos);
+                    map_tiles[selected_map]["0"], tile_index_pos);
             }
             else if ( num == 1 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_tower(
-                    map_tiles[selected_map]["1"], window, tile_index_pos);
+                    map_tiles[selected_map]["1"], tile_index_pos);
             }
             else if ( num == 2 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_enemy(
-                    map_tiles[selected_map]["2"], window, tile_index_pos);
+                    map_tiles[selected_map]["2"], tile_index_pos);
             }
             else if ( num == 3 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_enemy_start(
-                    map_tiles[selected_map]["3"], window, tile_index_pos);
+                    map_tiles[selected_map]["3"], tile_index_pos);
             }
             else if ( num == 4 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_enemy_end(
-                    map_tiles[selected_map]["4"], window, tile_index_pos);
+                    map_tiles[selected_map]["4"], tile_index_pos);
             }
             else
             {
@@ -127,8 +127,8 @@ void Game::load_map(string const & file_entity)
     // calculate Tile::side_length and change all tiles
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
-    Tile::side_length = std::min(window.getSize().x/tiles_per_col,
-                                 window.getSize().y/tiles_per_row);
+    Tile::side_length = std::min(window->getSize().x/tiles_per_col,
+                                 window->getSize().y/tiles_per_row);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -138,7 +138,7 @@ void Game::load_map(string const & file_entity)
     float shop_sizeX = read_shop_width(file_entity);
     unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
     unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
-    window.create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
+    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
 
     /* set direction of tiles */
     determine_tile_directions();
@@ -216,18 +216,18 @@ void Game::render()
     // render tiles
     for (auto it{begin(Tile::tiles)}; it != end(Tile::tiles); ++it)
     {
-        window.draw(*it->second);
+        window->draw(*it->second);
     }
 
     // render enemies
     for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
     {
-        window.draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it)); // it doesn't make sense to me either but it works
     }
 
     for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
     {
-        window.draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it)); // it doesn't make sense to me either but it works
     }
 
     //render projectiles
@@ -235,11 +235,11 @@ void Game::render()
          it != end(Projectile::projectiles);
          ++it)
     {
-        window.draw(*(*it));
+        window->draw(*(*it));
     }
 
     // render shop
-    shop.render(window);
+    shop.render(*window);
 
     // render health
     health.render();
@@ -250,7 +250,7 @@ void Game::render()
 
 bool Game::is_running()
 {
-    return window.isOpen();
+    return window->isOpen();
 }
 
 // void Game::enemy_update_direction()
@@ -328,7 +328,7 @@ void Game::projectile_update_position()
 {
     for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
     {
-      if(!((*it)->update_position(window.getSize())))
+      if(!((*it)->update_position(window->getSize())))
       {
         delete *it;
         it = Projectile::projectiles.erase(it);
@@ -561,7 +561,7 @@ void Game::init_shop(json const & j_shop)
     string font_name{j_shop["font_name"]};
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
-    sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
+    sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     json back_color = j_shop["background_color"];
     sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
     json btn_color = j_shop["btn_color"];
@@ -582,10 +582,14 @@ int Game::get_frame()
 {
     return frame;
 }
+void Game::update_frame() // OBS! dont use this or the game breaks!! why is this here?
+{
+    frame++;
+}
 
 sf::Vector2u Game::get_window_size()
 {
-    return window.getSize();
+    return window->getSize();
 }
 
 void Game::set_selected_map(std::string map_name)
@@ -601,8 +605,6 @@ void Game::check_collision()
     // variables to ease readability.
     vector<Enemy*> &enemies = Enemy::enemies;
     vector<Projectile*> &projectiles = Projectile::projectiles;
-    bool enemy_deleted{false};
-    bool projectile_deleted{false};
     Enemy *enemy;
     Projectile *projectile;
 
@@ -624,52 +626,51 @@ void Game::check_collision()
                 {
                     wallet.add(enemy->get_reward());
                     delete enemy;
+                    enemy = nullptr;
                     // swap and pop for increased performance
                     if (enemies.size() > 1)
                     {
                         swap(enemies.at(enemy_i),enemies.back());
                     }
                     enemies.pop_back();
-                    enemy_deleted = true;
                 }
                 // check if projectile should be deleted
                 if (projectile->collision())
                 {
                     delete projectile;
+                    projectile = nullptr;
                     if (projectiles.size() > 1)
                     {
                         swap(projectiles.at(projectile_i),projectiles.back());
                     }
                     projectiles.pop_back();
-                    projectile_deleted = true;
                 }
 
                 /* when true, enemy_i will not get updated. We do this because
                  * enemy_i will have the correct index for the next enemy we
                  * want to check since we did a swap.
                 */
-                if (enemy_deleted)
+                if (!enemy)
                 {
-                    enemy_deleted = false;
-                    projectile_deleted = false;
-                    goto next_enemy;
+                    break;
                 }
                 // same here but for projectile
-                if (projectile_deleted)
+                if (!projectile)
                 {
-                    projectile_deleted = false;
-                    goto next_projectile;
+                    continue;
                 }
 
             }
             projectile_i++;
-            next_projectile:
-            // statement needed after goto label
-            cout << "";
         }
-        enemy_i++;
-        next_enemy:
-        cout << "";
+        /* if enemy is not nullptr no enemy has been deleted and we want to
+         * update enemy_i
+         */
+        if (enemy)
+        {
+            enemy_i++;
+        }
+
     }
 }
 

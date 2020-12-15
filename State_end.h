@@ -1,5 +1,6 @@
 #ifndef STATE_END_H
 #define STATE_END_H
+#include <memory> // shared_ptr
 #include "State.h"
 #include "Game.h"
 #include <SFML/Graphics.hpp>
@@ -7,10 +8,13 @@
 class State_end : public State
 {
 public:
-    State_end(sf::RenderWindow & win, Game & gme)
-    : window{win}, game{gme},
+    State_end(std::shared_ptr<sf::RenderWindow> _window,
+        std::shared_ptr<Game> _game, 
+        const sf::Font &_font,
+        nlohmann::json &settings_end)
+    : State(_window, _game, _font),
       background_texture{Resource_manager::load(
-                            "resources/textures/background_start_menu.png")}
+                            settings_end["background"])}
     {};
 
 
@@ -19,14 +23,10 @@ public:
     void update_logic()                  override;
     void render()                        override;
 
-    std::string get_next_state() override;
+    int get_next_state() override;
 
 private:
     void on_resize();
-    
-    sf::RenderWindow & window;
-    Game & game;
-    std::string this_state{"end"};
 
     bool first_render{false};
     void draw_end_screen();
