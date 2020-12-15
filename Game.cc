@@ -33,7 +33,7 @@ int Game::frame =0;
 Projectile* Game::get_tower_projectile(std::string const & projectile)
 {
 
-    sf::Vector2f double0{0,0};//7
+    sf::Vector2f double0{0,0};
     if(projectile == "Projectile_basic")
     {
        return new Projectile_basic(double0,double0);
@@ -133,6 +133,12 @@ void Game::load_map(string const & file_entity)
         (*it).second->update_side_length();
     }
 
+    /* update window size */
+    float shop_sizeX = read_shop_width(file_entity);
+    unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
+    unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
+    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
+
     /* set direction of tiles */
     determine_tile_directions();
 }
@@ -218,7 +224,7 @@ void Game::render()
         window->draw(*(*it)); // it doesn't make sense to me either but it works
     }
 
-    for (auto it{begin(Tower::static_towers)}; it != end(Tower::static_towers); ++it)
+    for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
     {
         window->draw(*(*it)); // it doesn't make sense to me either but it works
     }
@@ -231,9 +237,13 @@ void Game::render()
         window->draw(*(*it));
     }
 
-    shop.render(*window, wallet);
+    // render shop
+    shop.render(*window);
+
     // render health
     health.render();
+
+    // render wave_manager
     wave_manager.render();
 }
 
@@ -242,25 +252,55 @@ bool Game::is_running()
     return window->isOpen();
 }
 
+// void Game::enemy_update_direction()
+// {
+//     float damage_dealt{0};
+//     for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
+//     {
+//         cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
+//         float damage_this_enemy{0};
+//         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
+//         // maybe change this later so that the deletion is done inside
+//         // tile_enemy_end instead. Have to change flow of information
+//         // between damage and health then too.
+//         damage_this_enemy = tile->update_enemy(*it);
+//         if ( damage_this_enemy > 0.f )
+//         {
+//             cout << "Delete enemy!" << endl;
+//             damage_dealt += damage_this_enemy;
+//             delete *it;
+//             it = Enemy::enemies.erase(it);
+//         }
+//         else
+//             ++it;
+//     }
+//     health.remove_n_health(damage_dealt);
+// }
+
 void Game::enemy_update_direction()
 {
     float damage_dealt{0};
-    for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
+    for (size_t i = 0; i < Enemy::enemies.size(); i++)
     {
+        // cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
         float damage_this_enemy{0};
-        Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
+        Tile* tile = Tile::get_tile_by_coord(Enemy::enemies[i]->getPosition());
         // maybe change this later so that the deletion is done inside
         // tile_enemy_end instead. Have to change flow of information
         // between damage and health then too.
-        damage_this_enemy = tile->update_enemy(*it);
+        damage_this_enemy = tile->update_enemy(Enemy::enemies[i]);
         if ( damage_this_enemy > 0.f )
         {
             damage_dealt += damage_this_enemy;
-            delete *it;
-            it = Enemy::enemies.erase(it);
+            delete Enemy::enemies[i];
+            if(Enemy::enemies.size()>0)
+            {
+                swap(Enemy::enemies.at(i),Enemy::enemies.back());
+            }
+
+            Enemy::enemies.pop_back();
+            //Enemy::enemies.erase(Enemy::enemies.begin() + i);
         }
-        else
-            ++it;
     }
     health.remove_n_health(damage_dealt);
 }
@@ -307,6 +347,28 @@ void Game::next_wave()
 int Game::get_current_wave() const
 {
     return wave_manager.get_current_wave();
+}
+
+float Game::read_shop_width(string const & file_entity)
+/* window needs shop_width and shop needs window size.
+   This function gets around the circular dependency */
+{
+    float shop_sizeX;
+
+    ifstream ifs(file_entity);
+    if (ifs.is_open())
+    {
+        json j_data;
+        ifs >> j_data;
+        shop_sizeX = j_data["Shop"]["shop_size"][0];
+        ifs.close();
+    }
+    else
+    {
+        throw invalid_argument("Could not open " + file_entity);
+    }
+
+    return shop_sizeX;
 }
 
 void Game::load_entities(string const & file_entity)
@@ -425,6 +487,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_basic::prop.hit_rad = proj["hit_rad"];
     Projectile_basic::prop.dir = sf::Vector2f(0,0);
     Projectile_basic::prop.mov_spd = proj["mov_spd"];
+    Projectile_basic::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_pierce"];
     Projectile_pierce::frames_to_live = proj["frames_to_live"];
@@ -435,6 +498,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_pierce::prop.dir = sf::Vector2f(0,0);
     Projectile_pierce::prop.mov_spd = proj["mov_spd"];
     Projectile_pierce::nr_pierce_init = proj["nr_pierce_init"];
+    Projectile_pierce::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_bomb"];
     Projectile_bomb::frames_to_live = proj["frames_to_live"];
@@ -444,6 +508,7 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_bomb::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb::prop.dir = sf::Vector2f(0,0);
     Projectile_bomb::prop.mov_spd = proj["mov_spd"];
+    Projectile_bomb::rotation_offset_init = proj["rotation_offset"];
 
     proj = json_obj["Projectile_bomb_blast"];
     Projectile_bomb_blast::frames_to_live = proj["frames_to_live"];
@@ -453,53 +518,40 @@ void Game::init_projectiles(json const & json_obj)
     Projectile_bomb_blast::prop.hit_rad = proj["hit_rad"];
     Projectile_bomb_blast::prop.dir = sf::Vector2f(0,0);
     Projectile_bomb_blast::prop.mov_spd = proj["mov_spd"];
+    Projectile_bomb_blast::rotation_offset_init = proj["rotation_offset"];
 }
 
 void Game::init_towers(json const & json_obj)
 {
-    json tower = json_obj["Tower_basic1"];
+    // Itterativly make tower_basics factories from file
+    json tower = json_obj["Tower_basics"];
+    for (auto& tow : tower)
+    {
+        Tower::factory_towers.push_back(new Tower_basic{
+            tow["sprite_init"],
+            sf::Vector2f{tow["size"][0], tow["size"][1]},
+            tow["detection_radius_init"],
+            tow["cost_init"],
+            get_tower_projectile(tow["projectile_init"]),
+            tow["fire_period_init"]
+    });
 
-    Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
-    Tower_basic::tower_prop.cost_init = tower["cost_init"];
-    Tower_basic::tower_prop.fire_period_init = tower["fire_period_init"];
-    Tower_basic::entity_prop.texture_file = tower["sprite_init"];
-    Tower_basic::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
-    Tower_basic::entity_prop.hit_rad = tower["detection_radius_init"];
-    Tower_basic::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Tower_basic::entity_prop.mov_spd = 0;
+    }
+    tower = json_obj["Tower_rings"];
 
-    tower = json_obj["Tower_ring1"];
-    Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
-    Tower_ring::tower_prop.cost_init = tower["cost_init"];
-    Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
-    Tower_ring::entity_prop.texture_file = tower["sprite_init"];
-    Tower_ring::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
-    Tower_ring::entity_prop.hit_rad = tower["detection_radius_init"];
-    Tower_ring::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Tower_ring::entity_prop.mov_spd = 0;
-    Tower_ring::num_projectile_init = tower["num_projectile_init"];
-
-    tower = json_obj["Tower_basic2"];
-    Tower_basic::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
-    Tower_basic::tower_prop.cost_init = tower["cost_init"];
-    Tower_basic::tower_prop.fire_period_init = tower["fire_period_init"];
-    Tower_basic::entity_prop.texture_file = tower["sprite_init"];
-    Tower_basic::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
-    Tower_basic::entity_prop.hit_rad = tower["detection_radius_init"];
-    Tower_basic::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Tower_basic::entity_prop.mov_spd = 0;
-
-    tower = json_obj["Tower_ring2"];
-    Tower_ring::tower_prop.projectile_init = get_tower_projectile(tower["projectile_init"]);
-    Tower_ring::tower_prop.cost_init = tower["cost_init"];
-    Tower_ring::tower_prop.fire_period_init = tower["fire_period_init"];
-    Tower_ring::entity_prop.texture_file = tower["sprite_init"];
-    Tower_ring::entity_prop.size = sf::Vector2f{tower["size"][0], tower["size"][1]};
-    Tower_ring::entity_prop.hit_rad = tower["detection_radius_init"];
-    Tower_ring::entity_prop.dir = sf::Vector2f{0, 0}; //Will be set by tile
-    Tower_ring::entity_prop.mov_spd = 0;
-    Tower_ring::num_projectile_init = tower["num_projectile_init"];
-
+    // Itterativly make tower_rings factories from file
+    for (auto& tow : tower)
+    {
+        Tower::factory_towers.push_back(new Tower_ring{
+            tow["sprite_init"],
+            sf::Vector2f{tow["size"][0], tow["size"][1]},
+            tow["detection_radius_init"],
+            tow["cost_init"],
+            get_tower_projectile(tow["projectile_init"]),
+            tow["fire_period_init"],
+            tow["num_projectile_init"]
+        });
+    }
 }
 
 void Game::init_shop(json const & j_shop)
@@ -508,7 +560,7 @@ void Game::init_shop(json const & j_shop)
     string font_name{j_shop["font_name"]};
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
-    sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0};
+    sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     json back_color = j_shop["background_color"];
     sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
     json btn_color = j_shop["btn_color"];
@@ -517,11 +569,12 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_select_color{btn_select_color["r"], btn_select_color["g"], btn_select_color["b"]};
     json bcc = j_shop["btn_no_cash_color"];
     sf::Color button_no_cash_color{bcc["r"], bcc["g"], bcc["b"]};
-    vector<Tower *> passive_towers{new Tower_basic{}, new Tower_ring{}};
-    shop = Tower_shop{passive_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color,font_name};
+    json fc = j_shop["font_color"];
+    sf::Color font_color{fc["r"], fc["g"], fc["b"]};
+    shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color, font_color, font_name};
     wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
     shop.update_shop_ui(wallet);
-    cout << "wallet in game" << wallet.getCash() << endl;
+    // cout << "wallet in game" << wallet.getCash() << endl;
 }
 
 int Game::get_frame()
@@ -627,20 +680,20 @@ void Game::check_collision()
 void Game::check_collision_towers()
 {
     for (size_t tower_i = 0;
-            tower_i < Tower::static_towers.size();
+            tower_i < Tower::towers.size();
             tower_i++)
     {
-        Tower::static_towers.at(tower_i)->shootable_enemies.clear();
-        if (!dynamic_cast<Tower_ring*>( Tower::static_towers.at(tower_i) ) )
+        Tower::towers.at(tower_i)->shootable_enemies.clear();
+        if (!dynamic_cast<Tower_ring*>( Tower::towers.at(tower_i) ) )
         {
             for (size_t enemy_i = 0;
                 enemy_i < Enemy::enemies.size();
                 enemy_i++)
             {
-                        if (collided(Tower::static_towers.at(tower_i),
+                        if (collided(Tower::towers.at(tower_i),
                                     Enemy::enemies.at(enemy_i)))
                         {
-                            Tower::static_towers.at(
+                            Tower::towers.at(
                                 tower_i)->collision(Enemy::enemies.at(enemy_i));
                         }
             }
@@ -650,8 +703,8 @@ void Game::check_collision_towers()
 
 void Game::fire_towers()
 {
-    for (auto tower = Tower::static_towers.begin();
-         tower != Tower::static_towers.end();
+    for (auto tower = Tower::towers.begin();
+         tower != Tower::towers.end();
          tower++)
         {
             (*tower)->shoot();
@@ -684,12 +737,12 @@ void Game::handle_input(sf::Event & event)
      if(!shop.getGlobalBounds().contains(click))
      {
         Tower * tw = shop.get_chosen_tower();
-        cout << "Chosen tower in game: " << tw << endl;
+        // cout << "Chosen tower in game: " << tw << endl;
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
             Tile_tower * tile = dynamic_cast<Tile_tower*>(Tile::get_tile_by_coord(click));
 
-            cout << "Enough money to buy. Tile: " << tile << endl;
+            // cout << "Enough money to buy. Tile: " << tile << endl;
             if(tile != nullptr && !tile->is_occupied() && tile->on_click(tw))
             {
                 wallet.take(tw->cost);

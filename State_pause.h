@@ -16,15 +16,16 @@ public:
     void init();
 
     void handle_input(sf::Event & event) override;
-    void update_logic() override;
-    void render()       override;
+    void update_logic()                  override;
+    void render()                        override;
 
     int get_next_state() override;
 
 private:
+    void on_resize();
+    
     bool unpause_game{false};
 
-    /* graphics stuff below */
     sf::RectangleShape shader;
     sf::Text text_pause;
 };

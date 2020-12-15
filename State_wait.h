@@ -18,6 +18,8 @@ public:
     int get_next_state() override;
 
 private:
+    void on_resize();
+    
     bool play{false};
     sf::Text text_wait;
 };

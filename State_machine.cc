@@ -109,6 +109,14 @@ void State_machine::handle_input()
         {
         states.at(current_state)->handle_input(event);
         }
+
+        if ( event.type == sf::Event::Resized )
+        {
+            for (auto it=states.begin(); it!=states.end(); ++it)
+            {
+                (*it).second->handle_input(event);
+            }
+        }
     }
 }
 

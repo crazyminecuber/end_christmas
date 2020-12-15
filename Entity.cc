@@ -13,16 +13,16 @@ std::ostream& operator<<(std::ostream& os,const Entity & E)
         << std::to_string(E.getPosition().y);
     return os;
 }
-/* Beware that size, hitbox_radius, movement_speed will be scaled with 
+/* Beware that size, hitbox_radius, movement_speed will be scaled with
  * Tile::side_length.
  */
 Entity::Entity(std::string _texture_file,
         sf::Vector2f position, sf::Vector2f siz,
         float hit_rad, sf::Vector2f dir, float mov_spd)
-: sf::Sprite(), 
+: sf::Sprite(),
     texture_file{_texture_file},
     texture{Resource_manager::load(_texture_file)},
-    size{(siz*Tile::side_length)}, 
+    size{(siz*Tile::side_length)},
     hitbox_radius{(hit_rad*Tile::side_length)},
     direction{dir},
     movement_speed{(mov_spd*Tile::side_length)}

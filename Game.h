@@ -20,7 +20,7 @@ public:
 	Game(std::shared_ptr<sf::RenderWindow> win, std::string const & file_health_texture, int hp
 		 /*std::string const & shop_file,*/
 		 )
-		 : window{win}, 
+		 : window{win},
 		   health{win, file_health_texture, hp},
 		   wave_manager{win}/*, shop{shop_file}*/
 		 {
@@ -35,6 +35,7 @@ public:
 	void load_map(std::string const & file_entity);
 	void determine_tile_directions();
 
+	float read_shop_width(std::string const & file_entity);
 	void load_entities(std::string const & file_entity);
 	bool is_running(); // remove when we make StateMachine
 	void check_collision();

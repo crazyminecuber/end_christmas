@@ -16,15 +16,16 @@ public:
         nlohmann::json &settings_menu);
 
     void handle_input(sf::Event & event) override;
-    void update_logic() override;
-    void render()       override;
+    void update_logic()                  override;
+    void render()                        override;
 
     int get_next_state() override;
 
 private:
     void handle_click(sf::Vector2f mouse_pos);
     void check_hover();
-    void window_calculations();
+    // void window_calculations1();
+    void on_resize();
 
     bool start_game{false};
     bool hovering_map_1{false};

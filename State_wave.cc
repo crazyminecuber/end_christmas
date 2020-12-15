@@ -46,6 +46,10 @@ int State_wave::get_next_state()
     {
         return_value = PAUSE;
     }
+    else if (game->player_has_won())
+    {
+        return_value = END;
+    }
     else if ( game->wave_complete() )
     {
         return_value = WAIT;

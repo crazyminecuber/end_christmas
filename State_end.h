@@ -15,19 +15,22 @@ public:
     : State(_window, _game, _font),
       background_texture{Resource_manager::load(
                             settings_end["background"])}
-    {
-        init();
-    };
+    {};
 
-    void init();
+
 
     void handle_input(sf::Event & event) override;
-    void update_logic() override;
-    void render()       override;
+    void update_logic()                  override;
+    void render()                        override;
 
     int get_next_state() override;
 
 private:
+    void on_resize();
+
+    bool first_render{false};
+    void draw_end_screen();
+
     /* graphics stuff below */
     sf::Texture background_texture;
     sf::Sprite background_sprite;

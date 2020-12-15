@@ -8,14 +8,14 @@
 #include "Tower.h"
 #include "Tower_shop.h"
 #include "Wallet.h"
+
 // Can we make it position it self relative to its center point?
-//
 class Tower_button : public sf::RectangleShape
 {
 public:
     Tower_button(Tower * tw, sf::Vector2f btn_size,
             sf::Vector2f position, sf::Color btn_color,sf::Color btn_select_color,
-            sf::Color btn_no_cash_color, std::string font_name);
+            sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name);
 
     Tower * on_click(sf::Vector2f click, Wallet & wallet);
     void render(sf::RenderWindow & window);
@@ -35,6 +35,7 @@ private:
     sf::Color color{};
     sf::Color select_color{};
     sf::Color no_cash_color{};
+    sf::Color font_color{};
 
 };
 

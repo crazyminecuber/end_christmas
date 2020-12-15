@@ -6,8 +6,8 @@ using namespace std;
 
 Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
         sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color,
-        sf::Color btn_color, sf::Color btn_select_color,  sf::Color btn_no_cash_color, std::string font_name)
-    : RectangleShape(siz), passive_towers{pt}, button_size{btn_size},
+        sf::Color btn_color, sf::Color btn_select_color,  sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name)
+    : RectangleShape(siz), passive_towers{pt}, font_color{font_color}, button_size{btn_size},
     heading{make_text(font_name)}, wallet_text{make_text(font_name)}// Lagra position och size i sfml:objectet.
 {
     set_chosen_tower(nullptr);
@@ -27,11 +27,12 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
     sf::IntRect area{int(getPosition().x),int(getPosition().y) + 130, int(siz.x), 400};
     generate_shop_grid(nr_columns, area, btn_color, btn_select_color, btn_no_cash_color, font_name);
 
-    cout << "made a shop" << endl;
+    cout << "Shop created" << endl;
 }
 
 // Make a button for every tower
-void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color, sf::Color btn_no_cash_color,  string font_name) // Genera knappar med textur genom att kalla på tower_button många gånger.
+void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color,
+        sf::Color btn_select_color, sf::Color btn_no_cash_color, string font_name) // Genera knappar med textur genom att kalla på tower_button många gånger.
 {
 
     /*
@@ -52,9 +53,7 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
                     + (current_column * (spacing + button_size.x));
         btn_pos.y = area.top + button_size.y / 2 + spacing
                     + (current_row * (spacing + button_size.y));
-        buttons.push_back(Tower_button{*tow_it, button_size, btn_pos, btn_color, btn_select_color, btn_no_cash_color, font_name});
-
-
+        buttons.push_back(Tower_button{*tow_it, button_size, btn_pos, btn_color, btn_select_color, btn_no_cash_color, font_color, font_name});
         current_column++;
         if (current_column >= nr_columns)
         {
@@ -66,11 +65,10 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
 
 sf::Text Tower_shop::make_text(string font_name)
 {
-    sf::Font * font = new sf::Font{}; // Minnesläcker!Bör nog laddas i game istället.
     return sf::Text{"Tower Shop", Resource_manager::load_font(font_name)}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
 }
 
-void Tower_shop::render(sf::RenderWindow & window, Wallet wallet)
+void Tower_shop::render(sf::RenderWindow & window)
 {
     window.draw(*this);
     window.draw(wallet_text);
@@ -86,7 +84,7 @@ void Tower_shop::render(sf::RenderWindow & window, Wallet wallet)
 // Can probably be done way more efficiently
 void Tower_shop::on_click(sf::Vector2f click, Wallet & wallet)
 {
-    cout << "nullptr"<<endl;
+    // cout << "nullptr"<<endl;
     set_chosen_tower(nullptr);
     Tower * tw{};
     for (auto b = buttons.begin(); b != buttons.end(); b++)
@@ -101,12 +99,12 @@ void Tower_shop::on_click(sf::Vector2f click, Wallet & wallet)
 
 void Tower_shop::set_chosen_tower(Tower * tw)
 {
-    cout << "set chosen_tower to: " << tw << endl;
+    // cout << "set chosen_tower to: " << tw << endl;
     chosen_tower = tw;
 }
 Tower * Tower_shop::get_chosen_tower()
 {
-    cout << "returning chosen tower: " << chosen_tower << endl;
+    // cout << "returning chosen tower: " << chosen_tower << endl;
     return chosen_tower;
 }
 

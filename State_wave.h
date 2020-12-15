@@ -16,8 +16,8 @@ public:
     void init();
 
     void handle_input(sf::Event & event) override;
-    void update_logic() override;
-    void render()       override;
+    void update_logic()                  override;
+    void render()                        override;
     int get_next_state();
 
 private:

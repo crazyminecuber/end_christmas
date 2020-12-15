@@ -22,7 +22,7 @@ bool Projectile::outside_screen(sf::Vector2u const & window_size)
 }
 bool Projectile::update_position(sf::Vector2u const & window_size)
 {
-    if (Game::get_frame() < frame_to_die || outside_screen(window_size))
+    if (Game::get_frame() <= frame_to_die && !(outside_screen(window_size)))
     {
         move(direction*movement_speed);
         return true;
@@ -39,6 +39,7 @@ Projectile::Projectile(Projectile const& other):Entity(other)
 {
   damage = other.damage;
   frame_to_die = other.frame_to_die;
+  rotation_offset = other.rotation_offset;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -47,6 +48,7 @@ Projectile::Projectile(Projectile const& other):Entity(other)
 entity_properties Projectile_basic::prop;
 int Projectile_basic::frames_to_live;
 int Projectile_basic::damage_init;
+float Projectile_basic::rotation_offset_init;
 
 Projectile_basic::Projectile_basic(sf::Vector2f position,sf::Vector2f direction)
   : Projectile
@@ -57,7 +59,8 @@ Projectile_basic::Projectile_basic(sf::Vector2f position,sf::Vector2f direction)
     prop.hit_rad,
     direction,
     prop.mov_spd,
-    damage_init
+    damage_init,
+    rotation_offset_init
   )
 {}
 
@@ -69,6 +72,7 @@ Projectile_basic::Projectile_basic(Projectile_basic const& other)
 }
 
 //clone and add direction void clone(sf::Vector2f direction, sf::Vector2f position)
+
 void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_basic* p = new Projectile_basic{*this};
@@ -79,9 +83,9 @@ void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 
 // Returns true if the porjectile should be deleted when collided with an enemy
 bool Projectile_basic::collision()
-    {
-      return true;
-    }
+{
+  return true;
+}
 
 /*----------------------------------------------------------------------------*/
 //Projectile_pierce
@@ -90,6 +94,7 @@ entity_properties Projectile_pierce::prop;
 int Projectile_pierce::frames_to_live;
 int Projectile_pierce::damage_init;
 int Projectile_pierce::nr_pierce_init;
+float Projectile_pierce::rotation_offset_init;
 
 Projectile_pierce::Projectile_pierce
 (
@@ -104,7 +109,8 @@ Projectile_pierce::Projectile_pierce
       prop.hit_rad,
       direction,
       prop.mov_spd,
-      damage_init
+      damage_init,
+      rotation_offset_init
     ),
     nr_pierce{nr_pierce_init}
 {}
@@ -122,37 +128,13 @@ void Projectile_pierce::clone(sf::Vector2f dir, sf::Vector2f pos)
   Projectile_pierce* p = new Projectile_pierce{*this};
   p->direction = dir;
   p->setPosition(pos);
-  rotate_to_target(dir);
+
+  //OBS in math, radians are used and its anticlockwise. In sfml, degrees are
+  //used and its clockwise since y is pointing downwards.
+  float degree = (180 / M_PI) * atan2(dir.y, dir.x) + rotation_offset;
+  p->setRotation(degree);
+
   projectiles.push_back(p);
-}
-
-void Projectile_pierce::rotate_to_target(sf::Vector2f dir)
-{
-
-    float angle = (180 / M_PI) * atan((dir.y)/(dir.x));
-    if(dir.x < 0 && dir.y > 0)
-    {
-      angle+= 0;
-      //std::cout << "second angle" << angle<<endl;
-    }
-    else if(dir.x > 0 && dir.y < 0)
-    {
-      angle-= 0;
-      //std::cout << "Fourth angle" << angle<<endl;
-    }
-    else if(dir.x <0 && dir.y < 0)
-    {
-      angle += 90;
-      //std::cout << "Third angle" << angle<<endl;
-
-    }
-    else if(dir.x >0 && dir.y > 0)
-    {
-      angle += 0;
-      //std::cout << "first angle" << angle<<endl;
-
-    }
-    setRotation(angle);
 }
 
 //Counts nr of enemies killed and return true if the projectile should be delete
@@ -177,10 +159,12 @@ bool Projectile_pierce::collision()
 entity_properties Projectile_bomb::prop;
 int Projectile_bomb::frames_to_live;
 int Projectile_bomb::damage_init;
+float Projectile_bomb::rotation_offset_init;
 //static Projectile_bomb_blast
 entity_properties Projectile_bomb_blast::prop;
 int Projectile_bomb_blast::frames_to_live;
 int Projectile_bomb_blast::damage_init;
+float Projectile_bomb_blast::rotation_offset_init;
 
 Projectile_bomb::Projectile_bomb
   (
@@ -195,7 +179,8 @@ Projectile_bomb::Projectile_bomb
         prop.hit_rad,
         direction,
         prop.mov_spd,
-        damage_init
+        damage_init,
+        rotation_offset_init
       ),
       blast{}
   {}
@@ -237,13 +222,14 @@ Projectile_bomb_blast::Projectile_bomb_blast()
         prop.hit_rad,
         direction,
         prop.mov_spd,
-        damage_init
+        damage_init,
+        rotation_offset_init
       )
   {}
 
 Projectile_bomb_blast::Projectile_bomb_blast(string texture_file, sf::Vector2f position,
       sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd)
-      : Projectile(texture_file, position, size, hit_rad, dir, mov_spd, damage_init){}
+      : Projectile(texture_file, position, size, hit_rad, dir, mov_spd, damage_init, rotation_offset_init){}
 
 //copy-constructor, sets frame_to_die
 Projectile_bomb_blast::Projectile_bomb_blast(Projectile_bomb_blast const& other)

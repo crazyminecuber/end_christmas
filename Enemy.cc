@@ -76,7 +76,7 @@ Enemy* Enemy::get_new_enemy_boss(nlohmann::json const & enemy_props,
 
 void Enemy::create_enemy_by_obj(Enemy* enemy)
 {
-    Enemy::enemies.push_back(enemy->clone());
+    Enemy::enemies.push_back(enemy);
 }
 
 void Enemy::delete_all_enemies()

@@ -9,11 +9,12 @@ void Tile_tower::init()
 
 bool Tile_tower::on_click(Tower * tw)
 {
-    cout << "checking out if tower is set" << endl;
+    // cout << "checking out if tower is set" << endl;
     if (!(tw == nullptr))
     {
-        cout << "Creating tower. Position: " << getPosition().x << " " << getPosition().y << endl;
+        // cout << "Creating tower. Position: " << getPosition().x << " " << getPosition().y << endl;
         tower = tw->create_active(getPosition() + sf::Vector2f{side_length / 2, side_length / 2});
+
         return true;
     }
     return false;
@@ -21,6 +22,6 @@ bool Tile_tower::on_click(Tower * tw)
 
 bool Tile_tower::is_occupied()
 {
-    cout << "Tower in tile" << tower << endl;
+    // cout << "Tower in tile" << tower << endl;
     return !(tower == nullptr);
 }

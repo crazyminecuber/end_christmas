@@ -5,7 +5,26 @@
 
 using namespace std;
 
-void State_end::init()
+void State_end::draw_end_screen()
+{
+    on_resize();
+}
+
+void State_end::handle_input(sf::Event & event)
+{
+    if ( event.type == sf::Event::KeyPressed )
+    {
+        window->close ();
+    }
+
+    if ( event.type == sf::Event::Resized )
+    {
+        on_resize();
+    }
+}
+
+
+void State_end::on_resize()
 {
     /* background */
     background_sprite.setTexture(background_texture, false);
@@ -23,12 +42,22 @@ void State_end::init()
     {
         throw invalid_argument("Unable to load " + file);
     }
+    string str1{""};
+    string str2{""};
 
-    string str1{"Santa won!"};
-    string str2{"You got to level "};
-    str2 += to_string(game->get_current_wave());
+    if(game->player_has_won())
+    {
+        str1 = "You won!";
 
-    text1 = sf::Text{'('+str1+')', font, 100};
+    }
+    else
+    {
+        str1 = "Santa won!";
+        str2 = "You got to level ";
+        str2 += to_string(game->get_current_wave());
+    }
+
+    text1 = sf::Text{str1, font, 100};
     text2= sf::Text{str2, font, 80};
 
     sf::FloatRect bb_text1{text1.getGlobalBounds()};
@@ -39,23 +68,7 @@ void State_end::init()
 
     text1.setPosition(window_size.x / 2.f, window_size.y / 6.f);
     text2.setPosition(window_size.x / 2.f, window_size.y / 3.f);
-}
 
-void State_end::handle_input(sf::Event & event)
-{
-    if ( event.type == sf::Event::KeyPressed )
-    {
-        window->close ();
-    }
-}
-
-void State_end::update_logic()
-{
-    ;
-}
-
-void State_end::render()
-{
     window->clear();
 
     /* put stuff to render here */
@@ -63,6 +76,24 @@ void State_end::render()
     window->draw(text1);
     window->draw(text2);
     /*                          */
+}
+
+
+void State_end::update_logic()
+{
+
+}
+
+void State_end::render()
+{
+    if(!first_render)
+
+    {
+        first_render = true;
+        on_resize();
+    }
+
+
 
     window->display();
 }

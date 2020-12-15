@@ -45,8 +45,7 @@ State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
     map4 = (*it).first;
 
     background_sprite.setTexture(background_texture, false);
-    window_calculations();
-
+    on_resize();
 }
 
 
@@ -154,7 +153,7 @@ void State_menu::check_hover()
         hovering_map_4 = true;
 }
 
-void State_menu::window_calculations()
+void State_menu::on_resize()
 {
     /* text */
     sf::FloatRect bb_title{text_title.getGlobalBounds()};
@@ -170,8 +169,8 @@ void State_menu::window_calculations()
     sf::Vector2f size{background_sprite.getGlobalBounds().width,
                       background_sprite.getGlobalBounds().height};
     background_sprite.setOrigin(size.x / 2, size.y / 2);
-    background_sprite.setScale((-(window->getSize().x * 1.0) / size.x),
-                               (  window->getSize().y * 1.0) / size.y);
+    background_sprite.setScale(((-(window->getSize().x * 1.0) / size.x) * background_sprite.getScale().x),
+                               ((  window->getSize().y * 1.0) / size.y) * background_sprite.getScale().y);
     background_sprite.setPosition(window->getSize().x / 2.f,
                                   window->getSize().y / 2.f);
 
@@ -226,7 +225,4 @@ void State_menu::window_calculations()
     text_map_4.setOrigin(bb_text_map_4.width / 2.f, bb_text_map_4.height / 2.f);
     text_map_4.setPosition(button_map_4.getPosition().x + button_side_length / 2.f,
                            button_map_4.getPosition().y + button_side_length / 8.f - 12);
-
-    /* map button text */
-
 }
