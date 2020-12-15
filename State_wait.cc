@@ -3,7 +3,7 @@
 #include <memory> // shared_ptr
 using namespace std;
 
-State_wait::State_wait(std::shared_ptr<sf::RenderWindow> _window, 
+State_wait::State_wait(std::shared_ptr<sf::RenderWindow> _window,
         std::shared_ptr<Game> _game,
         const sf::Font &_font)
     : State(_window, _game, _font)
@@ -19,8 +19,12 @@ void State_wait::handle_input(sf::Event & event)
         {
             play = true;
         }
+        else if ( event.key.code == sf::Keyboard::R )
+        {
+            game->set_render_tower_radii( !(game->get_render_tower_radii()) );
+        }
     }
-        
+
     if ( event.type == sf::Event::Resized )
     {
         on_resize();
@@ -71,6 +75,6 @@ void State_wait::on_resize()
     text_wait = sf::Text{"(Press P To Start Next Wave)", font, 60};
     sf::FloatRect bb_wait{text_wait.getGlobalBounds()};
     text_wait.setOrigin(bb_wait.width  / 2.f, bb_wait.height / 2.f);
-    text_wait.setPosition(window->getSize().x * 0.5f, 
+    text_wait.setPosition(window->getSize().x * 0.5f,
                           window->getSize().y *0.01f);
 }
