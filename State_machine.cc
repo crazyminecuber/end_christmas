@@ -94,7 +94,7 @@ void State_machine::throttle(const float fps, sf::Clock & clock)
 {
     auto const target{sf::milliseconds(1000.0/fps)};
     auto wait_time{target - clock.getElapsedTime()};
-    cout << (wait_time/target) * 100 << "%" << endl;
+    // cout << (wait_time/target) * 100 << "%" << endl;
     sleep(wait_time);
     clock.restart();
 }
