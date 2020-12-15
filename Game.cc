@@ -29,6 +29,33 @@ using namespace std;
 using json = nlohmann::json;
 int Game::frame =0;
 
+Game::~Game()
+{
+    for (Projectile *p : Projectile::projectiles)
+    {
+        delete p;
+    }
+    Projectile::projectiles.clear();
+
+    for (Enemy *e : Enemy::enemies)
+    {
+        delete e;
+    }
+    Enemy::enemies.clear();
+
+
+    for (Tower *t : Tower::towers)
+    {
+        delete t;
+    }
+    Tower::towers.clear();
+
+    for (auto it = Tile::tiles.begin(); it != Tile::tiles.end(); it++)
+    {
+        delete (*it).second;
+    }
+    Tile::tiles.clear();
+}
 
 // Help function to determine init projectile for tower
 Projectile* Game::get_tower_projectile(std::string const & projectile)
