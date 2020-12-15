@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <memory> // shared_ptr
 #include "Tower_shop.h"
 #include "Resource_manager.h"
 #include "Entity.h"
@@ -16,7 +17,7 @@ class Game final
 {
 public:
 	Game() = delete;
-	Game(sf::RenderWindow & win, std::string const & file_health_texture, int hp
+	Game(std::shared_ptr<sf::RenderWindow> win, std::string const & file_health_texture, int hp
 		 /*std::string const & shop_file,*/
 		 )
 		 : window{win}, 
@@ -52,6 +53,7 @@ public:
 	void fire_towers();
 
 	static int get_frame();
+	void update_frame();
 	int get_health();
 	double get_fps(); // ta bort
 	sf::Vector2u get_window_size();
@@ -62,7 +64,7 @@ public:
 	std::map<std::string, std::map<std::string, std::string>> maps;
 
 private:
-	sf::RenderWindow & window;
+	std::shared_ptr<sf::RenderWindow> window;
 	Projectile* get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	bool collided_bb(Entity const *object1, Entity const *object2);

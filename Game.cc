@@ -88,27 +88,27 @@ void Game::load_map(string const & file_entity)
             else if ( num == 0 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_nothing(
-                    map_tiles[selected_map]["0"], window, tile_index_pos);
+                    map_tiles[selected_map]["0"], tile_index_pos);
             }
             else if ( num == 1 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_tower(
-                    map_tiles[selected_map]["1"], window, tile_index_pos);
+                    map_tiles[selected_map]["1"], tile_index_pos);
             }
             else if ( num == 2 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_enemy(
-                    map_tiles[selected_map]["2"], window, tile_index_pos);
+                    map_tiles[selected_map]["2"], tile_index_pos);
             }
             else if ( num == 3 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_enemy_start(
-                    map_tiles[selected_map]["3"], window, tile_index_pos);
+                    map_tiles[selected_map]["3"], tile_index_pos);
             }
             else if ( num == 4 )
             {
                 Tile::tiles[tile_index_pos] = new Tile_enemy_end(
-                    map_tiles[selected_map]["4"], window, tile_index_pos);
+                    map_tiles[selected_map]["4"], tile_index_pos);
             }
             else
             {
@@ -126,8 +126,8 @@ void Game::load_map(string const & file_entity)
     // calculate Tile::side_length and change all tiles
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
-    Tile::side_length = std::min(window.getSize().x/tiles_per_col,
-                                 window.getSize().y/tiles_per_row);
+    Tile::side_length = std::min(window->getSize().x/tiles_per_col,
+                                 window->getSize().y/tiles_per_row);
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
@@ -209,18 +209,18 @@ void Game::render()
     // render tiles
     for (auto it{begin(Tile::tiles)}; it != end(Tile::tiles); ++it)
     {
-        window.draw(*it->second);
+        window->draw(*it->second);
     }
 
     // render enemies
     for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
     {
-        window.draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it)); // it doesn't make sense to me either but it works
     }
 
     for (auto it{begin(Tower::static_towers)}; it != end(Tower::static_towers); ++it)
     {
-        window.draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it)); // it doesn't make sense to me either but it works
     }
 
     //render projectiles
@@ -228,10 +228,10 @@ void Game::render()
          it != end(Projectile::projectiles);
          ++it)
     {
-        window.draw(*(*it));
+        window->draw(*(*it));
     }
 
-    shop.render(window, wallet);
+    shop.render(*window, wallet);
     // render health
     health.render();
     wave_manager.render();
@@ -239,7 +239,7 @@ void Game::render()
 
 bool Game::is_running()
 {
-    return window.isOpen();
+    return window->isOpen();
 }
 
 void Game::enemy_update_direction()
@@ -287,7 +287,7 @@ void Game::projectile_update_position()
 {
     for (auto it = Projectile::projectiles.begin(); it != Projectile::projectiles.end();)
     {
-      if(!((*it)->update_position(window.getSize())))
+      if(!((*it)->update_position(window->getSize())))
       {
         delete *it;
         it = Projectile::projectiles.erase(it);
@@ -508,7 +508,7 @@ void Game::init_shop(json const & j_shop)
     string font_name{j_shop["font_name"]};
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
-    sf::Vector2f shop_pos{window.getSize().x - shop_size.x, 0};
+    sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0};
     json back_color = j_shop["background_color"];
     sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
     json btn_color = j_shop["btn_color"];
@@ -528,13 +528,18 @@ int Game::get_frame()
 {
     return frame;
 }
+void Game::update_frame()
+{
+    frame++;
+}
+
 double Game::get_fps()
 {
     return fps;
 }
 sf::Vector2u Game::get_window_size()
 {
-    return window.getSize();
+    return window->getSize();
 }
 
 void Game::set_selected_map(std::string map_name)
