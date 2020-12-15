@@ -12,6 +12,8 @@
 using namespace std;
 using json = nlohmann::json;
 
+float State_machine::fps = 60;
+
 State_machine::State_machine(const string & title,
                              const string & settings_file,
                              const string & entity_file)
@@ -28,7 +30,10 @@ State_machine::State_machine(const string & title,
             title,
             sf::Style::Close
         },
-        game{window, settings["game"]["health_texture"], settings["game"]["hp"]}
+        game{window,
+             settings["game"]["health_texture"],
+             settings["game"]["hp"],
+             State_machine::fps}
 {
     states.insert(
         make_pair("menu", new State_menu(window, game, title, entity_file)));
@@ -59,7 +64,7 @@ void State_machine::run()
 
         current_state->render();
 
-        throttle(fps, clock);
+        throttle(State_machine::fps, clock);
     }
     quit();
 }
@@ -78,10 +83,11 @@ void State_machine::load_settings(const string & settings_file)
     }
 }
 
-void State_machine::throttle(const double fps, sf::Clock & clock)
+void State_machine::throttle(const float fps, sf::Clock & clock)
 {
     auto const target{sf::milliseconds(1000.0/fps)};
     auto wait_time{target - clock.getElapsedTime()};
+    cout << (wait_time/target) * 100 << "%" << endl;
     sleep(wait_time);
     clock.restart();
 }
@@ -114,6 +120,16 @@ void State_machine::handle_input()
             }
         }
     }
+}
+
+void State_machine::set_fps(float frames_per_second)
+{
+    State_machine::fps = frames_per_second;
+}
+
+float State_machine::get_fps()
+{
+    return State_machine::fps;
 }
 
 void State_machine::quit()

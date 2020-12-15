@@ -16,7 +16,7 @@ class State_machine
 {
 public:
     State_machine(
-        const std::string &title, 
+        const std::string &title,
         const std::string & settings_file,
         const std::string & entity_file
         );
@@ -25,12 +25,15 @@ public:
 
     bool running();
 
+    void static set_fps(float fps);
+    float static get_fps();
+
 private:
     void load_settings(const std::string & settings_file);
 
     nlohmann::json settings;
 
-    double fps{60};
+    float static fps;
 
     sf::RenderWindow window;
 
@@ -42,7 +45,7 @@ private:
 
     bool _running{true};
 
-    void throttle(double fps, sf::Clock & clock);
+    void throttle(float fps, sf::Clock & clock);
 
     // Changes next_state_ptr to states.at(state)
     void set_state(std::string const & state);

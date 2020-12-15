@@ -7,6 +7,7 @@
 #include <vector>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
 
+#include "State_machine.h"
 #include "Game.h"
 #include "Enemy.h"
 #include "Enemy_basic.h"
@@ -341,7 +342,7 @@ void Game::projectile_update_position()
 
 void Game::next_wave()
 {
-    wave_manager.next_wave(frame, Game::fps);
+    wave_manager.next_wave(frame, State_machine::get_fps());
 }
 
 int Game::get_current_wave() const
@@ -474,7 +475,7 @@ void Game::init_waves(json const & waves, json const & enemies)
                           wave.value()["num_of_groups"],
                           wave.value()["num_of_groups_inc"]));
     }
-    wave_manager.init_waves(frame, fps);
+    wave_manager.init_waves(frame, State_machine::get_fps());
 }
 
 void Game::init_projectiles(json const & json_obj)
@@ -581,10 +582,7 @@ int Game::get_frame()
 {
     return frame;
 }
-double Game::get_fps()
-{
-    return fps;
-}
+
 sf::Vector2u Game::get_window_size()
 {
     return window.getSize();

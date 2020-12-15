@@ -16,11 +16,14 @@ class Game final
 {
 public:
 	Game() = delete;
-	Game(sf::RenderWindow & win, std::string const & file_health_texture, int hp
+	Game(sf::RenderWindow & win,
+		 std::string const & file_health_texture,
+		 int hp,
+		 float fps)
 		 /*std::string const & shop_file,*/
-		 )
 		 : window{win},
 		   health{win, file_health_texture, hp},
+		   fps{fps},
 		   wave_manager{win}/*, shop{shop_file}*/
 		 {
 
@@ -54,7 +57,6 @@ public:
 
 	static int get_frame();
 	int get_health();
-	double get_fps(); // ta bort
 	sf::Vector2u get_window_size();
 
 	void set_selected_map(std::string map_name);
@@ -73,7 +75,7 @@ private:
 	void init_shop(nlohmann::json const & json_obj);
 	Health health;
 	static int frame;
-	double fps{60}; // ta bort
+	float const fps;
 	Wave_manager wave_manager;
 
 

@@ -1,4 +1,5 @@
 #include "State_wave.h"
+#include "State_machine.h"
 #include <iostream> // debugg
 using namespace std;
 void State_wave::init()
@@ -15,7 +16,17 @@ void State_wave::handle_input(sf::Event & event)
         {
             pause_game = true;
         }
+        else if ( event.key.code == sf::Keyboard::F )
+        {
+            if ( State_machine::get_fps() == 60 )
+                State_machine::set_fps(120);
+            else if ( State_machine::get_fps() == 120 )
+                State_machine::set_fps(240);
+            else
+                State_machine::set_fps(60);
+        }
     }
+
 }
 
 void State_wave::update_logic()
