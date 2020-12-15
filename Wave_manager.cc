@@ -46,15 +46,10 @@ void Wave_manager::render()
 //Private
 void Wave_manager::init()
 {
-    /* text */
-    if ( !font->loadFromFile("resources/fonts/font.ttf") )
-    {
-        std::cout << "Error: could not load font " << font
-                  << " in wave_manager" << std::endl;
-    }
+    /* text *
     sf::Vector2f text_pos{0,50};
     float text_size{50};
-    text_wave.setFont((*font));
+    text_wave.setFont((font));
     text_wave.setFillColor(sf::Color::White);
     text_wave.setPosition(1, 50);
     text_wave.setCharacterSize(text_size * 0.8);

@@ -12,7 +12,7 @@ class Wave_manager
 {
 public:
     Wave_manager(std::shared_ptr<sf::RenderWindow> win)
-    : window{win}, font{new sf::Font}
+    : window{win}, font{Resource_manager::load_font("resources/fonts/font.ttf")}
     {
         init();
     }
@@ -37,7 +37,7 @@ private:
     std::vector<Wave_group*> active_wave_groups; //The groups that spawn the current wave
 
     std::shared_ptr<sf::RenderWindow> window;
-    sf::Font* font;
+    sf::Font font;
     sf::RectangleShape background;
     sf::Text text_wave;
 
