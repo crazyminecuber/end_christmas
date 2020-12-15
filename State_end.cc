@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void State_end::init()
+void State_end::draw_end_screen()
 {
     on_resize();
 }
@@ -14,35 +14,13 @@ void State_end::handle_input(sf::Event & event)
     {
         window.close ();
     }
-    
+
     if ( event.type == sf::Event::Resized )
     {
         on_resize();
     }
 }
 
-void State_end::update_logic()
-{
-    ;
-}
-
-void State_end::render()
-{
-    window.clear();
-
-    /* put stuff to render here */
-    window.draw(background_sprite);
-    window.draw(text1);
-    window.draw(text2);
-    /*                          */
-
-    window.display();
-}
-
-string State_end::get_next_state()
-{
-    return this_state;
-}
 
 void State_end::on_resize()
 {
@@ -62,12 +40,22 @@ void State_end::on_resize()
     {
         throw invalid_argument("Unable to load " + file);
     }
+    string str1{""};
+    string str2{""};
 
-    string str1{"Santa won!"};
-    string str2{"You got to level "};
-    str2 += to_string(game.get_current_wave());
+    if(game.player_has_won())
+    {
+        str1 = "You won!";
 
-    text1 = sf::Text{'('+str1+')', font, 100};
+    }
+    else
+    {
+        str1 = "Santa won!";
+        str2 = "You got to level ";
+        str2 += to_string(game.get_current_wave());
+    }
+
+    text1 = sf::Text{str1, font, 100};
     text2= sf::Text{str2, font, 80};
 
     sf::FloatRect bb_text1{text1.getGlobalBounds()};
@@ -78,4 +66,37 @@ void State_end::on_resize()
 
     text1.setPosition(window_size.x / 2.f, window_size.y / 6.f);
     text2.setPosition(window_size.x / 2.f, window_size.y / 3.f);
+
+    window.clear();
+
+    /* put stuff to render here */
+    window.draw(background_sprite);
+    window.draw(text1);
+    window.draw(text2);
+    /*                          */
+}
+
+
+void State_end::update_logic()
+{
+
+}
+
+void State_end::render()
+{
+    if(!first_render)
+
+    {
+        first_render = true;
+        on_resize();
+    }
+
+
+
+    window.display();
+}
+
+string State_end::get_next_state()
+{
+    return this_state;
 }

@@ -64,7 +64,7 @@ public:
 
 private:
 	sf::RenderWindow & window;
-	Projectile* get_tower_projectile(std::string const & projectile);
+    Projectile * get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2);
 	bool collided_bb(Entity const *object1, Entity const *object2);
 	void init_waves(nlohmann::json const & waves, nlohmann::json const & enemies);

@@ -43,6 +43,10 @@ string State_wave::get_next_state()
     {
         return_string = "pause";
     }
+    else if (game.player_has_won())
+    {
+        return_string = "end";
+    }
     else if ( game.wave_complete() )
     {
         return_string = "wait";

@@ -6,165 +6,192 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Resource_manager.h"
-#include "Enemy.h"
-#include "Enemy_basic.h"
-#include "Enemy_boss.h"
-#include "Wallet.h"
+#include "Projectile.h"
+#include "Game.h"
+#include "Tile.h"
+
 using namespace std;
 
-TEST_CASE("Hello world")
-{
-    CHECK(1 + 1 == 2);
-}
-
-/*
-// TODO: Lägg till test fall för:
-// Att lägga till fiender i enemy-vektorn
-
-TEST_CASE("Enemy_statics")
-{
-    //array
-    sf::Vector2f v1(5.0,5.0);
-    Enemy_boss* E_BOSS = new Enemy_boss{"resources/textures/Santa.png", v1, v1, 5.0, v1, 3, 5};
-    Enemy_basic* E_BASIC = new Enemy_basic{"resources/textures/Santa.png", v1, v1, 5.0, v1, 3, 5};
-    Enemy::enemies.push_back(E_BOSS);
-    Enemy::enemies.push_back(E_BASIC);
-    CHECK(size(Enemy::enemies) == 2);
-
-    Enemy_basic::position_init = v1;
-    Enemy_basic::prop.texture_file = "resources/textures/Santa.png";
-    Enemy_basic::prop.size = v1;
-    Enemy_basic::prop.hit_rad = 5;
-    Enemy_basic::prop.dir = v1;
-    Enemy_basic::prop.mov_spd = 3;
-    Enemy_basic::life_init = 1;
-
-    CHECK(Enemy_basic::position_init == v1);
-    CHECK(Enemy_basic::prop.texture_file == "resources/textures/Santa.png");
-    CHECK(Enemy_basic::prop.size == v1);
-    CHECK(Enemy_basic::prop.hit_rad == 5);
-    CHECK(Enemy_basic::prop.dir == v1);
-    CHECK(Enemy_basic::prop.mov_spd == 3);
-    CHECK(Enemy_basic::life_init == 1);
-
-    Enemy_boss::position_init = v1;
-    Enemy_boss::prop.texture_file = "resources/textures/Santa.png";
-    Enemy_boss::prop.size = v1;
-    Enemy_boss::prop.hit_rad = 5;
-    Enemy_boss::prop.dir = v1;
-    Enemy_boss::prop.mov_spd = 3;
-    Enemy_boss::life_init = 2;
-
-    CHECK(Enemy_boss::position_init == v1);
-    CHECK(Enemy_boss::prop.texture_file == "resources/textures/Santa.png");
-    CHECK(Enemy_boss::prop.size == v1);
-    CHECK(Enemy_boss::prop.hit_rad == 5);
-    CHECK(Enemy_boss::prop.dir == v1);
-    CHECK(Enemy_boss::prop.mov_spd == 3);
-    CHECK(Enemy_boss::life_init == 2);
-
-    //Delete all previous enemies
-    Enemy::delete_all_enemies();
-}
-
-TEST_CASE("Creating new enemies")
-{
-    sf::Vector2f v1(5.0,5.0);
-    Enemy_basic::position_init = v1;
-    Enemy_basic::prop.texture_file = "resources/textures/Santa.png";
-    Enemy_basic::prop.size = v1;
-    Enemy_basic::prop.hit_rad = 5;
-    Enemy_basic::prop.dir = v1;
-    Enemy_basic::prop.mov_spd = 3;
-    Enemy_basic::life_init = 1;
-
-    Enemy_boss::position_init = v1;
-    Enemy_boss::prop.texture_file = "resources/textures/Santa.png";
-    Enemy_boss::prop.size = v1;
-    Enemy_boss::prop.hit_rad = 5;
-    Enemy_boss::prop.dir = v1;
-    Enemy_boss::prop.mov_spd = 3;
-    Enemy_boss::life_init = 2;
-
-    Enemy::new_basic();
-    Enemy::new_basic();
-    Enemy::new_basic(v1);
-    Enemy::new_basic(v1);
-    Enemy::new_basic(v1);
-    Enemy::new_boss();
-    Enemy::new_boss();
-    Enemy::new_boss();
-    Enemy::new_boss();
-    Enemy::new_boss();
-    CHECK(size(Enemy::enemies) == 10);
-    Enemy::delete_all_enemies();
-}
-
-TEST_CASE("Resource_manager")
-{
-  //Check that resouce_manager doens't load same sprite more than ones
-  sf::Texture test{};
-  sf::Texture test2{};
-  test = Resource_manager::load("resources/textures/Santa.png");
-  test2 = Resource_manager::load("resources/textures/Santa.png");
-  CHECK(Resource_manager::get_num_of_resources() == 1);
-}
 
 TEST_CASE("Projectile_basic")
 {
   //Make instance
   sf::Vector2f v1(1.0,1.0);
   sf::Vector2f v2(2.0,2.0);
-  Projectile_basic* P_BASIC = new Projectile_basic{"resources/textures/Snowball.png", v1, v2, 1.0, v1, 1, 5};
-  Projectile::projectiles.push_back(P_BASIC);
-  Projectile_pierce* P_PIERCE = new Projectile_pierce{"resources/textures/Snowball.png", v1, v2, 1.0, v1, 1, 5};
-  Projectile::projectiles.push_back(P_PIERCE);
-  CHECK(size(Projectile::projectiles) ==2);
+  sf::Vector2f v_dir(1.0,0);
+  sf::Vector2u v3(2.0,2.0);
+  sf::Vector2u v4(0.5,0.5);
 
-  Projectile_basic::position = v1;
-  Projectile_basic::prop.texture_file = "resources/textures/Snowball.png";
+  //Set Properties
+  Projectile_basic::prop.texture_file = "resources/textures/Santa.png";
   Projectile_basic::prop.size = v1;
   Projectile_basic::prop.hit_rad = 5;
-  Projectile_basic::prop.dir = v1;
-  Projectile_basic::prop.mov_spd = 3;
+  Projectile_basic::prop.dir = v_dir;
+  Projectile_basic::prop.mov_spd = 5;
   Projectile_basic::damage_init = 2;
+  Projectile_basic::frames_to_live = 5;
+  Tile::side_length = 1;
 
-  CHECK(Projectile_basic::position == v1);
+  //Check Properties
   CHECK(Projectile_basic::prop.texture_file == "resources/textures/Santa.png");
   CHECK(Projectile_basic::prop.size == v1);
   CHECK(Projectile_basic::prop.hit_rad == 5);
-  CHECK(Projectile_basic::prop.dir == v1);
-  CHECK(Projectile_basic::prop.mov_spd == 3);
+  CHECK(Projectile_basic::prop.dir == v_dir);
+  CHECK(Projectile_basic::prop.mov_spd == 5);
   CHECK(Projectile_basic::damage_init == 2);
 
+  //Adding projectiles and clone
+  Projectile* p3 = new Projectile_basic(v2,v2);
+  p3 -> clone(v_dir,v1);
+  Projectile* p1 = new Projectile_basic("resources/textures/Santa.png",
+                  v1, v2, 5, v1, 3, 2, 0);
+  Projectile::projectiles.push_back(p1);
+  Projectile* p2 = new Projectile_basic("resources/textures/Santa.png",
+                  v1, v2, 6, v1, 7, 9, 0);
+  Projectile::projectiles.push_back(p2);
+
+  //Checking vector projectiles and if clone works
+  CHECK(Projectile::projectiles.size()==3);
+  CHECK(p1->getPosition() == v1);
+  CHECK(p3->getPosition() == v2);
+  CHECK(Projectile::projectiles[0]->getPosition() == v1); //clone of p3
+  CHECK(Projectile::projectiles[0]->movement_speed == 5 );
+
+  //Chech update_position (and outside_screen)
+  CHECK(Projectile::projectiles[0]->update_position(v3));
+  CHECK(!(Projectile::projectiles[0]->update_position(v4)));
+  CHECK(Projectile::projectiles[0]->getPosition() == sf::Vector2f(6.0,1.0));
+
 }
 
-TEST_CASE("Tower_basic")
+TEST_CASE("Projectile_pierce")
 {
-  Tower_basic::position_init = v1;
-  Tower_basic::prop.texture_file = "resources/textures/Santa.png";
-  Tower_basic::prop.size = v1;
-  Tower_basic::prop.hit_rad = 5;
-  Tower_basic::prop.dir = v1;
-  Tower_basic::prop.mov_spd = 3;
-}
-*/
+  //Make instance
+  sf::Vector2f v1(1.0,1.0);
+  sf::Vector2f v2(2.0,2.0);
+  sf::Vector2f v_dir(1.0,0);
+  sf::Vector2u v3(2.0,2.0);
+  sf::Vector2u v4(0.5,0.5);
 
-void t(Wallet & w)
+  //Set Properties
+  Projectile_pierce::prop.texture_file = "resources/textures/Snowball.png";
+  Projectile_pierce::prop.size = v1;
+  Projectile_pierce::prop.hit_rad = 5;
+  Projectile_pierce::prop.dir = v_dir;
+  Projectile_pierce::prop.mov_spd = 5;
+  Projectile_pierce::damage_init = 2;
+  Projectile_pierce::frames_to_live = 5;
+  Tile::side_length = 1;
+
+  //Check Properties
+  CHECK(Projectile_pierce::prop.texture_file == "resources/textures/Snowball.png");
+  CHECK(Projectile_pierce::prop.size == v1);
+  CHECK(Projectile_pierce::prop.hit_rad == 5);
+  CHECK(Projectile_pierce::prop.dir == v_dir);
+  CHECK(Projectile_pierce::prop.mov_spd == 5);
+  CHECK(Projectile_pierce::damage_init == 2);
+
+  //Adding projectiles and clone
+  Projectile* p3 = new Projectile_pierce(v2,v2);
+  p3 -> clone(v_dir,v1);
+  Projectile* p1 = new Projectile_pierce("resources/textures/icicle1.png",
+                  v1, v2, 5, v1, 3, 2, 2, 0);
+  Projectile::projectiles.push_back(p1);
+  Projectile* p2 = new Projectile_pierce("resources/textures/icicle1.png",
+                  v1, v2, 6, v1, 7, 9, 2, 0);
+  Projectile::projectiles.push_back(p2);
+
+  //Checking vector projectiles and if clone works
+  CHECK(Projectile::projectiles.size()==6);
+  CHECK(p1->getPosition() == v1);
+  CHECK(p3->getPosition() == v2);
+  CHECK(Projectile::projectiles[3]->getPosition() == v1); //clone of p3
+  CHECK(Projectile::projectiles[3]->movement_speed == 5 );
+
+  //Chech update_position (and outside_screen)
+  CHECK(Projectile::projectiles[3]->update_position(v3));
+  CHECK(!(Projectile::projectiles[3]->update_position(v4)));
+  CHECK(Projectile::projectiles[3]->getPosition() == sf::Vector2f(6.0,1.0));
+}
+
+TEST_CASE("Projectile_bomb")
 {
+  //Make instance
+  sf::Vector2f v1(1.0,1.0);
+  sf::Vector2f v2(2.0,2.0);
+  sf::Vector2f v_dir(1.0,0);
+  sf::Vector2u v3(2.0,2.0);
+  sf::Vector2u v4(0.5,0.5);
 
+  //Set Properties
+  Projectile_bomb::prop.texture_file = "resources/textures/Santa.png";
+  Projectile_bomb::prop.size = v1;
+  Projectile_bomb::prop.hit_rad = 5;
+  Projectile_bomb::prop.dir = v_dir;
+  Projectile_bomb::prop.mov_spd = 5;
+  Projectile_bomb::damage_init = 2;
+  Projectile_bomb::frames_to_live = 5;
+  Tile::side_length = 1;
+
+  //Check Properties
+  CHECK(Projectile_bomb::prop.texture_file == "resources/textures/Santa.png");
+  CHECK(Projectile_bomb::prop.size == v1);
+  CHECK(Projectile_bomb::prop.hit_rad == 5);
+  CHECK(Projectile_bomb::prop.dir == v_dir);
+  CHECK(Projectile_bomb::prop.mov_spd == 5);
+  CHECK(Projectile_bomb::damage_init == 2);
+
+  //Adding projectiles and clone
+  Projectile* p3 = new Projectile_bomb(v2,v2);
+  p3 -> clone(v_dir,v1);
+  Projectile* p1 = new Projectile_bomb("resources/textures/Santa.png",
+                  v1, v2, 5, v1, 3, 2, 0 );
+  Projectile::projectiles.push_back(p1);
+  Projectile* p2 = new Projectile_bomb("resources/textures/Santa.png",
+                  v1, v2, 6, v1, 7, 9, 0);
+  Projectile::projectiles.push_back(p2);
+
+  //Checking vector projectiles and if clone works
+  CHECK(Projectile::projectiles.size()==9);
+  CHECK(p1->getPosition() == v1);
+  CHECK(p3->getPosition() == v2);
+  CHECK(Projectile::projectiles[6]->getPosition() == v1); //clone of p3
+  CHECK(Projectile::projectiles[6]->movement_speed == 5 );
+
+  //Chech update_position (and outside_screen)
+  CHECK(Projectile::projectiles[6]->update_position(v3));
+  CHECK(!(Projectile::projectiles[6]->update_position(v4)));
+  CHECK(Projectile::projectiles[6]->getPosition() == sf::Vector2f(6.0,1.0));
 }
 
-TEST_CASE("Wallet")
+TEST_CASE("Projectile_bomb_blast")
 {
+  //Vector
+  sf::Vector2f v1(1.0,1.0);
+  sf::Vector2f v2(2.0,2.0);
+  sf::Vector2f v_dir(1.0,0);
+  sf::Vector2u v3(2.0,2.0);
+  sf::Vector2u v4(0.5,0.5);
 
-    Wallet w{1000};
-    w.ui_callback = t;
-    CHECK(w.getCash() == 1000);
-    CHECK(w.take(200));
-    CHECK(w.getCash() == 800);
-    CHECK(!(w.take(2000)));
-    w.add(91);
-    CHECK(w.getCash() == 891);
+  Tile::side_length = 1;
+
+  //Adding projectiles and Clone
+  Projectile* p1 = new Projectile_bomb_blast("resources/textures/Santa.png",
+                  v1, v2, 5, v1, 3);
+  Projectile::projectiles.push_back(p1);
+  Projectile* p2 = new Projectile_bomb_blast("resources/textures/Santa.png",
+                  v1, v2, 6, v1, 7);
+  Projectile::projectiles.push_back(p2);
+  p1 ->clone(v_dir, v1);
+
+  //Checking vector projectiles and if clone works
+  CHECK(Projectile::projectiles.size()==12);
+  CHECK(p1->getPosition() == v1);
+  CHECK(Projectile::projectiles[9]->getPosition() == v1); //clone of p3
+  CHECK(Projectile::projectiles[9]->movement_speed == 3 );
+
+  //Chech update_position (and outside_screen)
+  CHECK(Projectile::projectiles[9]->update_position(v3));
+  CHECK(!(Projectile::projectiles[9]->update_position(v4)));
+  CHECK(Projectile::projectiles[9]->getPosition() == sf::Vector2f(4.0,4.0));
 }
-

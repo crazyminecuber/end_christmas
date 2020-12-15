@@ -11,11 +11,9 @@ public:
     : window{win}, game{gme},
       background_texture{Resource_manager::load(
                             "resources/textures/background_start_menu.png")}
-    {
-        init();
-    };
+    {};
 
-    void init();
+
 
     void handle_input(sf::Event & event) override;
     void update_logic()                  override;
@@ -29,6 +27,9 @@ private:
     sf::RenderWindow & window;
     Game & game;
     std::string this_state{"end"};
+
+    bool first_render{false};
+    void draw_end_screen();
 
     /* graphics stuff below */
     sf::Texture background_texture;

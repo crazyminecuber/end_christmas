@@ -4,9 +4,9 @@
 using namespace sf;
 using namespace std;
 Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
-            Vector2f position, sf::Color btn_color, sf::Color btn_select_color, sf::Color btn_no_cash_color, string font_name)
+            Vector2f position, sf::Color btn_color, sf::Color btn_select_color, sf::Color btn_no_cash_color, sf::Color _font_color, string font_name)
             : RectangleShape{btn_size}, tower{tw}, pricetag{make_pricetag(tw, font_name)},
-            tower_pic{make_tower_pic(tw)}, color{btn_color}, select_color{btn_select_color}, no_cash_color{btn_no_cash_color}
+            tower_pic{make_tower_pic(tw)}, color{btn_color}, select_color{btn_select_color}, no_cash_color{btn_no_cash_color}, font_color{_font_color}
 {
     // Creates sprite for image of tower, font and text for pricetag and sets
     // background color
@@ -25,6 +25,7 @@ Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
     price_orig.x = price_rec.left + price_rec.width / 2;
     price_orig.y = price_rec.top + price_rec.height / 2;
     pricetag.setOrigin(price_orig);
+    pricetag.setFillColor(font_color);
 
     // Scalingfontsprite
     float sprite_x{btn_size.x * 0.8f};
@@ -57,7 +58,6 @@ Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
 sf::Text Tower_button::make_pricetag(Tower * tw, std::string font_name)
 {
     string cost {to_string(tw->cost)};
-    // cout << "cost: " << cost << endl;
     return Text{cost, Resource_manager::load_font(font_name)}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
 }
 

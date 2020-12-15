@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "Resource_manager.h"
+#include <iostream>
 
 class Entity : public sf::Sprite
 {
@@ -11,7 +12,18 @@ public:
     Entity(std::string _texture_file,
            sf::Vector2f position, sf::Vector2f size,
            float hit_rad, sf::Vector2f dir, float mov_spd);
-    //Entity(Entity const & other)=default;
+    //Entity(Entity const & other) = default;
+    //{
+    //   std::cout << "movement_speed in Entity" << other.movement_speed <<std::endl;
+    //   texture_file = other.texture_file;
+    //   texture = other.texture;
+    //   size = other.size;
+    //   scale_moving_right = other.scale_moving_right;
+    //   hitbox_radius = other.hitbox_radius;
+    //   direction = other.direction;
+    //   movement_speed = other.movement_speed;
+    //
+    // }
     virtual ~Entity()=default;
 
 
