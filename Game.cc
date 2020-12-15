@@ -49,6 +49,12 @@ Game::~Game()
         delete t;
     }
     Tower::towers.clear();
+
+    for (auto it = Tile::tiles.begin(); it != Tile::tiles.end(); it++)
+    {
+        delete (*it).second;
+    }
+    Tile::tiles.clear();
 }
 
 // Help function to determine init projectile for tower
