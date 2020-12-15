@@ -18,7 +18,8 @@ public:
             sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name);
 
     Tower * on_click(sf::Vector2f click, Wallet & wallet);
-    void render(sf::RenderWindow & window);
+    void render_button(sf::RenderWindow & window);
+    void render_selected_tower(sf::RenderWindow & window);
     void update_ui(Wallet wallet);
 
 private:

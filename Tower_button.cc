@@ -47,19 +47,22 @@ Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
 Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
 {
     // Return chosen_tower to shop.
-    // cout << "wallet.getCash()" << wallet.getCash() << endl;
-    if (wallet.getCash() < tower->cost)
+    Tower* returned_tower{nullptr};
+
+    if ( wallet.getCash() < tower->cost )
     {
        not_enough_cash();
-       return nullptr;
     }
-    if(!getGlobalBounds().contains(click))
+    else if ( !getGlobalBounds().contains(click) || selected )
     {
        unselect();
-       return nullptr;
     }
-    select();
-    return tower;
+    else
+    {
+        select();
+        returned_tower = tower;
+    }
+    return returned_tower;
 }
 
 sf::Text Tower_button::make_pricetag(Tower * tw, std::string font_name)
@@ -74,12 +77,15 @@ sf::Sprite Tower_button::make_tower_pic(Tower * tw)
     return Sprite{Resource_manager::load(texture_file)}; // Again hoping for move construction
 }
 
-void Tower_button::render(sf::RenderWindow & window)
+void Tower_button::render_button(sf::RenderWindow & window)
 {
     window.draw(*this);
     window.draw(tower_pic);
     window.draw(pricetag);
+}
 
+void Tower_button::render_selected_tower(sf::RenderWindow & window)
+{
     if ( selected )
     {
         copy_of_tower_sprite.setPosition     (sf::Mouse::getPosition().x,
@@ -94,20 +100,20 @@ void Tower_button::render(sf::RenderWindow & window)
 void Tower_button::select()
 {
     setFillColor(select_color);
-    inactive= false;
+    inactive = false;
     selected = true;
 }
 
 void Tower_button::unselect()
 {
     setFillColor(color);
-    inactive= false;
+    inactive = false;
     selected = false;
 }
 void Tower_button::not_enough_cash()
 {
     setFillColor(no_cash_color);
-    inactive= true;
+    inactive = true;
     selected = false; // line should not be needed but maybe?
 }
 

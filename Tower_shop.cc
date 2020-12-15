@@ -70,14 +70,19 @@ sf::Text Tower_shop::make_text(string font_name)
 
 void Tower_shop::render(sf::RenderWindow & window)
 {
+    // chose to render selected tower behind shop but maybe put in front?
+    for (auto it = buttons.begin(); it != buttons.end(); it++)
+    {
+        it->render_selected_tower(window);
+    }
+
     window.draw(*this);
     window.draw(wallet_text);
     window.draw(heading);
-    for (auto it = buttons.begin();
-         it != buttons.end();
-         it++)
+
+    for (auto it = buttons.begin(); it != buttons.end(); it++)
     {
-        it->render(window);
+        it->render_button(window);
     }
 }
 

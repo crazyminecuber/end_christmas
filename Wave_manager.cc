@@ -46,7 +46,7 @@ void Wave_manager::render()
 //Private
 void Wave_manager::init()
 {
-    /* text *
+    /* text */
     sf::Vector2f text_pos{0,50};
     float text_size{50};
     text_wave.setFont((font));
