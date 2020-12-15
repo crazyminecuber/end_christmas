@@ -6,7 +6,8 @@ using namespace std;
 Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
             Vector2f position, sf::Color btn_color, sf::Color btn_select_color, sf::Color btn_no_cash_color, sf::Color _font_color, string font_name)
             : RectangleShape{btn_size}, tower{tw}, pricetag{make_pricetag(tw, font_name)},
-            tower_pic{make_tower_pic(tw)}, color{btn_color}, select_color{btn_select_color}, no_cash_color{btn_no_cash_color}, font_color{_font_color}
+            tower_pic{make_tower_pic(tw)}, color{btn_color}, select_color{btn_select_color}, no_cash_color{btn_no_cash_color}, font_color{_font_color},
+            copy_of_tower_texture{*(tw->getTexture())}
 {
     // Creates sprite for image of tower, font and text for pricetag and sets
     // background color
@@ -35,6 +36,12 @@ Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
     tower_pic.setOrigin(tower_pic.getLocalBounds().width / 2, tower_pic.getLocalBounds().height / 2); // OBS! In local coordinates! Take scale into account! Therefore using localbounds.
 
     tower_pic.setPosition(getPosition());
+
+    // copy tower visuals
+    copy_of_tower_sprite.setTexture(copy_of_tower_texture, false);
+    copy_of_tower_sprite.setScale(tower->getScale());
+    copy_of_tower_sprite.setOrigin(tower->getOrigin());
+    copy_of_tower_circleshape = tower->circle_hit_rad;
 }
 
 Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
@@ -72,23 +79,36 @@ void Tower_button::render(sf::RenderWindow & window)
     window.draw(*this);
     window.draw(tower_pic);
     window.draw(pricetag);
+
+    if ( selected )
+    {
+        copy_of_tower_sprite.setPosition     (sf::Mouse::getPosition().x,
+                                              sf::Mouse::getPosition().y - 32); // have to subtract cursor height for some reason
+        copy_of_tower_circleshape.setPosition(sf::Mouse::getPosition().x,
+                                              sf::Mouse::getPosition().y - 32); // have to subtract cursor height for some reason
+        window.draw(copy_of_tower_sprite);
+        window.draw(copy_of_tower_circleshape);
+    }
 }
 
 void Tower_button::select()
 {
     setFillColor(select_color);
     inactive= false;
+    selected = true;
 }
 
 void Tower_button::unselect()
 {
     setFillColor(color);
     inactive= false;
+    selected = false;
 }
 void Tower_button::not_enough_cash()
 {
     setFillColor(no_cash_color);
     inactive= true;
+    selected = false; // line should not be needed but maybe?
 }
 
 void Tower_button::update_ui(Wallet wallet)

@@ -114,7 +114,7 @@ Tower * Tower_ring::create_active(sf::Vector2f position)
 {
     Tower * t = new Tower_ring{*this};
     t->setPosition(position);
-    // t->init_circle_hit_rad(); // Not sure if hit_rad has any purpose for tower_rings?
+    t->init_circle_hit_rad(); // Not sure if hit_rad has any purpose for tower_rings?
     towers.push_back(t);
     return t;
 }

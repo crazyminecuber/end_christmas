@@ -27,6 +27,7 @@ private:
     void not_enough_cash();
 
     bool inactive{};
+    bool selected{false};
     Tower* tower;
     sf::Text pricetag{};
     sf::Sprite tower_pic{};
@@ -36,6 +37,10 @@ private:
     sf::Color select_color{};
     sf::Color no_cash_color{};
     sf::Color font_color{};
+
+    sf::Texture     const& copy_of_tower_texture;
+    sf::Sprite      copy_of_tower_sprite;
+    sf::CircleShape copy_of_tower_circleshape;
 
 };
 

@@ -8,7 +8,7 @@
 
 std::ostream& operator<<(std::ostream& os,const Entity & E)
 {
-    os << "Entity at position : ("
+    os  << "Entity at position : ("
         << std::to_string(E.getPosition().x) << ", "
         << std::to_string(E.getPosition().y);
     return os;
@@ -27,7 +27,7 @@ Entity::Entity(std::string _texture_file,
     direction{dir},
     movement_speed{(mov_spd*Tile::side_length)}
 {
-    init(position); // size is not needed as argument. 
+    init(position);
 }
 
 //void Entity::init(sf::Vector2f position)

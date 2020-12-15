@@ -18,11 +18,15 @@ public:
         sf::Vector2f size, float hit_rad,
         int _cost, Projectile * proj, int f_period)
     :Entity(texture_file, sf::Vector2f{0,0},
-        size, hit_rad,
-        sf::Vector2f{1,0}, 0),
-        fire_period{f_period},
-        projectile{proj},
-        cost{_cost}{}
+            size, hit_rad,
+            sf::Vector2f{1,0}, 0),
+            fire_period{f_period},
+            projectile{proj},
+            cost{_cost}
+    {
+        init_circle_hit_rad(); // create circle_hit_rad for factory_towers to use when placing towers
+    }
+
     Tower(Tower const & other);
     ~Tower() = default;
     void collision(Enemy* object);
@@ -56,8 +60,8 @@ public:
   Tower_basic(std::string texture_file,
       sf::Vector2f size, float hit_rad,
       int cost, Projectile * proj, int f_period)
-  : Tower(texture_file, size, hit_rad, cost, proj, f_period){
-  }
+  : Tower(texture_file, size, hit_rad, cost, proj, f_period)
+  {}
 
   Tower_basic(Tower_basic const & other);
   ~Tower_basic()=default;
