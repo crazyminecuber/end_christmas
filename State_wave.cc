@@ -21,12 +21,12 @@ void State_wave::handle_input(sf::Event & event)
         }
         else if ( event.key.code == sf::Keyboard::F )
         {
-            if ( State_machine::get_fps() == 60 )
-                State_machine::set_fps(120);
-            else if ( State_machine::get_fps() == 120 )
-                State_machine::set_fps(240);
+            if ( State_machine::get_fps() < 60.1 )
+                State_machine::set_fps(120.f);
+            else if ( State_machine::get_fps() < 120.1 )
+                State_machine::set_fps(240.f);
             else
-                State_machine::set_fps(60);
+                State_machine::set_fps(60.f);
         }
     }
 
