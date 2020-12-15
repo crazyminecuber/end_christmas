@@ -49,6 +49,10 @@ int State_wait::get_next_state()
     int return_value{WAIT};
     if (play)
     {
+        for (Projectile *p : Projectile::projectiles)
+        {
+            delete p;
+        }
         Projectile::projectiles.clear();
         return_value = WAVE;
         game->next_wave();
