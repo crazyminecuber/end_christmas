@@ -29,7 +29,8 @@ State_machine::State_machine(const string &title,
         game{make_shared<Game>(
                 window,
                 settings["game"]["health_texture"],
-                settings["game"]["hp"] ) }
+                settings["game"]["hp"],
+                State_machine::fps ) }
 {
     game->init_tiles(entity_file);
     sf::Font font{Resource_manager::load_font(settings["font"])};
