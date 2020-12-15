@@ -252,6 +252,20 @@
                 "3" : "resources/textures/dirt.jpg",
                 "4" : "resources/textures/dirt.jpg"
             }
+        },
+        "map_boat" :
+        {
+            "file_name" : "resources/maps/map_boat.csv",
+            "display_name" : "Boat",
+            "difficulty" : "Medium",
+            "tiles" :
+            {
+                "0" : "resources/textures/stones.jpg",
+                "1" : "resources/textures/grass.jpg",
+                "2" : "resources/textures/dirt.jpg",
+                "3" : "resources/textures/dirt.jpg",
+                "4" : "resources/textures/dirt.jpg"
+            }
         }
     }
 }
