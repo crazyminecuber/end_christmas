@@ -3,15 +3,17 @@
 #define TOWER_H
 #include <iostream>
 #include <vector>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/System/Vector2.hpp> //remove?
+#include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "Enemy.h"
 #include "Projectile.h"
 
 
+
 class Tower : public Entity
 {
-  public:
+public:
     Tower(std::string texture_file,
         sf::Vector2f size, float hit_rad,
         int _cost, Projectile * proj, int f_period)
@@ -32,14 +34,18 @@ class Tower : public Entity
     static std::vector<Tower*> factory_towers;
     std::vector<Enemy*> shootable_enemies;
 
-  protected:
+    void init_circle_hit_rad();
+    sf::CircleShape circle_hit_rad;
+protected:
+
     Entity* target_enemy;
     int frame_last_shot{0};
     int fire_period;
     int fire_angle;
 
     Projectile * projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren? (Abstrakt klass går ej att instansiera, bästa jag vet är att använda unique_ptr, men kräver en del jobb)
- public:
+
+public:
     int cost{};
 };
 

@@ -63,6 +63,9 @@ public:
 
 	void set_selected_map(std::string map_name);
 
+	void set_render_tower_radii(bool render);
+	bool get_render_tower_radii();
+
 	void init_tiles(std::string const & file_entity);
 	std::map<std::string, std::map<std::string, std::string>> maps;
 
@@ -79,6 +82,7 @@ private:
 	static int frame;
 	float const fps;
 	Wave_manager wave_manager;
+	bool render_tower_radii{false};
 
 
     Tower_shop shop;

@@ -18,6 +18,17 @@ Tower::Tower(Tower const & other)
     cost{other.cost}
 {}
 
+void Tower::init_circle_hit_rad()
+{
+    circle_hit_rad.setRadius(hitbox_radius);
+    circle_hit_rad.setOrigin(circle_hit_rad.getGlobalBounds().width  / 2.f,
+                             circle_hit_rad.getGlobalBounds().height / 2.f);
+    circle_hit_rad.setFillColor(sf::Color(0, 0, 0, 40));
+    circle_hit_rad.setOutlineColor(sf::Color::Black);
+    circle_hit_rad.setOutlineThickness(2);
+    circle_hit_rad.setPosition(getPosition());
+}
+
 void Tower::collision(Enemy* object)
 {
   shootable_enemies.push_back(object);
@@ -41,6 +52,7 @@ Tower * Tower_basic::create_active(sf::Vector2f position)
 {
     Tower * t = new Tower_basic{*this};
     t->setPosition(position);
+    t->init_circle_hit_rad();
     towers.push_back(t);
     return t;
 }
@@ -102,6 +114,7 @@ Tower * Tower_ring::create_active(sf::Vector2f position)
 {
     Tower * t = new Tower_ring{*this};
     t->setPosition(position);
+    // t->init_circle_hit_rad(); // Not sure if hit_rad has any purpose for tower_rings?
     towers.push_back(t);
     return t;
 }

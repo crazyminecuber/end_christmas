@@ -225,9 +225,19 @@ void Game::render()
         window->draw(*(*it)); // it doesn't make sense to me either but it works
     }
 
+    // render towers
     for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
     {
         window->draw(*(*it)); // it doesn't make sense to me either but it works
+    }
+
+    // render tower radii
+    if ( render_tower_radii )
+    {
+        for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
+        {
+            window->draw((*(*it)).circle_hit_rad);
+        }
     }
 
     //render projectiles
@@ -595,6 +605,15 @@ sf::Vector2u Game::get_window_size()
 void Game::set_selected_map(std::string map_name)
 {
     selected_map = map_name;
+}
+
+void Game::set_render_tower_radii(bool render)
+{
+    render_tower_radii = render;
+}
+bool Game::get_render_tower_radii()
+{
+    return render_tower_radii;
 }
 
 /* Check collisions between every enemy and projectile.

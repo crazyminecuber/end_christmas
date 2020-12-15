@@ -28,6 +28,10 @@ void State_wave::handle_input(sf::Event & event)
             else
                 State_machine::set_fps(60);
         }
+        else if ( event.key.code == sf::Keyboard::R )
+        {
+            game->set_render_tower_radii( !(game->get_render_tower_radii()) );
+        }
     }
 
 }
