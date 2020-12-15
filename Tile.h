@@ -12,10 +12,10 @@ struct cmpTileByCoord;
 class Tile : public sf::Sprite
 {
 public:
-    Tile(std::string texture_file, sf::RenderWindow const& win,
+    Tile(std::string texture_file,
          sf::Vector2i index_pos)
     : sf::Sprite(),
-    window{win}, texture{Resource_manager::load(texture_file)},
+    texture{Resource_manager::load(texture_file)},
     index_position{index_pos}
     {
         init();
@@ -41,7 +41,6 @@ public:
 	static bool is_tile_enemy_end(sf::Vector2i index);
 
 protected:
-    sf::RenderWindow const& window;
     sf::Texture const& texture;
     sf::Vector2f coord_position;
     sf::Vector2i index_position;

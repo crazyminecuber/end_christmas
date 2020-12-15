@@ -8,9 +8,9 @@
 class Tile_enemy : public Tile
 {
 public:
-    Tile_enemy(std::string texture_file, sf::RenderWindow const& win,
+    Tile_enemy(std::string texture_file,
                sf::Vector2i index_pos)
-    : Tile(texture_file, win, index_pos)
+    : Tile(texture_file, index_pos)
     {}
 
     void set_direction(sf::Vector2f dir) override;
