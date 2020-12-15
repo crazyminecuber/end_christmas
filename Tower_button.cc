@@ -88,10 +88,10 @@ void Tower_button::render_selected_tower(sf::RenderWindow & window)
 {
     if ( selected )
     {
-        copy_of_tower_sprite.setPosition     (sf::Mouse::getPosition().x,
-                                              sf::Mouse::getPosition().y - 32); // have to subtract cursor height for some reason
-        copy_of_tower_circleshape.setPosition(sf::Mouse::getPosition().x,
-                                              sf::Mouse::getPosition().y - 32); // have to subtract cursor height for some reason
+        copy_of_tower_sprite.setPosition     (sf::Mouse::getPosition(window).x,
+                                              sf::Mouse::getPosition(window).y);
+        copy_of_tower_circleshape.setPosition(sf::Mouse::getPosition(window).x,
+                                              sf::Mouse::getPosition(window).y);
         window.draw(copy_of_tower_sprite);
         window.draw(copy_of_tower_circleshape);
     }
