@@ -29,9 +29,9 @@ void Tower::init_circle_hit_rad()
     circle_hit_rad.setPosition(getPosition());
 }
 
-void Tower::collision(Enemy* object)
+void Tower::collision(Enemy* object, float distance)
 {
-  shootable_enemies.push_back(object);
+  shootable_enemies.emplace( make_pair(distance,object) );
 }
 
 //Creating ptojectiles
@@ -78,7 +78,7 @@ Entity * Tower_basic::select_target()
 {
   if (!shootable_enemies.empty())
   {
-    target_enemy = shootable_enemies.front();
+    target_enemy = (*shootable_enemies.begin()).second;
   }
   return target_enemy;
 }

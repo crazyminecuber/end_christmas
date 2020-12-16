@@ -35,4 +35,3 @@ clean:
 	rm -f a.out
 	rm -f demo
 	rm -f play
-	rm -f debug
