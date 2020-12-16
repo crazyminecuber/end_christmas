@@ -158,17 +158,24 @@ void Game::load_map(string const & file_entity)
 
     /* update side_length */
     // calculate Tile::side_length and change all tiles
+    float shop_sizeX = read_shop_width(file_entity);
+
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y  + (1 - 2);
-    Tile::side_length = std::min(window->getSize().x/tiles_per_col,
-                                 window->getSize().y/tiles_per_row);
+    float max_size_win_x = (window->getSize().x - shop_sizeX)/tiles_per_col;
+    float max_size_win_y = window->getSize().y/tiles_per_row;
+    float max_size_screen_x = (sf::VideoMode::getDesktopMode().width
+                                - shop_sizeX)/tiles_per_col;
+    float max_size_screen_y = sf::VideoMode::getDesktopMode().height
+                                             /tiles_per_row;
+    Tile::side_length = std::min({max_size_win_x, max_size_win_y,
+                                  max_size_screen_x, max_size_screen_y});
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
     }
 
     /* update window size */
-    float shop_sizeX = read_shop_width(file_entity);
     unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
     unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
     window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);

@@ -19,12 +19,10 @@ public:
 	Game() = delete;
 	Game(std::shared_ptr<sf::RenderWindow> win,
 		 std::string const & file_health_texture,
-		 int hp,
-		 float fps)
+		 int hp)
 		 /*std::string const & shop_file,*/
 		 : window{win},
 		   health{win, file_health_texture, hp},
-		   fps{fps}, // borde inte denna tas bort eftersom State_machine har hand om fps?
 		   wave_manager{win}/*, shop{shop_file}*/
 		 {
 
@@ -82,7 +80,6 @@ private:
 	void init_shop(nlohmann::json const & json_obj);
 	Health health;
 	static int frame;
-	float const fps;
 	Wave_manager wave_manager;
 	bool render_tower_radii{false};
 

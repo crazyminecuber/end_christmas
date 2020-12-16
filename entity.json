@@ -231,7 +231,7 @@
                     "hit_rad" : 0.25,
                     "mov_spd" : 0.08,
                     "rotation_offset" : -90,
-                    "nr_pierce_init" : 0
+                    "nr_pierce_init" : 2
                 },
             "Projectile_bomb" :
                 {
@@ -257,15 +257,7 @@
     "Tower" :
         {
             "Tower_basics" :
-            [{
-                    "sprite_init" : "resources/textures/tower_basic.png",
-                    "projectile_init" : "Projectile_pierce",
-                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
-                    "cost_init" : 50,
-                    "detection_radius_init" : 5,
-                    "fire_period_init" : 100,
-                    "size": [1,1]
-                },
+            [
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_basic",
@@ -274,27 +266,57 @@
                     "detection_radius_init" : 6,
                     "fire_period_init" : 10,
                     "size": [1,1]
-                }],
+                },
+                {
+                    "sprite_init" : "resources/textures/tower_basic.png",
+                    "projectile_init" : "Projectile_pierce",
+                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
+                    "cost_init" : 75,
+                    "detection_radius_init" : 6,
+                    "fire_period_init" : 10,
+                    "size": [1,1]
+                },
+				{
+                    "sprite_init" : "resources/textures/tower_basic.png",
+                    "projectile_init" : "Projectile_bomb",
+                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
+                    "cost_init" : 50,
+                    "detection_radius_init" : 5,
+                    "fire_period_init" : 100,
+                    "size": [1,1]
+                }
+			],
 
             "Tower_rings" :
-            [{
+            [
+				{
                     "sprite_init" : "resources/textures/tower_ring.png",
-                    "projectile_init" : "Projectile_pierce",
+                    "projectile_init" : "Projectile_basic",
                     "cost_init" : 50,
                     "detection_radius_init" : 0,
                     "fire_period_init" : 100,
                     "size": [1,1],
                     "num_projectile_init": 6
                 },
+				{
+                    "sprite_init" : "resources/textures/tower_ring.png",
+                    "projectile_init" : "Projectile_pierce",
+                    "cost_init" : 50,
+                    "detection_radius_init" : 0,
+                    "fire_period_init" : 100,
+                    "size": [1,1],
+                    "num_projectile_init": 8
+                },
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
                     "projectile_init" : "Projectile_bomb",
                     "cost_init" : 150,
                     "detection_radius_init" : 0,
-                    "fire_period_init" : 10,
+                    "fire_period_init" : 90,
                     "size": [1,1],
                     "num_projectile_init": 8
-                }]
+                }
+			]
         },
     "Shop" :
         {
