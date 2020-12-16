@@ -13,13 +13,13 @@ OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile
 #SRCS := $(wildcard *.cc)
 #HEADERS := $(SRCS:%.cc=%.h)
 #OBJS
-.PHONY: clean, test
+.PHONY: clean, test, dox
 
-all: $(OBJS)
+all: $(OBJS) main.cc
 	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o game
 
 demo: $(OBJS)
-	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS)
+	$(CCC) $(CFLAGS) main.cc $^ -o $@ $(LDFLAGS)
 	./a.out
 
 test: $(OBJS) test_main.o tests.cc
@@ -30,7 +30,7 @@ test_main.o: test_main.cc
 	$(CCC) $(CFLAGS) -c test_main.cc
 
 %.o: %.cc %.h
-	$(CCC) $(CFLAGS) -c $< $(LDFLAGS)
+	$(CCC) $(CFLAGS) -c $< -o $@
 
 dox:
 	doxygen doxyconf
