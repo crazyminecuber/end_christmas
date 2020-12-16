@@ -298,11 +298,6 @@ void Game::render()
     wave_manager.render();
 }
 
-bool Game::is_running()
-{
-    return window->isOpen();
-}
-
 // void Game::enemy_update_direction()
 // {
 //     float damage_dealt{0};
