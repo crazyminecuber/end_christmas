@@ -4,6 +4,7 @@
 #include <math.h>
 #include <vector>
 #include "Game.h"
+#include "Tile.h"
 using namespace std;
 //Init static variables
 std::vector<Tower*> Tower::towers{};
@@ -31,7 +32,8 @@ void Tower::init_circle_hit_rad()
 
 void Tower::collision(Enemy* object, float distance)
 {
-  shootable_enemies.emplace( make_pair(distance,object) );
+    float tile_number = Tile::get_tile_by_coord(object->getPosition())->get_tile_number();
+    shootable_enemies.emplace( make_pair(sf::Vector2f{distance, tile_number}, object) );
 }
 
 //Creating ptojectiles
@@ -64,7 +66,7 @@ void Tower_basic::shoot()
   {
     if (Game::get_frame() - frame_last_shot > fire_period)
     {
-      pair<float, Entity *> target = select_target();
+      pair<sf::Vector2f, Entity *> target = select_target();
       sf::Vector2f aim_dir = aim_direction(target);
       make_projectile(aim_dir, getPosition());
       frame_last_shot = Game::get_frame();
@@ -74,7 +76,7 @@ void Tower_basic::shoot()
 }
 
 //Selecting enemy to shoot at
-pair<float,Entity *> Tower_basic::select_target()
+pair<sf::Vector2f, Entity *> Tower_basic::select_target()
 {
   if (!shootable_enemies.empty())
   {
@@ -91,11 +93,11 @@ pair<float,Entity *> Tower_basic::select_target()
 // }
 
 //Selecting direction for projectile
-sf::Vector2f Tower_basic::aim_direction(pair<float, Entity *> target_enemy)
+sf::Vector2f Tower_basic::aim_direction(pair<sf::Vector2f, Entity *> target_enemy)
 {
   sf::Vector2f aim = (target_enemy.second->getPosition());
   sf::Vector2f t_dir = (target_enemy.second->get_direction() );
-  float distance_to_enemy = sqrt(target_enemy.first);
+  float distance_to_enemy = sqrt(target_enemy.first.x);
   float frames = distance_to_enemy / projectile->movement_speed;
   sf::Vector2f target = aim + t_dir*target_enemy.second->movement_speed*frames ;
   sf::Vector2f dir =  target - getPosition();
