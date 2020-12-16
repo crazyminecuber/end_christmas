@@ -67,6 +67,16 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     return ready_check;
 }
 
+void Tile_enemy::set_tile_number(int tile_num)
+{
+    tile_number = tile_num;
+}
+
+int Tile_enemy::get_tile_number()
+{
+    return tile_number;
+}
+
 //
 // Tower* Tile_enemy::on_click()
 // {

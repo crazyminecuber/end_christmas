@@ -19,12 +19,12 @@
                     "texture" : "resources/textures/reindeer.png",
                     "size": [0.5, 0.7],
                     "hit_rad": 0.25,
-                    "mov_spd": 0.05
+                    "mov_spd": 0.1
                 },
             "reindeer_expert" :
                 {
                     "type": "Enemy_basic",
-                    "life_init" : 3,
+                    "life_init" : 10,
                     "reward_init" : 5,
                     "texture" : "resources/textures/reindeer.png",
                     "size": [0.7, 0.9],
@@ -107,15 +107,15 @@
             "elf_group" :
             {
                 "start_wave": 1,
-                "end_wave" : 3,
+                "end_wave" : 2,
                 "enemy" : "elf",
-                "spawn_delay": 1,
-                "spawn_rate" : 2.5,
+                "spawn_delay": 0,
+                "spawn_rate" :5,
                 "num_in_group": 5,
                 "num_in_group_inc": 10,
                 "group_spawn_interval": 2,
                 "num_of_groups": 2,
-                "num_of_groups_inc": 1
+                "num_of_groups_inc": 4
             },
             "elf_group_better" :
             {
@@ -124,10 +124,10 @@
                 "enemy" : "elf",
                 "spawn_delay": 1,
                 "spawn_rate" : 7,
-                "num_in_group": 5,
-                "num_in_group_inc": 10,
+                "num_in_group": 10,
+                "num_in_group_inc": 5,
                 "group_spawn_interval": 2,
-                "num_of_groups": 2,
+                "num_of_groups": 4,
                 "num_of_groups_inc": 1
             },
             "reindeer_group" :
@@ -168,8 +168,20 @@
                 "group_spawn_interval": 0,
                 "num_of_groups": 1,
                 "num_of_groups_inc": 0
-            }
-            ,
+            },
+            "elf_group_betterB" :
+            {
+                "start_wave": 6,
+                "end_wave" : 6,
+                "enemy" : "elf",
+                "spawn_delay": 1,
+                "spawn_rate" : 15,
+                "num_in_group": 150,
+                "num_in_group_inc": 10,
+                "group_spawn_interval": 2,
+                "num_of_groups": 4,
+                "num_of_groups_inc": 1
+            },
             "sled_elf_group" :
             {
                 "start_wave": 7,
@@ -220,7 +232,7 @@
                     "size" : [0.25,0.25],
                     "hit_rad" : 0.125,
                     "rotation_offset" : 0,
-                    "mov_spd" : 0.1
+                    "mov_spd" : 0.15
                 },
             "Projectile_pierce" :
                 {
@@ -229,9 +241,9 @@
                     "texture" : "resources/textures/icicle1.png",
                     "size" : [0.5,0.5],
                     "hit_rad" : 0.25,
-                    "mov_spd" : 0.08,
+                    "mov_spd" : 0.06,
                     "rotation_offset" : -90,
-                    "nr_pierce_init" : 0
+                    "nr_pierce_init" : 6
                 },
             "Projectile_bomb" :
                 {
@@ -241,14 +253,14 @@
                     "size" : [0.5, 0.5],
                     "hit_rad" : 0.25,
                     "rotation_offset" : 0,
-                    "mov_spd" : 0.08
+                    "mov_spd" : 0.04
                 },
             "Projectile_bomb_blast" :
                 {
-                    "frames_to_live" : 1,
-                    "damage_init" : 2,
+                    "frames_to_live" : 5,
+                    "damage_init" : 3,
                     "texture" : "resources/textures/Bang.png",
-                    "size" : [1,1],
+                    "size" : [3,3],
                     "hit_rad" : 0.5,
                     "rotation_offset" : 0,
                     "mov_spd" : 0
@@ -263,42 +275,72 @@
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 5,
-                    "fire_period_init" : 100,
+                    "fire_period_init" : 50,
                     "size": [1,1]
                 },
                 {
                     "sprite_init" : "resources/textures/tower_basic_blue.png",
                     "projectile_init" : "Projectile_basic",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
-                    "cost_init" : 75,
+                    "cost_init" : 125,
                     "detection_radius_init" : 6,
-                    "fire_period_init" : 10,
+                    "fire_period_init" : 200,
                     "size": [1,1]
-                }],
+                },
+                {
+                    "sprite_init" : "resources/textures/tower_basic.png",
+                    "projectile_init" : "Projectile_bomb",
+                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
+                    "cost_init" : 250,
+                    "detection_radius_init" : 6,
+                    "fire_period_init" : 200,
+                    "size": [1,1]
+                },
+				{
+                    "sprite_init" : "resources/textures/tower_basic.png",
+                    "projectile_init" : "Projectile_bomb",
+                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
+                    "cost_init" : 50,
+                    "detection_radius_init" : 5,
+                    "fire_period_init" : 100,
+                    "size": [1,1]
+                }
+			],
 
             "Tower_rings" :
-            [{
+            [
+				{
                     "sprite_init" : "resources/textures/tower_ring_green.png",
+                    "projectile_init" : "Projectile_basic",
+                    "cost_init" : 50,
+                    "detection_radius_init" : 0,
+                    "fire_period_init" : 25,
+                    "size": [1,1],
+                    "num_projectile_init": 6
+                },
+				{
+                    "sprite_init" : "resources/textures/tower_ring_red.png",
                     "projectile_init" : "Projectile_pierce",
                     "cost_init" : 50,
                     "detection_radius_init" : 0,
                     "fire_period_init" : 100,
                     "size": [1,1],
-                    "num_projectile_init": 6
+                    "num_projectile_init": 8
                 },
                 {
                     "sprite_init" : "resources/textures/tower_ring_red.png",
                     "projectile_init" : "Projectile_bomb",
                     "cost_init" : 150,
                     "detection_radius_init" : 0,
-                    "fire_period_init" : 10,
+                    "fire_period_init" : 30,
                     "size": [1,1],
                     "num_projectile_init": 8
-                }]
+                }
+			]
         },
     "Shop" :
         {
-            "start_cash" : 150,
+            "start_cash" : 100,
             "font_name" : "resources/fonts/best_font.ttf",
             "font_color" :
             {

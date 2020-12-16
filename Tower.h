@@ -2,7 +2,7 @@
 #ifndef TOWER_H
 #define TOWER_H
 #include <iostream>
-#include <vector>
+#include <map>
 #include <SFML/System/Vector2.hpp> //remove?
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
@@ -29,20 +29,20 @@ public:
 
     Tower(Tower const & other);
     ~Tower() = default;
-    void collision(Enemy* object);
+    void collision(Enemy* object, float distance);
     virtual void shoot()=0;
     virtual Tower * create_active(sf::Vector2f position) = 0;
     void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
 
     static std::vector<Tower*> towers;
     static std::vector<Tower*> factory_towers;
-    std::vector<Enemy*> shootable_enemies;
+    std::map<float, Enemy*> shootable_enemies;
 
     void init_circle_hit_rad();
     sf::CircleShape circle_hit_rad;
 protected:
 
-    Entity* target_enemy;
+    std::pair<float, Entity*> target_enemy;
     int frame_last_shot{0};
     int fire_period;
     int fire_angle;
@@ -68,8 +68,8 @@ public:
 
   void shoot() override;
   Tower * create_active(sf::Vector2f position) override;
-  Entity * select_target();
-  sf::Vector2f aim_direction(Entity * target_enemy);
+  std::pair<float, Entity *> select_target();
+  sf::Vector2f aim_direction(std::pair<float, Entity *> target_enemy);
 };
 
 class Tower_ring : public Tower
