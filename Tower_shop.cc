@@ -8,20 +8,23 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
         sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color,
         sf::Color btn_color, sf::Color btn_select_color,  sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name, std::string texture_file)
     : RectangleShape(siz), passive_towers{pt}, font_color{font_color}, button_size{btn_size},
-    heading{make_text(font_name)}, wallet_text{make_text(font_name)}// Lagra position och size i sfml:objectet.
+    heading{make_text(font_name)}, wallet_text{make_text(font_name)}
+// Lagra position och size i sfml:objectet.
 {
     set_chosen_tower(nullptr);
     setPosition(pos);
     //setFillColor(color);
     setTexture(&Resource_manager::load(texture_file));
 
-    wallet_text.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y + 80);
+    wallet_text.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y + 100);
 
+    heading.setCharacterSize(70);
+    heading.setFillColor(font_color);
     heading.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y);
     sf::Vector2f head_orig{};
     sf::FloatRect head_rec = heading.getLocalBounds();
     head_orig.x = head_rec.left + head_rec.width / 2;
-    head_orig.y = 0.0f;
+    head_orig.y = -10.0f;
     heading.setOrigin(head_orig);
 
     int nr_columns{2};
@@ -116,6 +119,8 @@ Tower * Tower_shop::get_chosen_tower()
 
 void Tower_shop::update_shop_ui(Wallet wallet)
 {
+    wallet_text.setCharacterSize(50);
+    wallet_text.setFillColor(font_color);
     wallet_text.setString("$" + to_string(wallet.getCash()));
     sf::Vector2f price_orig{};
     sf::FloatRect price_rec = wallet_text.getLocalBounds();
