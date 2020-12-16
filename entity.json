@@ -19,7 +19,7 @@
                     "texture" : "resources/textures/reindeer.png",
                     "size": [0.5, 0.7],
                     "hit_rad": 0.25,
-                    "mov_spd": 0.1
+                    "mov_spd": 0.075
                 },
             "reindeer_expert" :
                 {
@@ -81,7 +81,7 @@
                 {
                     "type": "Enemy_boss",
                     "child": "reindeer_expert",
-                    "num_of_children": 100,
+                    "num_of_children": 50,
                     "life_init" : 10,
                     "reward_init" : 70,
                     "texture" : "resources/textures/santaandsled.png",
@@ -110,7 +110,7 @@
                 "end_wave" : 2,
                 "enemy" : "elf",
                 "spawn_delay": 0,
-                "spawn_rate" :5,
+                "spawn_rate" :2,
                 "num_in_group": 5,
                 "num_in_group_inc": 10,
                 "group_spawn_interval": 2,
@@ -176,7 +176,7 @@
                 "enemy" : "elf",
                 "spawn_delay": 1,
                 "spawn_rate" : 15,
-                "num_in_group": 150,
+                "num_in_group": 75,
                 "num_in_group_inc": 10,
                 "group_spawn_interval": 2,
                 "num_of_groups": 4,
@@ -296,6 +296,16 @@
                     "fire_period_init" : 200,
                     "size": [1,1]
                 }
+                ,
+                {
+                    "sprite_init" : "resources/textures/tower_basic_pink.png",
+                    "projectile_init" : "Projectile_basic",
+                    "shop_sprite_init" : "resources/textures/tower_basic_basic.png",
+                    "cost_init" : 250,
+                    "detection_radius_init" : 6,
+                    "fire_period_init" : 5,
+                    "size": [1,1]
+                }
 			],
 
             "Tower_rings" :
@@ -303,7 +313,7 @@
 				{
                     "sprite_init" : "resources/textures/tower_ring_green.png",
                     "projectile_init" : "Projectile_basic",
-                    "cost_init" : 50,
+                    "cost_init" : 40,
                     "detection_radius_init" : 0,
                     "fire_period_init" : 25,
                     "size": [1,1],
@@ -312,7 +322,7 @@
 				{
                     "sprite_init" : "resources/textures/tower_ring_yellow.png",
                     "projectile_init" : "Projectile_pierce",
-                    "cost_init" : 50,
+                    "cost_init" : 80,
                     "detection_radius_init" : 0,
                     "fire_period_init" : 100,
                     "size": [1,1],
