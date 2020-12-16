@@ -42,7 +42,7 @@ public:
     sf::CircleShape circle_hit_rad;
 protected:
 
-    Entity* target_enemy;
+    std::pair<float, Entity*> target_enemy;
     int frame_last_shot{0};
     int fire_period;
     int fire_angle;
@@ -68,8 +68,8 @@ public:
 
   void shoot() override;
   Tower * create_active(sf::Vector2f position) override;
-  Entity * select_target();
-  sf::Vector2f aim_direction(Entity * target_enemy);
+  std::pair<float, Entity *> select_target();
+  sf::Vector2f aim_direction(std::pair<float, Entity *> target_enemy);
 };
 
 class Tower_ring : public Tower

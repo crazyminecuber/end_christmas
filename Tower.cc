@@ -64,7 +64,7 @@ void Tower_basic::shoot()
   {
     if (Game::get_frame() - frame_last_shot > fire_period)
     {
-      Entity * target = select_target();
+      pair<float, Entity *> target = select_target();
       sf::Vector2f aim_dir = aim_direction(target);
       make_projectile(aim_dir, getPosition());
       frame_last_shot = Game::get_frame();
@@ -74,11 +74,11 @@ void Tower_basic::shoot()
 }
 
 //Selecting enemy to shoot at
-Entity * Tower_basic::select_target()
+pair<float,Entity *> Tower_basic::select_target()
 {
   if (!shootable_enemies.empty())
   {
-    target_enemy = (*shootable_enemies.begin()).second;
+    target_enemy = *shootable_enemies.begin();
   }
   return target_enemy;
 }
@@ -91,13 +91,13 @@ Entity * Tower_basic::select_target()
 // }
 
 //Selecting direction for projectile
-sf::Vector2f Tower_basic::aim_direction(Entity * target_enemy)
+sf::Vector2f Tower_basic::aim_direction(pair<float, Entity *> target_enemy)
 {
-  sf::Vector2f aim = (target_enemy->getPosition());
-  sf::Vector2f t_dir = (target_enemy->get_direction() );
-  float distance_to_enemy = sqrt(pow((getPosition() - aim).x, 2) + pow((getPosition() - aim).y, 2));
+  sf::Vector2f aim = (target_enemy.second->getPosition());
+  sf::Vector2f t_dir = (target_enemy.second->get_direction() );
+  float distance_to_enemy = sqrt(target_enemy.first);
   float frames = distance_to_enemy / projectile->movement_speed;
-  sf::Vector2f target = aim + t_dir*target_enemy->movement_speed*frames ;
+  sf::Vector2f target = aim + t_dir*target_enemy.second->movement_speed*frames ;
   sf::Vector2f dir =  target - getPosition();
   float length {sqrt(dir.x * dir.x + dir.y * dir.y)};
   //Normalize vector
