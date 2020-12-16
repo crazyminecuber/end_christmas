@@ -79,12 +79,18 @@ Projectile* Game::get_tower_projectile(std::string const & projectile)
         __throw_bad_function_call();
     }
 }
-// Help function to determine if object1 and object2 have collided
-bool Game::collided(Entity const *object1, Entity const *object2)
-{
-    return (pow(object1->getPosition().x - object2->getPosition().x,2)
+/* Help function to determine if object1 and object2 have collided. 
+ * "returns" the squared distance in sq_distance.
+ */
+bool Game::collided(Entity const *object1, Entity const *object2, float & sq_distance)
+{   
+    sf::Vector2f distance{0,0};
+    distance.x = pow(object1->getPosition().x - object2->getPosition().x,2);
+    distance.y = pow(object1->getPosition().y - object2->getPosition().y,2);
+    sq_distance = distance.x + distance.y;
+    return ( distance.x
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
-            && pow(object1->getPosition().y - object2->getPosition().y,2)
+            && distance.y
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
            );
 }
@@ -722,6 +728,7 @@ void Game::check_collision()
 
 void Game::check_collision_towers()
 {
+    float distance{};
     for (size_t tower_i = 0;
             tower_i < Tower::towers.size();
             tower_i++)
@@ -734,10 +741,12 @@ void Game::check_collision_towers()
                 enemy_i++)
             {
                         if (collided(Tower::towers.at(tower_i),
-                                    Enemy::enemies.at(enemy_i)))
+                                    Enemy::enemies.at(enemy_i),
+                                    distance))
                         {
                             Tower::towers.at(
-                                tower_i)->collision(Enemy::enemies.at(enemy_i));
+                                tower_i)->collision(Enemy::enemies.at(enemy_i), 
+                                distance);
                         }
             }
         }

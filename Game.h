@@ -73,7 +73,8 @@ public:
 private:
 	std::shared_ptr<sf::RenderWindow> window;
 	Projectile* get_tower_projectile(std::string const & projectile);
-	bool collided(Entity const *object1, Entity const *object2);
+	bool collided(Entity const *object1, Entity const *object2,
+		float &sq_distance);
 	bool collided_bb(Entity const *object1, Entity const *object2);
 	void init_waves(nlohmann::json const & waves, nlohmann::json const & enemies);
 	void init_projectiles(nlohmann::json const & json_obj);
