@@ -16,10 +16,10 @@ OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile
 .PHONY: clean, test, dox, demo
 
 all: $(OBJS) main.cc
-	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o game
+	$(CCC) $(CFLAGS) $^ $(LDFLAGS) -o game
 
-demo: $(OBJS)
-	$(CCC) $(CFLAGS) main.cc $^ -o $@ $(LDFLAGS)
+demo: main.cc $(OBJS)
+	$(CCC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 	./a.out
 
 test: $(OBJS) test_main.o tests.cc
