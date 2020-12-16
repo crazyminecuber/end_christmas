@@ -6,13 +6,14 @@ using namespace std;
 
 Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
         sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color,
-        sf::Color btn_color, sf::Color btn_select_color,  sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name)
+        sf::Color btn_color, sf::Color btn_select_color,  sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name, std::string texture_file)
     : RectangleShape(siz), passive_towers{pt}, font_color{font_color}, button_size{btn_size},
     heading{make_text(font_name)}, wallet_text{make_text(font_name)}// Lagra position och size i sfml:objectet.
 {
     set_chosen_tower(nullptr);
     setPosition(pos);
-    setFillColor(color);
+    //setFillColor(color);
+    setTexture(&Resource_manager::load(texture_file));
 
     wallet_text.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y + 80);
 

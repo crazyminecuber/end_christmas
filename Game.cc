@@ -79,11 +79,11 @@ Projectile* Game::get_tower_projectile(std::string const & projectile)
         __throw_bad_function_call();
     }
 }
-/* Help function to determine if object1 and object2 have collided. 
+/* Help function to determine if object1 and object2 have collided.
  * "returns" the squared distance in sq_distance.
  */
 bool Game::collided(Entity const *object1, Entity const *object2, float & sq_distance)
-{   
+{
     sf::Vector2f distance{0,0};
     distance.x = pow(object1->getPosition().x - object2->getPosition().x,2);
     distance.y = pow(object1->getPosition().y - object2->getPosition().y,2);
@@ -612,6 +612,7 @@ void Game::init_shop(json const & j_shop)
     sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
+    string texture_file{j_shop["texture_file"]}; // gets changed in Game::load_map
     json back_color = j_shop["background_color"];
     sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
     json btn_color = j_shop["btn_color"];
@@ -622,7 +623,7 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_no_cash_color{bcc["r"], bcc["g"], bcc["b"]};
     json fc = j_shop["font_color"];
     sf::Color font_color{fc["r"], fc["g"], fc["b"]};
-    shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color, font_color, font_name};
+    shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color, font_color, font_name, texture_file};
     wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
     shop.update_shop_ui(wallet);
     // cout << "wallet in game" << wallet.getCash() << endl;
@@ -752,7 +753,7 @@ void Game::check_collision_towers()
                                     distance))
                         {
                             Tower::towers.at(
-                                tower_i)->collision(Enemy::enemies.at(enemy_i), 
+                                tower_i)->collision(Enemy::enemies.at(enemy_i),
                                 distance);
                         }
             }

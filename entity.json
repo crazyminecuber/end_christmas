@@ -261,7 +261,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_basic",
-                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 75,
                     "detection_radius_init" : 6,
                     "fire_period_init" : 10,
@@ -270,7 +269,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_pierce",
-                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 75,
                     "detection_radius_init" : 6,
                     "fire_period_init" : 10,
@@ -279,7 +277,6 @@
 				{
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_bomb",
-                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 5,
                     "fire_period_init" : 100,
@@ -322,6 +319,7 @@
         {
             "start_cash" : 150,
             "font_name" : "resources/fonts/best_font.ttf",
+            "texture_file" : "resources/textures/Santa.png",
             "font_color" :
             {
                 "r": 234,

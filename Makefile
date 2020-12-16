@@ -18,6 +18,9 @@ OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile
 play: $(OBJS)
 	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o play
 
+p: play
+	./play
+
 all: $(OBJS)
 	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o game
 
