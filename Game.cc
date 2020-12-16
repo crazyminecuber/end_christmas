@@ -79,11 +79,11 @@ Projectile* Game::get_tower_projectile(std::string const & projectile)
         __throw_bad_function_call();
     }
 }
-/* Help function to determine if object1 and object2 have collided. 
+/* Help function to determine if object1 and object2 have collided.
  * "returns" the squared distance in sq_distance.
  */
 bool Game::collided(Entity const *object1, Entity const *object2, float & sq_distance)
-{   
+{
     sf::Vector2f distance{0,0};
     distance.x = pow(object1->getPosition().x - object2->getPosition().x,2);
     distance.y = pow(object1->getPosition().y - object2->getPosition().y,2);
@@ -161,7 +161,7 @@ void Game::load_map(string const & file_entity)
     float shop_sizeX = read_shop_width(file_entity);
 
     int tiles_per_col = tile_index_pos.x + (1 - 2);
-    int tiles_per_row = tile_index_pos.y  + (1 - 2);
+    int tiles_per_row = tile_index_pos.y + (1 - 2);
     float max_size_win_x = (window->getSize().x - shop_sizeX)/tiles_per_col;
     float max_size_win_y = window->getSize().y/tiles_per_row;
     float max_size_screen_x = (sf::VideoMode::getDesktopMode().width
@@ -191,6 +191,7 @@ void Game::determine_tile_directions()
     sf::Vector2i current_tile;
     sf::Vector2i next_tile;
     sf::Vector2f direction;
+    int tile_number{0};
 
     /* find enemy_end tile */
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
@@ -236,6 +237,10 @@ void Game::determine_tile_directions()
         {
             next_tile = current_tile + sf::Vector2i{-1, 0};
         }
+
+        // set tile_number
+        Tile::get_tile_by_index(current_tile)->set_tile_number(tile_number);
+        tile_number++;
 
         // prepare for next iteration
         last_tile = current_tile;
@@ -609,7 +614,8 @@ void Game::init_shop(json const & j_shop)
 {
     wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
-    sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
+    sf::Vector2f shop_size{j_shop["shop_size"][0], window->getSize().y};
+    // sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     json back_color = j_shop["background_color"];
@@ -752,7 +758,7 @@ void Game::check_collision_towers()
                                     distance))
                         {
                             Tower::towers.at(
-                                tower_i)->collision(Enemy::enemies.at(enemy_i), 
+                                tower_i)->collision(Enemy::enemies.at(enemy_i),
                                 distance);
                         }
             }
