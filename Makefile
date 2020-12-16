@@ -13,7 +13,7 @@ OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile
 #SRCS := $(wildcard *.cc)
 #HEADERS := $(SRCS:%.cc=%.h)
 #OBJS
-.PHONY: clean, test, dox
+.PHONY: clean, test, dox, demo
 
 all: $(OBJS) main.cc
 	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o game
