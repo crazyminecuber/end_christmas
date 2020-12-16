@@ -20,6 +20,8 @@ State_machine::State_machine(const string &title,
     :   window{make_shared<sf::RenderWindow>(
             (load_settings(settings_file),  // comma operator
              sf::VideoMode
+             // {sf::VideoMode::getDesktopMode().width  * 0.9,
+             //  sf::VideoMode::getDesktopMode().height * 0.9}
                 {settings["window"]["width"],
                  settings["window"]["height"]}
             ),
