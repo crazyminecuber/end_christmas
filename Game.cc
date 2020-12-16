@@ -583,9 +583,10 @@ void Game::init_towers(json const & json_obj)
 
 void Game::init_shop(json const & j_shop)
 {
+    float window_sizeY = window->getSize().y;
     wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
-    sf::Vector2f shop_size{j_shop["shop_size"][0], window->getSize().y};
+    sf::Vector2f shop_size{j_shop["shop_size"][0], window_sizeY};
     // sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
