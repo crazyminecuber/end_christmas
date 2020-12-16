@@ -298,30 +298,6 @@ void Game::render()
     wave_manager.render();
 }
 
-// void Game::enemy_update_direction()
-// {
-//     float damage_dealt{0};
-//     for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
-//     {
-//         cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
-//         float damage_this_enemy{0};
-//         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
-//         // maybe change this later so that the deletion is done inside
-//         // tile_enemy_end instead. Have to change flow of information
-//         // between damage and health then too.
-//         damage_this_enemy = tile->update_enemy(*it);
-//         if ( damage_this_enemy > 0.f )
-//         {
-//             cout << "Delete enemy!" << endl;
-//             damage_dealt += damage_this_enemy;
-//             delete *it;
-//             it = Enemy::enemies.erase(it);
-//         }
-//         else
-//             ++it;
-//     }
-//     health.remove_n_health(damage_dealt);
-// }
 
 void Game::enemy_update_direction()
 {
