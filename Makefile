@@ -15,12 +15,11 @@ OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile
 #OBJS
 .PHONY: clean, test
 
+play: $(OBJS)
+	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o play
+
 all: $(OBJS)
 	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o game
-
-demo: $(OBJS)
-	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS)
-	./a.out
 
 test: $(OBJS) test_main.o tests.cc
 	$(CCC) $(CFLAGS) -o test tests.cc $(OBJS) $(LDFLAGS)
@@ -35,9 +34,9 @@ test_main.o: test_main.cc
 dox:
 	doxygen doxyconf
 
-
 clean:
 	rm -f *.o
 	rm -f *.h.gch
 	rm -f test
 	rm -f game
+	rm -f play
