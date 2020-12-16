@@ -2,8 +2,8 @@
     "font" : "resources/fonts/Christmas_Bell.otf",
     "window" :
         {
-            "width" : 1280,
-            "height" : 720,
+            "width" : 1920,
+            "height" : 1000,
             "fullscren" : false
         },
     "game" :

@@ -161,7 +161,7 @@ void Game::load_map(string const & file_entity)
     float shop_sizeX = read_shop_width(file_entity);
 
     int tiles_per_col = tile_index_pos.x + (1 - 2);
-    int tiles_per_row = tile_index_pos.y  + (1 - 2);
+    int tiles_per_row = tile_index_pos.y + (1 - 2);
     float max_size_win_x = (window->getSize().x - shop_sizeX)/tiles_per_col;
     float max_size_win_y = window->getSize().y/tiles_per_row;
     float max_size_screen_x = (sf::VideoMode::getDesktopMode().width
@@ -191,6 +191,7 @@ void Game::determine_tile_directions()
     sf::Vector2i current_tile;
     sf::Vector2i next_tile;
     sf::Vector2f direction;
+    int tile_number{0};
 
     /* find enemy_end tile */
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
@@ -236,6 +237,10 @@ void Game::determine_tile_directions()
         {
             next_tile = current_tile + sf::Vector2i{-1, 0};
         }
+
+        // set tile_number
+        Tile::get_tile_by_index(current_tile)->set_tile_number(tile_number);
+        tile_number++;
 
         // prepare for next iteration
         last_tile = current_tile;
@@ -298,35 +303,6 @@ void Game::render()
     wave_manager.render();
 }
 
-bool Game::is_running()
-{
-    return window->isOpen();
-}
-
-// void Game::enemy_update_direction()
-// {
-//     float damage_dealt{0};
-//     for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
-//     {
-//         cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
-//         float damage_this_enemy{0};
-//         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
-//         // maybe change this later so that the deletion is done inside
-//         // tile_enemy_end instead. Have to change flow of information
-//         // between damage and health then too.
-//         damage_this_enemy = tile->update_enemy(*it);
-//         if ( damage_this_enemy > 0.f )
-//         {
-//             cout << "Delete enemy!" << endl;
-//             damage_dealt += damage_this_enemy;
-//             delete *it;
-//             it = Enemy::enemies.erase(it);
-//         }
-//         else
-//             ++it;
-//     }
-//     health.remove_n_health(damage_dealt);
-// }
 
 void Game::enemy_update_direction()
 {
@@ -392,7 +368,7 @@ void Game::projectile_update_position()
 
 void Game::next_wave()
 {
-    wave_manager.next_wave(frame, State_machine::get_fps());
+    wave_manager.next_wave(frame);
 }
 
 int Game::get_current_wave() const
@@ -525,7 +501,7 @@ void Game::init_waves(json const & waves, json const & enemies)
                           wave.value()["num_of_groups"],
                           wave.value()["num_of_groups_inc"]));
     }
-    wave_manager.init_waves(frame, State_machine::get_fps());
+    wave_manager.init_waves(frame);
 }
 
 void Game::init_projectiles(json const & json_obj)
@@ -607,9 +583,11 @@ void Game::init_towers(json const & json_obj)
 
 void Game::init_shop(json const & j_shop)
 {
+    float window_sizeY = window->getSize().y;
     wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
-    sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
+    sf::Vector2f shop_size{j_shop["shop_size"][0], window_sizeY};
+    // sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     string texture_file{j_shop["texture_file"]}; // gets changed in Game::load_map

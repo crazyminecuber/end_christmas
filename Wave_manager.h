@@ -6,6 +6,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Wave_group.h"
+#include <iostream>
 
 
 class Wave_manager
@@ -17,18 +18,18 @@ public:
         init();
     }
 
-    void next_wave(int current_frame, int fps);
+    void next_wave(int current_frame);
     bool wave_is_finished();
     bool player_has_won();
     void add_wave(Wave_group* wave_group);
     void render();
-    void init_waves(int current_frame, int fps);
+    void init_waves(int current_frame);
     void spawn_enemies(int frame);
     bool all_enemies_have_spawned();
     int get_current_wave() const;
 private:
     void init();
-    void generate_wave(int current_frame, int fps);
+    void generate_wave(int current_frame);
     void calculate_win_wave();
 
     int current_wave{1};
@@ -40,6 +41,8 @@ private:
     sf::Font font;
     sf::RectangleShape background;
     sf::Text text_wave;
+
+    float fps{60};
 
 
     void update_text_waves();

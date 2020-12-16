@@ -39,7 +39,6 @@ public:
 
 	float read_shop_width(std::string const & file_entity);
 	void load_entities(std::string const & file_entity);
-	bool is_running(); // remove when we make StateMachine
 	void check_collision();
 	void check_collision_towers();
 	void handle_click(sf::Vector2f click);
