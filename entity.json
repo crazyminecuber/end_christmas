@@ -24,7 +24,7 @@
             "reindeer_expert" :
                 {
                     "type": "Enemy_basic",
-                    "life_init" : 10,
+                    "life_init" : 6,
                     "reward_init" : 5,
                     "texture" : "resources/textures/reindeer.png",
                     "size": [0.7, 0.9],
@@ -273,8 +273,8 @@
                     "sprite_init" : "resources/textures/tower_basic_white.png",
                     "projectile_init" : "Projectile_basic",
                     "cost_init" : 50,
-                    "detection_radius_init" : 5,
-                    "fire_period_init" : 50,
+                    "detection_radius_init" : 3,
+                    "fire_period_init" : 75,
                     "size": [1,1]
                 },
                 {
@@ -289,7 +289,7 @@
                     "sprite_init" : "resources/textures/tower_basic_orange.png",
                     "projectile_init" : "Projectile_bomb",
                     "cost_init" : 250,
-                    "detection_radius_init" : 6,
+                    "detection_radius_init" : 2,
                     "fire_period_init" : 200,
                     "size": [1,1]
                 }
@@ -299,7 +299,7 @@
                     "projectile_init" : "Projectile_basic",
                     "shop_sprite_init" : "resources/textures/tower_basic_basic.png",
                     "cost_init" : 250,
-                    "detection_radius_init" : 6,
+                    "detection_radius_init" : 2,
                     "fire_period_init" : 5,
                     "size": [1,1]
                 }
