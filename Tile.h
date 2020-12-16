@@ -27,6 +27,8 @@ public:
     virtual bool on_click(Tower * tw) {tw->getPosition();return false;};
     virtual void set_direction(sf::Vector2f dir);
     virtual float update_enemy(Enemy* enemy);
+    virtual void set_tile_number(int tile_num);
+    virtual int get_tile_number();
 
 
     /* static members and functions */

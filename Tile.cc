@@ -111,3 +111,13 @@ float Tile::update_enemy(Enemy* enemy)
     enemy->direction.x += 0; // compiler don't likes "unused arguments"
     return 0;
 }
+
+void Tile::set_tile_number(int tile_num)
+{
+    tile_num; // compiler don't likes "unused arguments"
+}
+
+int Tile::get_tile_number()
+{
+    return 0;
+}

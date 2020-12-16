@@ -79,12 +79,18 @@ Projectile* Game::get_tower_projectile(std::string const & projectile)
         __throw_bad_function_call();
     }
 }
-// Help function to determine if object1 and object2 have collided
-bool Game::collided(Entity const *object1, Entity const *object2)
+/* Help function to determine if object1 and object2 have collided.
+ * "returns" the squared distance in sq_distance.
+ */
+bool Game::collided(Entity const *object1, Entity const *object2, float & sq_distance)
 {
-    return (pow(object1->getPosition().x - object2->getPosition().x,2)
+    sf::Vector2f distance{0,0};
+    distance.x = pow(object1->getPosition().x - object2->getPosition().x,2);
+    distance.y = pow(object1->getPosition().y - object2->getPosition().y,2);
+    sq_distance = distance.x + distance.y;
+    return ( distance.x
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
-            && pow(object1->getPosition().y - object2->getPosition().y,2)
+            && distance.y
             < pow(object1->get_hitbox_radius() - object2->get_hitbox_radius(),2)
            );
 }
@@ -152,17 +158,24 @@ void Game::load_map(string const & file_entity)
 
     /* update side_length */
     // calculate Tile::side_length and change all tiles
+    float shop_sizeX = read_shop_width(file_entity);
+
     int tiles_per_col = tile_index_pos.x + (1 - 2);
-    int tiles_per_row = tile_index_pos.y  + (1 - 2);
-    Tile::side_length = std::min(window->getSize().x/tiles_per_col,
-                                 window->getSize().y/tiles_per_row);
+    int tiles_per_row = tile_index_pos.y + (1 - 2);
+    float max_size_win_x = (window->getSize().x - shop_sizeX)/tiles_per_col;
+    float max_size_win_y = window->getSize().y/tiles_per_row;
+    float max_size_screen_x = (sf::VideoMode::getDesktopMode().width
+                                - shop_sizeX)/tiles_per_col;
+    float max_size_screen_y = sf::VideoMode::getDesktopMode().height
+                                             /tiles_per_row;
+    Tile::side_length = std::min({max_size_win_x, max_size_win_y,
+                                  max_size_screen_x, max_size_screen_y});
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
     {
         (*it).second->update_side_length();
     }
 
     /* update window size */
-    float shop_sizeX = read_shop_width(file_entity);
     unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
     unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
     window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
@@ -178,6 +191,7 @@ void Game::determine_tile_directions()
     sf::Vector2i current_tile;
     sf::Vector2i next_tile;
     sf::Vector2f direction;
+    int tile_number{0};
 
     /* find enemy_end tile */
     for (std::map<sf::Vector2i, Tile*>::iterator it=Tile::tiles.begin(); it!=Tile::tiles.end(); ++it)
@@ -223,6 +237,10 @@ void Game::determine_tile_directions()
         {
             next_tile = current_tile + sf::Vector2i{-1, 0};
         }
+
+        // set tile_number
+        Tile::get_tile_by_index(current_tile)->set_tile_number(tile_number);
+        tile_number++;
 
         // prepare for next iteration
         last_tile = current_tile;
@@ -285,35 +303,6 @@ void Game::render()
     wave_manager.render();
 }
 
-bool Game::is_running()
-{
-    return window->isOpen();
-}
-
-// void Game::enemy_update_direction()
-// {
-//     float damage_dealt{0};
-//     for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
-//     {
-//         cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
-//         float damage_this_enemy{0};
-//         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
-//         // maybe change this later so that the deletion is done inside
-//         // tile_enemy_end instead. Have to change flow of information
-//         // between damage and health then too.
-//         damage_this_enemy = tile->update_enemy(*it);
-//         if ( damage_this_enemy > 0.f )
-//         {
-//             cout << "Delete enemy!" << endl;
-//             damage_dealt += damage_this_enemy;
-//             delete *it;
-//             it = Enemy::enemies.erase(it);
-//         }
-//         else
-//             ++it;
-//     }
-//     health.remove_n_health(damage_dealt);
-// }
 
 void Game::enemy_update_direction()
 {
@@ -379,7 +368,7 @@ void Game::projectile_update_position()
 
 void Game::next_wave()
 {
-    wave_manager.next_wave(frame, State_machine::get_fps());
+    wave_manager.next_wave(frame);
 }
 
 int Game::get_current_wave() const
@@ -512,7 +501,7 @@ void Game::init_waves(json const & waves, json const & enemies)
                           wave.value()["num_of_groups"],
                           wave.value()["num_of_groups_inc"]));
     }
-    wave_manager.init_waves(frame, State_machine::get_fps());
+    wave_manager.init_waves(frame);
 }
 
 void Game::init_projectiles(json const & json_obj)
@@ -594,9 +583,11 @@ void Game::init_towers(json const & json_obj)
 
 void Game::init_shop(json const & j_shop)
 {
+    float window_sizeY = window->getSize().y;
     wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
-    sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
+    sf::Vector2f shop_size{j_shop["shop_size"][0], window_sizeY};
+    // sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     json back_color = j_shop["background_color"];
@@ -722,6 +713,7 @@ void Game::check_collision()
 
 void Game::check_collision_towers()
 {
+    float distance{};
     for (size_t tower_i = 0;
             tower_i < Tower::towers.size();
             tower_i++)
@@ -734,10 +726,12 @@ void Game::check_collision_towers()
                 enemy_i++)
             {
                         if (collided(Tower::towers.at(tower_i),
-                                    Enemy::enemies.at(enemy_i)))
+                                    Enemy::enemies.at(enemy_i),
+                                    distance))
                         {
                             Tower::towers.at(
-                                tower_i)->collision(Enemy::enemies.at(enemy_i));
+                                tower_i)->collision(Enemy::enemies.at(enemy_i),
+                                distance);
                         }
             }
         }
