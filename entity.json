@@ -288,7 +288,7 @@
                     "size": [1,1]
                 },
                 {
-                    "sprite_init" : "resources/textures/tower_basic.png",
+                    "sprite_init" : "resources/textures/tower_basic_orange.png",
                     "projectile_init" : "Projectile_bomb",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 250,
@@ -297,7 +297,7 @@
                     "size": [1,1]
                 },
 				{
-                    "sprite_init" : "resources/textures/tower_basic.png",
+                    "sprite_init" : "resources/textures/tower_basic_pink.png",
                     "projectile_init" : "Projectile_bomb",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
@@ -319,7 +319,7 @@
                     "num_projectile_init": 6
                 },
 				{
-                    "sprite_init" : "resources/textures/tower_ring_red.png",
+                    "sprite_init" : "resources/textures/tower_ring_yellow.png",
                     "projectile_init" : "Projectile_pierce",
                     "cost_init" : 50,
                     "detection_radius_init" : 0,
