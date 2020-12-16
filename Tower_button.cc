@@ -21,12 +21,14 @@ Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
 
     // Set origin to middle of text is uggly, because localbounds is offset for
     // some reason.
+    pricetag.setCharacterSize(70);
     Vector2f price_orig{};
     sf::FloatRect price_rec = pricetag.getLocalBounds();
     price_orig.x = price_rec.left + price_rec.width / 2;
     price_orig.y = price_rec.top + price_rec.height / 2;
     pricetag.setOrigin(price_orig);
     pricetag.setFillColor(font_color);
+
 
     // Scalingfontsprite
     float sprite_x{btn_size.x * 0.8f};
