@@ -34,8 +34,8 @@
             "santa" :
                 {
                     "type": "Enemy_basic",
-                    "life_init" : 40,
-                    "reward_init" : 10,
+                    "life_init" : 25,
+                    "reward_init" : 0,
                     "texture" : "resources/textures/Santa.png",
                     "size": [1,1],
                     "hit_rad": 0.025,
@@ -45,9 +45,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa",
-                    "num_of_children": 5,
-                    "life_init" : 40,
-                    "reward_init" : 10,
+                    "num_of_children": 1,
+                    "life_init" : 75,
+                    "reward_init" : 0,
                     "texture" : "resources/textures/Santa.png",
                     "size": [1.5,1.5],
                     "hit_rad": 0.025,
@@ -57,9 +57,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa",
-                    "num_of_children": 5,
+                    "num_of_children": 1,
                     "life_init" : 150,
-                    "reward_init" : 50,
+                    "reward_init" : 0,
                     "texture" : "resources/textures/Santa.png",
                     "size": [2,2],
                     "hit_rad": 0.025,
@@ -71,7 +71,7 @@
                     "child": "elf",
                     "num_of_children": 40,
                     "life_init" : 50,
-                    "reward_init" : 100,
+                    "reward_init" : 250,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -83,7 +83,7 @@
                     "child": "reindeer_expert",
                     "num_of_children": 50,
                     "life_init" : 10,
-                    "reward_init" : 70,
+                    "reward_init" : 250,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -93,9 +93,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa_big",
-                    "num_of_children": 100,
+                    "num_of_children": 50,
                     "life_init" : 10,
-                    "reward_init" : 70,
+                    "reward_init" : 250,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -138,7 +138,7 @@
                 "spawn_delay": 1,
                 "spawn_rate" : 5,
                 "num_in_group": 2,
-                "num_in_group_inc": 2,
+                "num_in_group_inc": 4,
                 "group_spawn_interval": 5,
                 "num_of_groups": 4,
                 "num_of_groups_inc": 0
@@ -257,8 +257,8 @@
                 },
             "Projectile_bomb_blast" :
                 {
-                    "frames_to_live" : 5,
-                    "damage_init" : 3,
+                    "frames_to_live" : 1,
+                    "damage_init" : 25,
                     "texture" : "resources/textures/Bang.png",
                     "size" : [3,3],
                     "hit_rad" : 0.5,
@@ -274,8 +274,8 @@
                     "projectile_init" : "Projectile_basic",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
-                    "detection_radius_init" : 5,
-                    "fire_period_init" : 50,
+                    "detection_radius_init" : 4,
+                    "fire_period_init" : 75,
                     "size": [1,1]
                 },
                 {
@@ -292,7 +292,7 @@
                     "projectile_init" : "Projectile_bomb",
                     "shop_sprite_init" : "resources/textures/tower_basic_bomb.png",
                     "cost_init" : 250,
-                    "detection_radius_init" : 6,
+                    "detection_radius_init" : 3,
                     "fire_period_init" : 200,
                     "size": [1,1]
                 }
@@ -302,7 +302,7 @@
                     "projectile_init" : "Projectile_basic",
                     "shop_sprite_init" : "resources/textures/tower_basic_basic.png",
                     "cost_init" : 250,
-                    "detection_radius_init" : 6,
+                    "detection_radius_init" : 3,
                     "fire_period_init" : 5,
                     "size": [1,1]
                 }
@@ -313,9 +313,9 @@
 				{
                     "sprite_init" : "resources/textures/tower_ring_green.png",
                     "projectile_init" : "Projectile_basic",
-                    "cost_init" : 40,
+                    "cost_init" : 50,
                     "detection_radius_init" : 0,
-                    "fire_period_init" : 25,
+                    "fire_period_init" : 50,
                     "size": [1,1],
                     "num_projectile_init": 6
                 },
