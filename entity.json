@@ -272,7 +272,6 @@
             [{
                     "sprite_init" : "resources/textures/tower_basic_white.png",
                     "projectile_init" : "Projectile_basic",
-                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 50,
                     "detection_radius_init" : 5,
                     "fire_period_init" : 50,
@@ -281,7 +280,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_basic_blue.png",
                     "projectile_init" : "Projectile_pierce",
-                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
                     "cost_init" : 125,
                     "detection_radius_init" : 6,
                     "fire_period_init" : 200,
@@ -290,7 +288,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_basic_orange.png",
                     "projectile_init" : "Projectile_bomb",
-                    "shop_sprite_init" : "resources/textures/tower_basic_bomb.png",
                     "cost_init" : 250,
                     "detection_radius_init" : 6,
                     "fire_period_init" : 200,
@@ -342,7 +339,8 @@
     "Shop" :
         {
             "start_cash" : 100,
-            "texture_file" : "resources/textur/toy_store.webp",
+
+            "texture_file" : "resources/textures/Shelf1.png",
             "font_name" : "resources/fonts/Christmas_Bell.otf",
             "font_color" :
             {
@@ -375,7 +373,7 @@
                 "b": 12
             },
             "shop_size": [300,800],
-            "btn_size": [100,100]
+            "btn_size": [90,90]
         },
     "Maps" :
     {

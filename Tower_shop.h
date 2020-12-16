@@ -16,9 +16,7 @@ public:
     Tower_shop(){};
     Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
             sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color,
-            sf::Color btn_color,sf::Color btn_select_color,
-            sf::Color btn_no_cash_color, sf::Color font_color,
-            std::string font_name);
+            sf::Color btn_color,sf::Color btn_select_color, sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name, std::string texture_file);
     void render(sf::RenderWindow & window);
     void on_click(sf::Vector2f click, Wallet & wallet);
     void set_chosen_tower(Tower * tw);
