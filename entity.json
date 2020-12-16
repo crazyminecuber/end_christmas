@@ -231,7 +231,7 @@
                     "hit_rad" : 0.25,
                     "mov_spd" : 0.08,
                     "rotation_offset" : -90,
-                    "nr_pierce_init" : 0
+                    "nr_pierce_init" : 2
                 },
             "Projectile_bomb" :
                 {
@@ -284,14 +284,14 @@
                     "detection_radius_init" : 0,
                     "fire_period_init" : 100,
                     "size": [1,1],
-                    "num_projectile_init": 6
+                    "num_projectile_init": 8
                 },
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
                     "projectile_init" : "Projectile_bomb",
                     "cost_init" : 150,
                     "detection_radius_init" : 0,
-                    "fire_period_init" : 10,
+                    "fire_period_init" : 90,
                     "size": [1,1],
                     "num_projectile_init": 8
                 }]
