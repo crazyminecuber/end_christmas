@@ -25,7 +25,7 @@ public:
 		 : window{win},
 		   health{win, file_health_texture, hp},
 		   fps{fps}, // borde inte denna tas bort eftersom State_machine har hand om fps?
-		   wave_manager{win}/*, shop{shop_file}*/
+		   wave_manager{win, fps}/*, shop{shop_file}*/
 		 {
 
 		 };

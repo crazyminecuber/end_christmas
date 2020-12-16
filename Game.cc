@@ -379,7 +379,7 @@ void Game::projectile_update_position()
 
 void Game::next_wave()
 {
-    wave_manager.next_wave(frame, State_machine::get_fps());
+    wave_manager.next_wave(frame);
 }
 
 int Game::get_current_wave() const
@@ -512,7 +512,7 @@ void Game::init_waves(json const & waves, json const & enemies)
                           wave.value()["num_of_groups"],
                           wave.value()["num_of_groups_inc"]));
     }
-    wave_manager.init_waves(frame, State_machine::get_fps());
+    wave_manager.init_waves(frame);
 }
 
 void Game::init_projectiles(json const & json_obj)
