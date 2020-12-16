@@ -12,11 +12,9 @@
 class Wave_manager
 {
 public:
-    Wave_manager(std::shared_ptr<sf::RenderWindow> win, float fps)
-    : window{win}, font{Resource_manager::load_font("resources/fonts/font.ttf")},
-    fps{fps}
+    Wave_manager(std::shared_ptr<sf::RenderWindow> win)
+    : window{win}, font{Resource_manager::load_font("resources/fonts/font.ttf")}
     {
-        std::cout << "fps: " << fps << std::endl;
         init();
     }
 
@@ -44,7 +42,7 @@ private:
     sf::RectangleShape background;
     sf::Text text_wave;
 
-    float fps;
+    float fps{60};
 
 
     void update_text_waves();

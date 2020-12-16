@@ -269,7 +269,8 @@
     "Tower" :
         {
             "Tower_basics" :
-            [{
+            [
+                {
                     "sprite_init" : "resources/textures/tower_basic.png",
                     "projectile_init" : "Projectile_basic",
                     "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
@@ -295,17 +296,37 @@
                     "detection_radius_init" : 6,
                     "fire_period_init" : 200,
                     "size": [1,1]
-                }],
+                },
+				{
+                    "sprite_init" : "resources/textures/tower_basic.png",
+                    "projectile_init" : "Projectile_bomb",
+                    "shop_sprite_init" : "resources/textures/tower_basic_shop.png",
+                    "cost_init" : 50,
+                    "detection_radius_init" : 5,
+                    "fire_period_init" : 100,
+                    "size": [1,1]
+                }
+			],
 
             "Tower_rings" :
-            [{
+            [
+				{
                     "sprite_init" : "resources/textures/tower_ring.png",
-                    "projectile_init" : "Projectile_pierce",
+                    "projectile_init" : "Projectile_basic",
                     "cost_init" : 50,
                     "detection_radius_init" : 0,
                     "fire_period_init" : 25,
                     "size": [1,1],
                     "num_projectile_init": 6
+                },
+				{
+                    "sprite_init" : "resources/textures/tower_ring.png",
+                    "projectile_init" : "Projectile_pierce",
+                    "cost_init" : 50,
+                    "detection_radius_init" : 0,
+                    "fire_period_init" : 100,
+                    "size": [1,1],
+                    "num_projectile_init": 8
                 },
                 {
                     "sprite_init" : "resources/textures/tower_ring.png",
@@ -315,7 +336,8 @@
                     "fire_period_init" : 30,
                     "size": [1,1],
                     "num_projectile_init": 8
-                }]
+                }
+			]
         },
     "Shop" :
         {

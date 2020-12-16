@@ -19,13 +19,11 @@ public:
 	Game() = delete;
 	Game(std::shared_ptr<sf::RenderWindow> win,
 		 std::string const & file_health_texture,
-		 int hp,
-		 float fps)
+		 int hp)
 		 /*std::string const & shop_file,*/
 		 : window{win},
 		   health{win, file_health_texture, hp},
-		   fps{fps}, // borde inte denna tas bort eftersom State_machine har hand om fps?
-		   wave_manager{win, fps}/*, shop{shop_file}*/
+		   wave_manager{win}/*, shop{shop_file}*/
 		 {
 
 		 };
@@ -73,7 +71,8 @@ public:
 private:
 	std::shared_ptr<sf::RenderWindow> window;
 	Projectile* get_tower_projectile(std::string const & projectile);
-	bool collided(Entity const *object1, Entity const *object2);
+	bool collided(Entity const *object1, Entity const *object2,
+		float &sq_distance);
 	bool collided_bb(Entity const *object1, Entity const *object2);
 	void init_waves(nlohmann::json const & waves, nlohmann::json const & enemies);
 	void init_projectiles(nlohmann::json const & json_obj);
@@ -81,7 +80,6 @@ private:
 	void init_shop(nlohmann::json const & json_obj);
 	Health health;
 	static int frame;
-	float const fps;
 	Wave_manager wave_manager;
 	bool render_tower_radii{false};
 

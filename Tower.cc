@@ -29,9 +29,9 @@ void Tower::init_circle_hit_rad()
     circle_hit_rad.setPosition(getPosition());
 }
 
-void Tower::collision(Enemy* object)
+void Tower::collision(Enemy* object, float distance)
 {
-  shootable_enemies.push_back(object);
+  shootable_enemies.emplace( make_pair(distance,object) );
 }
 
 //Creating ptojectiles
@@ -78,7 +78,7 @@ Entity * Tower_basic::select_target()
 {
   if (!shootable_enemies.empty())
   {
-    target_enemy = shootable_enemies.front();
+    target_enemy = (*shootable_enemies.begin()).second;
   }
   return target_enemy;
 }
@@ -95,7 +95,10 @@ sf::Vector2f Tower_basic::aim_direction(Entity * target_enemy)
 {
   sf::Vector2f aim = (target_enemy->getPosition());
   sf::Vector2f t_dir = (target_enemy->get_direction() );
-  sf::Vector2f dir {aim + t_dir - getPosition()};
+  float distance_to_enemy = sqrt(pow((getPosition() - aim).x, 2) + pow((getPosition() - aim).y, 2));
+  float frames = distance_to_enemy / projectile->movement_speed;
+  sf::Vector2f target = aim + t_dir*target_enemy->movement_speed*frames ;
+  sf::Vector2f dir =  target - getPosition();
   float length {sqrt(dir.x * dir.x + dir.y * dir.y)};
   //Normalize vector
   sf::Vector2f norm_dir{dir.x / length, dir.y / length};
