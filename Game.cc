@@ -303,35 +303,6 @@ void Game::render()
     wave_manager.render();
 }
 
-bool Game::is_running()
-{
-    return window->isOpen();
-}
-
-// void Game::enemy_update_direction()
-// {
-//     float damage_dealt{0};
-//     for (auto it{Enemy::enemies.begin()}; it != Enemy::enemies.end();)
-//     {
-//         cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
-//         float damage_this_enemy{0};
-//         Tile* tile = Tile::get_tile_by_coord((*it)->getPosition());
-//         // maybe change this later so that the deletion is done inside
-//         // tile_enemy_end instead. Have to change flow of information
-//         // between damage and health then too.
-//         damage_this_enemy = tile->update_enemy(*it);
-//         if ( damage_this_enemy > 0.f )
-//         {
-//             cout << "Delete enemy!" << endl;
-//             damage_dealt += damage_this_enemy;
-//             delete *it;
-//             it = Enemy::enemies.erase(it);
-//         }
-//         else
-//             ++it;
-//     }
-//     health.remove_n_health(damage_dealt);
-// }
 
 void Game::enemy_update_direction()
 {
@@ -397,7 +368,7 @@ void Game::projectile_update_position()
 
 void Game::next_wave()
 {
-    wave_manager.next_wave(frame, State_machine::get_fps());
+    wave_manager.next_wave(frame);
 }
 
 int Game::get_current_wave() const
@@ -530,7 +501,7 @@ void Game::init_waves(json const & waves, json const & enemies)
                           wave.value()["num_of_groups"],
                           wave.value()["num_of_groups_inc"]));
     }
-    wave_manager.init_waves(frame, State_machine::get_fps());
+    wave_manager.init_waves(frame);
 }
 
 void Game::init_projectiles(json const & json_obj)
