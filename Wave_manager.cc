@@ -9,21 +9,21 @@
 
 //Public
 
-void Wave_manager::init_waves(int current_frame, int fps)
+void Wave_manager::init_waves(int current_frame)
 {
-    generate_wave(current_frame, fps);
+    generate_wave(current_frame);
     calculate_win_wave();
     // std::cout << win_wave << std::endl;
 }
 
-void Wave_manager::next_wave(int current_frame, int fps)
+void Wave_manager::next_wave(int current_frame)
 {
     if(wave_is_finished())
     {
         ++current_wave;
         std::cout << "next wave: " << current_wave << std::endl;
         update_text_waves();
-        generate_wave(current_frame, fps);
+        generate_wave(current_frame);
     }
 }
 
@@ -65,7 +65,7 @@ void Wave_manager::init()
     background.setOutlineColor(sf::Color::Black);
 }
 
-void Wave_manager::generate_wave(int current_frame, int fps)
+void Wave_manager::generate_wave(int current_frame)
 {
     // std::cout << "generate wave" << std::endl;
     add_active_wave_groups();
