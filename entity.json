@@ -377,7 +377,7 @@
         },
     "Maps" :
     {
-        "map_dev" :
+        "9map_dev" :
         {
             "file_name" : "resources/maps/map_dev.csv",
             "display_name" : "Dev",
@@ -391,10 +391,10 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_beginner" :
+        "1map_beginner" :
         {
-            "file_name" : "resources/maps/map_beginner.csv",
-            "display_name" : "Beginner",
+            "file_name" : "resources/maps/map_winterland.csv",
+            "display_name" : "Winterland",
             "difficulty" : "Easy",
             "tiles" :
             {
@@ -405,7 +405,7 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_spiral" :
+        "4map_spiral" :
         {
             "file_name" : "resources/maps/map_spiral.csv",
             "display_name" : "Spiral",
@@ -419,7 +419,7 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_corson" :
+        "3map_corson" :
         {
             "file_name" : "resources/maps/map_corson.csv",
             "display_name" : "Corson",
@@ -433,7 +433,7 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_boat" :
+        "2map_boat" :
         {
             "file_name" : "resources/maps/map_boat.csv",
             "display_name" : "Boat",
