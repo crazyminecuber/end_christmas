@@ -413,7 +413,7 @@
             "tiles" :
             {
                 "0" : "resources/textures/stones.jpg",
-                "1" : "resources/textures/grass.jpg",
+                "1" : "resources/textures/snow.jpg",
                 "2" : "resources/textures/dirt.jpg",
                 "3" : "resources/textures/dirt.jpg",
                 "4" : "resources/textures/dirt.jpg"
