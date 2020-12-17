@@ -1,8 +1,6 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <cmath>
-#include <math.h>
 #include <sstream>
-#include <iostream>
 #include <fstream>
 #include <vector>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
@@ -276,13 +274,13 @@ void Game::render()
     // render enemies
     for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
     {
-        window->draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it)); 
     }
 
     // render towers
     for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
     {
-        window->draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it)); 
     }
 
     // render tower radii
@@ -318,24 +316,20 @@ void Game::enemy_update_direction()
     float damage_dealt{0};
     for (size_t i = 0; i < Enemy::enemies.size(); i++)
     {
-        // cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
         float damage_this_enemy{0};
         Tile* tile = Tile::get_tile_by_coord(Enemy::enemies[i]->getPosition());
-        // maybe change this later so that the deletion is done inside
-        // tile_enemy_end instead. Have to change flow of information
-        // between damage and health then too.
         damage_this_enemy = tile->update_enemy(Enemy::enemies[i]);
+
         if ( damage_this_enemy > 0.f )
         {
             damage_dealt += damage_this_enemy;
             delete Enemy::enemies[i];
-            if(Enemy::enemies.size()>0)
+
+            if(Enemy::enemies.size()>1)
             {
                 swap(Enemy::enemies.at(i),Enemy::enemies.back());
             }
-
             Enemy::enemies.pop_back();
-            //Enemy::enemies.erase(Enemy::enemies.begin() + i);
         }
     }
     health.remove_n_health(damage_dealt);
@@ -393,7 +387,6 @@ void Game::init_entities(nlohmann::json const& entity)
     init_waves(entity["Waves"], entity["Enemy"]);
 }
 
-// void Game::init_tiles(string const & file_entity)
 void Game::init_tiles(nlohmann::json const& entity)
 
 {
@@ -418,7 +411,6 @@ void Game::init_tiles(nlohmann::json const& entity)
         inner_map.insert({"difficulty", difficulty});
         maps.insert({map_name, inner_map});
     }
-    // cout << maps["map_dev"]["file_name"] << endl;
 
     /* populate map_tiles */
     string zero;
@@ -443,7 +435,6 @@ void Game::init_tiles(nlohmann::json const& entity)
         inner_map.insert({"4", four});
         map_tiles.insert({map_name, inner_map});
     }
-    // cout << map_tiles["map_dev"]["0"] << endl;
 }
 
 void Game::init_waves(json const & waves, json const & enemies)
@@ -571,7 +562,6 @@ void Game::init_shop(json const & j_shop)
     shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color, font_color, font_name, texture_file};
     wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
     shop.update_shop_ui(wallet);
-    // cout << "wallet in game" << wallet.getCash() << endl;
 }
 
 int Game::get_frame()
@@ -681,26 +671,28 @@ void Game::check_collision()
 
 void Game::check_collision_towers()
 {
-    float distance{};
+    float sq_distance{};
     for (size_t tower_i = 0;
             tower_i < Tower::towers.size();
             tower_i++)
     {
+        // fresh map in new frame
         Tower::towers.at(tower_i)->shootable_enemies.clear();
+
         if (!dynamic_cast<Tower_ring*>( Tower::towers.at(tower_i) ) )
         {
             for (size_t enemy_i = 0;
                 enemy_i < Enemy::enemies.size();
                 enemy_i++)
             {
-                        if (collided(Tower::towers.at(tower_i),
-                                    Enemy::enemies.at(enemy_i),
-                                    distance))
-                        {
-                            Tower::towers.at(
-                                tower_i)->collision(Enemy::enemies.at(enemy_i),
-                                distance);
-                        }
+                if (collided(Tower::towers.at(tower_i),
+                            Enemy::enemies.at(enemy_i),
+                            sq_distance))
+                {
+                    Tower::towers.at(
+                        tower_i)->collision(Enemy::enemies.at(enemy_i),
+                        sq_distance);
+                }
             }
         }
     }
@@ -727,7 +719,7 @@ void Game::handle_input(sf::Event & event)
         // Is it the left mouse button?
         if ( mouse.button == sf::Mouse::Button::Left )
         {
-            handle_click(sf::Vector2f{mouseX, mouseY});
+            handle_left_click(sf::Vector2f{mouseX, mouseY});
         }
         else if ( mouse.button == sf::Mouse::Button::Right)
         {
@@ -744,27 +736,21 @@ void Game::handle_right_click(sf::Vector2f click)
         Tile_tower *tile_t;
         if ( (tile_t = dynamic_cast<Tile_tower*>(tile)) )
         {
-            tile_t->on_click(click);
+            tile_t->on_right_click(click);
         }
     }
 }
 
- void Game::handle_click(sf::Vector2f click)
+ void Game::handle_left_click(sf::Vector2f click)
  {
-     // Do we want to be smart or dumb here? One way is to just itterate over all
-     // clickable object and see if they contain the clicked location. A faster
-     // way is to use the fact that everything is in a grid and calculate what
-     // button was pressed. I did the dump way.
-
      if(!shop.getGlobalBounds().contains(click))
      {
         Tower * tw = shop.get_chosen_tower();
-        // cout << "Chosen tower in game: " << tw << endl;
+        // Enough money to buy.
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
             Tile_tower * tile = dynamic_cast<Tile_tower*>(Tile::get_tile_by_coord(click));
 
-            // cout << "Enough money to buy. Tile: " << tile << endl;
             if(tile != nullptr && !tile->is_occupied() && tile->on_click(tw))
             {
                 wallet.take(tw->cost);
@@ -777,19 +763,12 @@ void Game::handle_right_click(sf::Vector2f click)
 
 void Game::update_logic()
 {
-    // if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
-    // {
-        // cout << "next_wave" << endl;
-        // wave_manager.next_wave(frame, fps);
-    // }
     wave_manager.spawn_enemies(frame);
     enemy_update_direction();
     enemy_update_position();
+    
+    projectile_update_position();
 
-    if (Projectile::projectiles.size() > 0)
-    {
-        projectile_update_position();
-    }
     check_collision();
     check_collision_towers();
     fire_towers();
