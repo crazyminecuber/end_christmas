@@ -55,28 +55,34 @@ Game::~Game()
         delete (*it).second;
     }
     Tile::tiles.clear();
+
+    for ( Tower *t : Tower::factory_towers )
+    {
+        delete t;
+    }
+    Tower::factory_towers.clear();
 }
 
 // Help function to determine init projectile for tower
-Projectile* Game::get_tower_projectile(std::string const & projectile)
+shared_ptr<Projectile> Game::get_tower_projectile(std::string const & projectile)
 {
 
     sf::Vector2f double0{0,0};
     if(projectile == "Projectile_basic")
     {
-       return new Projectile_basic(double0,double0);
+       return make_shared<Projectile_basic>(double0,double0);
     }
     else if(projectile == "Projectile_pierce")
     {
-        return new Projectile_pierce{double0,double0};
+        return make_shared<Projectile_pierce>(double0,double0);
     }
     else if(projectile == "Projectile_bomb")
     {
-        return new Projectile_bomb{double0,double0};
+        return make_shared<Projectile_bomb>(double0,double0);
     }
     else
     {
-        __throw_bad_function_call();
+        throw invalid_argument("No projectile with name " + projectile);
     }
 }
 /* Help function to determine if object1 and object2 have collided.

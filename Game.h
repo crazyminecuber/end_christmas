@@ -71,7 +71,7 @@ public:
 
 private:
 	std::shared_ptr<sf::RenderWindow> window;
-	Projectile* get_tower_projectile(std::string const & projectile);
+	std::shared_ptr<Projectile> get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2,
 		float &sq_distance);
 	bool collided_bb(Entity const *object1, Entity const *object2);
