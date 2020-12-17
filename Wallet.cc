@@ -1,9 +1,10 @@
 #include "Wallet.h"
 using namespace std;
 
+//Calculate income and expenditure and "stores" the money left. 
+
 bool Wallet::take(int price)
 {
-    // cout << "Taking cash: " << price << endl;
     if (cash - price < 0)
     {
         return false;
@@ -15,7 +16,6 @@ bool Wallet::take(int price)
 
 void Wallet::add(int income)
 {
-    // cout << "Added to wallet : "<< income << endl;
     cash += income;
     update_ui();
 

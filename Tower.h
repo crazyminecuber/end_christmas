@@ -1,4 +1,3 @@
-//TODO sätta destruktorer till default??
 #ifndef TOWER_H
 #define TOWER_H
 #include <iostream>
@@ -38,7 +37,7 @@ public:
     static std::vector<Tower*> factory_towers;
 
     struct cmpV2f
-    /* sort Vector2f by row and then column */
+    // sort Vector2f by row and then column
     {
         bool operator()(const sf::Vector2f& a, const sf::Vector2f& b) const
         {
@@ -58,13 +57,13 @@ protected:
     int frame_last_shot{0};
     int fire_period;
     int fire_angle;
-
-    Projectile * projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren? (Abstrakt klass går ej att instansiera, bästa jag vet är att använda unique_ptr, men kräver en del jobb)
+    Projectile * projectile;
 
 public:
     int cost{};
 };
 
+/*---------------------------------------------------------------------------*/
 
 class Tower_basic : public Tower
 {
@@ -76,13 +75,15 @@ public:
   {}
 
   Tower_basic(Tower_basic const & other);
-  ~Tower_basic()=default;
+  ~Tower_basic() = default;
 
   void shoot() override;
   Tower * create_active(sf::Vector2f position) override;
   std::pair<sf::Vector2f, Entity *> select_target();
   sf::Vector2f aim_direction(std::pair<sf::Vector2f, Entity *> target_enemy);
 };
+
+/*---------------------------------------------------------------------------*/
 
 class Tower_ring : public Tower
 {
@@ -96,7 +97,7 @@ public:
   ~Tower_ring() = default;
 
   void shoot() override;
-  Tower * create_active(sf::Vector2f postion) override; //referens?
+  Tower * create_active(sf::Vector2f postion) override;
 
 protected:
   int num_of_projectile;
