@@ -3,12 +3,14 @@
 #include "Wave_manager.h"
 #include "Wave_group.h"
 #include "Enemy.h"
+#include "State_machine.h"
 
 
 //Public
 
 void Wave_manager::init_waves(int current_frame)
 {
+    fps = State_machine::get_fps();
     generate_wave(current_frame);
     calculate_win_wave();
 }

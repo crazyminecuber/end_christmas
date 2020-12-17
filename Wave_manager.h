@@ -31,7 +31,7 @@ public:
 
 private:
     int current_wave{1};
-    float fps{60};
+    float fps;
     int win_wave;
 
     std::vector<Wave_group*> wave_groups; //All groups defined in entity.json
