@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Entity.h"
 #include "Enemy_basic.h"
 
@@ -11,7 +10,7 @@ Enemy* Enemy_basic::clone() const
 }
 
 bool Enemy_basic::collision(Projectile* object){
-    life-= object->damage;
+    life -= object->damage;
     if (life <= 0)
     {
       return true;

@@ -18,12 +18,14 @@ class Game final
 public:
 	Game() = delete;
 	Game(std::shared_ptr<sf::RenderWindow> win,
+	 	 std::string const & file_health_font,
 		 std::string const & file_health_texture,
-		 int hp)
+		 int hp,
+	 	 std::string const & file_wave_manager_font)
 		 /*std::string const & shop_file,*/
 		 : window{win},
-		   health{win, file_health_texture, hp},
-		   wave_manager{win}/*, shop{shop_file}*/
+		   health{win, file_health_font, file_health_texture, hp},
+		   wave_manager{win, file_wave_manager_font}/*, shop{shop_file}*/
 		 {
 
 		 };
@@ -34,14 +36,15 @@ public:
 	void update_logic();
 	void render();
 
-	void load_map(std::string const & file_entity);
+	void load_map(nlohmann::json const& entity,
+				  nlohmann::json const& settings);
 	void determine_tile_directions();
 
-	float read_shop_width(std::string const & file_entity);
-	void load_entities(std::string const & file_entity);
+	void init_entities(nlohmann::json const& entity);
 	void check_collision();
 	void check_collision_towers();
-	void handle_click(sf::Vector2f click);
+	void handle_left_click(sf::Vector2f click);
+	void handle_right_click(sf::Vector2f click);
 
 	void enemy_update_direction();
 	void enemy_update_position();
@@ -64,12 +67,12 @@ public:
 	void set_render_tower_radii(bool render);
 	bool get_render_tower_radii();
 
-	void init_tiles(std::string const & file_entity);
+	void init_tiles(nlohmann::json const& entity);
 	std::map<std::string, std::map<std::string, std::string>> maps;
 
 private:
 	std::shared_ptr<sf::RenderWindow> window;
-	Projectile* get_tower_projectile(std::string const & projectile);
+	std::shared_ptr<Projectile> get_tower_projectile(std::string const & projectile);
 	bool collided(Entity const *object1, Entity const *object2,
 		float &sq_distance);
 	bool collided_bb(Entity const *object1, Entity const *object2);

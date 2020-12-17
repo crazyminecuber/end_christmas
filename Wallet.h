@@ -9,9 +9,7 @@ class Wallet
 public:
     Wallet(){};
     Wallet(int starting_cash): cash{starting_cash}
-    {
-        std::cout << "Wallet created" << std::endl;
-    }
+    {}
 
     bool take(int price);
     void add(int income);
@@ -23,4 +21,5 @@ private:
     int cash{};
 };
 
-#endif //ENTITY_H
+#endif
+//ENTITY_H

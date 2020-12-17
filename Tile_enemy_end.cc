@@ -1,14 +1,13 @@
-#include <iostream> // debugg
 #include "Tile.h"
-#include "Entity.h"
-#include "Enemy.h"
 #include "Tile_enemy.h"
 #include "Tile_enemy_end.h"
+#include "Enemy.h"
 
 float Tile_enemy_end::update_enemy(Enemy* enemy)
+/* updates enemy movement and returns damage dealt to player*/
 {
     float damage_dealt{0};
-    if ( ready_to_update_enemy(enemy) )
+    if ( has_passed_middle(enemy) )
     {
         enemy->set_direction(direction);
         damage_dealt = enemy->get_damage();

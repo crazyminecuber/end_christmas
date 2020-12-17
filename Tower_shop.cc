@@ -102,7 +102,6 @@ Text Tower_shop::make_text(string font_name)
  */
 void Tower_shop::render(RenderWindow & window)
 {
-    // chose to render selected tower behind shop but maybe put in front?
     window.draw(*this);
     window.draw(wallet_text);
     window.draw(heading);

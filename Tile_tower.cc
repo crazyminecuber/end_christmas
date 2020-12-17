@@ -1,3 +1,4 @@
+#include <SFML/Graphics.hpp>
 #include "Tile.h"
 #include "Tile_tower.h"
 using namespace std;
@@ -7,21 +8,29 @@ void Tile_tower::init()
     Tile::tiles[index_position] = this;
 }
 
-bool Tile_tower::on_click(Tower * tw)
+bool Tile_tower::on_click(Tower* tw)
 {
-    // cout << "checking out if tower is set" << endl;
-    if (!(tw == nullptr))
+    bool occupied{false};
+    if ( !(tw == nullptr) )
     {
-        // cout << "Creating tower. Position: " << getPosition().x << " " << getPosition().y << endl;
-        tower = tw->create_active(getPosition() + sf::Vector2f{side_length / 2, side_length / 2});
-
-        return true;
+        tower = tw->create_active(getPosition()
+                                    + sf::Vector2f{side_length / 2,
+                                                   side_length / 2});
+        occupied = true;
     }
-    return false;
+    return occupied;
+}
+
+void Tile_tower::on_right_click(sf::Vector2f)
+{
+    if (tower)
+    {
+        tower->on_right_click();
+    }
 }
 
 bool Tile_tower::is_occupied()
 {
-    // cout << "Tower in tile" << tower << endl;
     return !(tower == nullptr);
 }
+

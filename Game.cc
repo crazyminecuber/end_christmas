@@ -1,8 +1,6 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <cmath>
-#include <math.h>
 #include <sstream>
-#include <iostream>
 #include <fstream>
 #include <vector>
 #include "json.hpp" // to parse data from json file. See json.hpp for source.
@@ -55,28 +53,34 @@ Game::~Game()
         delete (*it).second;
     }
     Tile::tiles.clear();
+
+    for ( Tower *t : Tower::factory_towers )
+    {
+        delete t;
+    }
+    Tower::factory_towers.clear();
 }
 
 // Help function to determine init projectile for tower
-Projectile* Game::get_tower_projectile(std::string const & projectile)
+shared_ptr<Projectile> Game::get_tower_projectile(std::string const & projectile)
 {
 
     sf::Vector2f double0{0,0};
     if(projectile == "Projectile_basic")
     {
-       return new Projectile_basic(double0,double0);
+       return make_shared<Projectile_basic>(double0,double0);
     }
     else if(projectile == "Projectile_pierce")
     {
-        return new Projectile_pierce{double0,double0};
+        return make_shared<Projectile_pierce>(double0,double0);
     }
     else if(projectile == "Projectile_bomb")
     {
-        return new Projectile_bomb{double0,double0};
+        return make_shared<Projectile_bomb>(double0,double0);
     }
     else
     {
-        __throw_bad_function_call();
+        throw invalid_argument("No projectile with name " + projectile);
     }
 }
 
@@ -101,7 +105,8 @@ bool Game::collided_bb(Entity const *object1, Entity const *object2)
     return (object1->getGlobalBounds().intersects(object2->getGlobalBounds()));
 }
 
-void Game::load_map(string const & file_entity)
+void Game::load_map(nlohmann::json const& entity,
+                    nlohmann::json const& settings)
 {
     /* prepare variables needed for reading from file */
     std::ifstream infile{maps[selected_map]["file_name"]};
@@ -155,11 +160,9 @@ void Game::load_map(string const & file_entity)
         tile_index_pos.y++;
     }
     infile.close();
-    cout << "Laddat in kartan" << endl;
 
     /* update side_length */
-    // calculate Tile::side_length and change all tiles
-    float shop_sizeX = read_shop_width(file_entity);
+    float shop_sizeX = entity["Shop"]["shop_width"];
 
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y + (1 - 2);
@@ -179,7 +182,11 @@ void Game::load_map(string const & file_entity)
     /* update window size */
     unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
     unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
-    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
+    string new_title = settings["title"];
+
+
+
+    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, new_title, sf::Style::Close);
 
     /* set direction of tiles */
     determine_tile_directions();
@@ -268,13 +275,13 @@ void Game::render()
     // render enemies
     for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
     {
-        window->draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it));
     }
 
     // render towers
     for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
     {
-        window->draw(*(*it)); // it doesn't make sense to me either but it works
+        window->draw(*(*it));
     }
 
     // render tower radii
@@ -310,24 +317,20 @@ void Game::enemy_update_direction()
     float damage_dealt{0};
     for (size_t i = 0; i < Enemy::enemies.size(); i++)
     {
-        // cout << "iterator at end " << (it != Enemy::enemies.end()) << endl;
         float damage_this_enemy{0};
         Tile* tile = Tile::get_tile_by_coord(Enemy::enemies[i]->getPosition());
-        // maybe change this later so that the deletion is done inside
-        // tile_enemy_end instead. Have to change flow of information
-        // between damage and health then too.
         damage_this_enemy = tile->update_enemy(Enemy::enemies[i]);
+
         if ( damage_this_enemy > 0.f )
         {
             damage_dealt += damage_this_enemy;
             delete Enemy::enemies[i];
-            if(Enemy::enemies.size()>0)
+
+            if(Enemy::enemies.size()>1)
             {
                 swap(Enemy::enemies.at(i),Enemy::enemies.back());
             }
-
             Enemy::enemies.pop_back();
-            //Enemy::enemies.erase(Enemy::enemies.begin() + i);
         }
     }
     health.remove_n_health(damage_dealt);
@@ -377,60 +380,18 @@ int Game::get_current_wave() const
     return wave_manager.get_current_wave();
 }
 
-float Game::read_shop_width(string const & file_entity)
-/* window needs shop_width and shop needs window size.
-   This function gets around the circular dependency */
+void Game::init_entities(nlohmann::json const& entity)
 {
-    float shop_sizeX;
-
-    ifstream ifs(file_entity);
-    if (ifs.is_open())
-    {
-        json j_data;
-        ifs >> j_data;
-        shop_sizeX = j_data["Shop"]["shop_size"][0];
-        ifs.close();
-    }
-    else
-    {
-        throw invalid_argument("Could not open " + file_entity);
-    }
-
-    return shop_sizeX;
+    init_projectiles(entity["Projectile"]);
+    init_towers(entity["Tower"]);
+    init_shop(entity["Shop"]);
+    init_waves(entity["Waves"], entity["Enemy"]);
 }
 
-void Game::load_entities(string const & file_entity)
-{
-    ifstream ifs(file_entity);
-    if (ifs.is_open())
-    {
-        json j_data;
-        ifs >> j_data;
-        init_projectiles(j_data["Projectile"]);
-        init_towers(j_data["Tower"]);
-        init_shop(j_data["Shop"]);
-        init_waves(j_data["Waves"], j_data["Enemy"]);
-        ifs.close();
-    }
-    else
-    {
-        throw invalid_argument("Could not open " + file_entity);
-    }
-}
+void Game::init_tiles(nlohmann::json const& entity)
 
-void Game::init_tiles(string const & file_entity)
 {
-    // read from file and save data in maps and map_tiles
-    ifstream ifs(file_entity);
-    json json_obj;
-    if (ifs.is_open())
-    {
-        json j_data;
-        ifs >> j_data;
-        json_obj = j_data["Maps"];
-    }
-    ifs.close();
-
+    json json_maps = entity["Maps"];
     string map_name;
     map<string, string> inner_map;
 
@@ -438,7 +399,7 @@ void Game::init_tiles(string const & file_entity)
     string file_name;
     string display_name;
     string difficulty;
-    for (const auto& map : json_obj.items())
+    for (const auto& map : json_maps.items())
     {
         map_name = map.key();
         file_name = map.value()["file_name"];
@@ -451,7 +412,6 @@ void Game::init_tiles(string const & file_entity)
         inner_map.insert({"difficulty", difficulty});
         maps.insert({map_name, inner_map});
     }
-    // cout << maps["map_dev"]["file_name"] << endl;
 
     /* populate map_tiles */
     string zero;
@@ -459,7 +419,7 @@ void Game::init_tiles(string const & file_entity)
     string two;
     string three;
     string four;
-    for (const auto& map : json_obj.items())
+    for (const auto& map : json_maps.items())
     {
         map_name = map.key();
         zero = map.value()["tiles"]["0"];
@@ -476,7 +436,6 @@ void Game::init_tiles(string const & file_entity)
         inner_map.insert({"4", four});
         map_tiles.insert({map_name, inner_map});
     }
-    // cout << map_tiles["map_dev"]["0"] << endl;
 }
 
 void Game::init_waves(json const & waves, json const & enemies)
@@ -588,8 +547,7 @@ void Game::init_shop(json const & j_shop)
     wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
     string font_btn_name{j_shop["font_button_name"]};
-    sf::Vector2f shop_size{j_shop["shop_size"][0], window_sizeY};
-    // sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
+    sf::Vector2f shop_size{j_shop["shop_width"], window_sizeY};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     string texture_file{j_shop["texture_file"]}; // gets changed in Game::load_map
@@ -713,26 +671,28 @@ void Game::check_collision()
 
 void Game::check_collision_towers()
 {
-    float distance{};
+    float sq_distance{};
     for (size_t tower_i = 0;
             tower_i < Tower::towers.size();
             tower_i++)
     {
+        // fresh map in new frame
         Tower::towers.at(tower_i)->shootable_enemies.clear();
+
         if (!dynamic_cast<Tower_ring*>( Tower::towers.at(tower_i) ) )
         {
             for (size_t enemy_i = 0;
                 enemy_i < Enemy::enemies.size();
                 enemy_i++)
             {
-                        if (collided(Tower::towers.at(tower_i),
-                                    Enemy::enemies.at(enemy_i),
-                                    distance))
-                        {
-                            Tower::towers.at(
-                                tower_i)->collision(Enemy::enemies.at(enemy_i),
-                                distance);
-                        }
+                if (collided(Tower::towers.at(tower_i),
+                            Enemy::enemies.at(enemy_i),
+                            sq_distance))
+                {
+                    Tower::towers.at(
+                        tower_i)->collision(Enemy::enemies.at(enemy_i),
+                        sq_distance);
+                }
             }
         }
     }
@@ -754,32 +714,43 @@ void Game::handle_input(sf::Event & event)
     if ( event.type == sf::Event::MouseButtonPressed )
     {
         auto mouse { event.mouseButton };
+        float mouseX = mouse.x;
+        float mouseY = mouse.y;
         // Is it the left mouse button?
         if ( mouse.button == sf::Mouse::Button::Left )
         {
-            float mouseX = mouse.x;
-            float mouseY = mouse.y;
-            handle_click(sf::Vector2f{mouseX, mouseY});
+            handle_left_click(sf::Vector2f{mouseX, mouseY});
+        }
+        else if ( mouse.button == sf::Mouse::Button::Right)
+        {
+            handle_right_click(sf::Vector2f{mouseX, mouseY});
         }
     }
 }
 
- void Game::handle_click(sf::Vector2f click)
- {
-     // Do we want to be smart or dumb here? One way is to just itterate over all
-     // clickable object and see if they contain the clicked location. A faster
-     // way is to use the fact that everything is in a grid and calculate what
-     // button was pressed. I did the dump way.
+void Game::handle_right_click(sf::Vector2f click)
+{
+    if(!shop.getGlobalBounds().contains(click))
+    {
+        Tile *tile = Tile::get_tile_by_coord(click);
+        Tile_tower *tile_t;
+        if ( (tile_t = dynamic_cast<Tile_tower*>(tile)) )
+        {
+            tile_t->on_right_click(click);
+        }
+    }
+}
 
+ void Game::handle_left_click(sf::Vector2f click)
+ {
      if(!shop.getGlobalBounds().contains(click))
      {
         Tower * tw = shop.get_chosen_tower();
-        // cout << "Chosen tower in game: " << tw << endl;
+        // Enough money to buy.
         if(tw != nullptr && wallet.getCash() >= tw->cost)
         {
             Tile_tower * tile = dynamic_cast<Tile_tower*>(Tile::get_tile_by_coord(click));
 
-            // cout << "Enough money to buy. Tile: " << tile << endl;
             if(tile != nullptr && !tile->is_occupied() && tile->on_click(tw))
             {
                 wallet.take(tw->cost);
@@ -792,22 +763,16 @@ void Game::handle_input(sf::Event & event)
 
 void Game::update_logic()
 {
-    // if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
-    // {
-        // cout << "next_wave" << endl;
-        // wave_manager.next_wave(frame, fps);
-    // }
     wave_manager.spawn_enemies(frame);
     enemy_update_direction();
     enemy_update_position();
 
-    if (Projectile::projectiles.size() > 0)
-    {
-        projectile_update_position();
-    }
+    projectile_update_position();
+
     check_collision();
     check_collision_towers();
     fire_towers();
+
     frame++;
 }
 

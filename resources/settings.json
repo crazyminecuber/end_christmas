@@ -1,16 +1,18 @@
 {
     "font" : "resources/fonts/Christmas_Bell.otf",
+    "title" : "Kill Santa",
     "window" :
         {
             "width" : 1920,
-            "height" : 1000,
+            "height" : 1020,
             "fullscren" : false
         },
     "game" :
         {
             "hp" : 100,
-            "coins" : 100,
-            "health_texture" : "resources/textures/heart.png"
+            "health_texture" : "resources/textures/heart.png",
+            "health_font" : "resources/fonts/font.ttf",
+            "wave_font" : "resources/fonts/font.ttf"
         },
     "menu" :
         {
@@ -20,6 +22,6 @@
         },
     "end" :
         {
-            "background" : "resources/textures/background_start_menu.png"
+            "background" : "resources/textures/Snowman_won.jpeg"
         }
 }

@@ -1,9 +1,8 @@
-#include "Tile.h"
-#include "Entity.h"
-#include "Enemy.h"
 #include "Tile_enemy.h"
+#include "Tile.h"
+#include "Enemy.h"
+#include <SFML/Graphics.hpp>
 #include <iostream> //debugg
-//#include "Enemy.h"
 
 void Tile_enemy::set_direction(sf::Vector2f dir)
 {
@@ -11,8 +10,9 @@ void Tile_enemy::set_direction(sf::Vector2f dir)
 }
 
 float Tile_enemy::update_enemy(Enemy* enemy)
+/* updates enemy movement and returns damage dealt to player*/
 {
-    if ( ready_to_update_enemy(enemy) )
+    if ( has_passed_middle(enemy) )
     {
         enemy->set_direction(direction);
         enemy->flip(direction);
@@ -20,14 +20,16 @@ float Tile_enemy::update_enemy(Enemy* enemy)
     return 0;
 }
 
-bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
+bool Tile_enemy::has_passed_middle(Enemy* enemy)
+/* checks if an enemy has passed the middle of its current tile,
+   different checks depending on enemy direction                */
 {
     bool ready_check{false};
     // moving right
     if ( enemy->get_direction() == sf::Vector2f{1, 0} )
     {
         if ( (enemy->getPosition().x) >
-             (coord_position.x       + (Tile::side_length / 2))                )
+             (coord_position.x       + (Tile::side_length / 2)) )
         {
             ready_check = true;
         }
@@ -36,7 +38,7 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     else if ( enemy->get_direction() == sf::Vector2f{-1, 0} )
     {
         if ( (enemy->getPosition().x) <
-             (coord_position.x       + (Tile::side_length / 2))                )
+             (coord_position.x       + (Tile::side_length / 2)) )
         {
             ready_check = true;
         }
@@ -45,7 +47,7 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     else if ( enemy->get_direction() == sf::Vector2f{0, -1} )
     {
         if ( (enemy->getPosition().y) <
-             (coord_position.y       + (Tile::side_length / 2))                )
+             (coord_position.y       + (Tile::side_length / 2)) )
         {
             ready_check = true;
         }
@@ -54,11 +56,12 @@ bool Tile_enemy::ready_to_update_enemy(Enemy* enemy)
     else if ( enemy->get_direction() == sf::Vector2f{0, 1} )
     {
         if ( (enemy->getPosition().y) >
-             (coord_position.y       + (Tile::side_length / 2))                )
+             (coord_position.y       + (Tile::side_length / 2)) )
         {
             ready_check = true;
         }
     }
+    // standing still
     else if ( enemy->get_direction() == sf::Vector2f{0, 0} )
     {
         ready_check = true;
@@ -76,9 +79,3 @@ int Tile_enemy::get_tile_number()
 {
     return tile_number;
 }
-
-//
-// Tower* Tile_enemy::on_click()
-// {
-//     return nullprt;
-// }

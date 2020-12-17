@@ -14,28 +14,30 @@ using json = nlohmann::json;
 
 float State_machine::fps = 60;
 
-State_machine::State_machine(const string &title,
-                             const string &settings_file,
+State_machine::State_machine(const string &settings_file,
                              const string &entity_file)
-    :   window{make_shared<sf::RenderWindow>(
-            (load_settings(settings_file),  // comma operator
-             sf::VideoMode
-                {settings["window"]["width"],
-                 settings["window"]["height"]}
-            ),
-            title,
-            sf::Style::Close
-        )},
+    :   window{(load_settings(settings_file),  // comma operator
+                make_shared<sf::RenderWindow>(
+                sf::VideoMode{settings["window"]["width"],
+                              settings["window"]["height"]},
+                string{settings["title"]},
+                sf::Style::Close)
+               )},
         game{make_shared<Game>(
                 window,
+                settings["game"]["health_font"],
                 settings["game"]["health_texture"],
-                settings["game"]["hp"] ) }
+                settings["game"]["hp"],
+                settings["game"]["wave_font"]) }
 {
-    game->init_tiles(entity_file);
+    load_entity(entity_file);
+    game->init_tiles(entity);
     sf::Font font{Resource_manager::load_font(settings["font"])};
+
+    /* create states */
     states.insert(
         make_pair(MENU,
-            make_unique<State_menu>(window, game, font, settings["menu"]))
+            make_unique<State_menu>(window, game, font, entity, settings))
         );
     states.insert(
         make_pair(WAVE,
@@ -45,8 +47,12 @@ State_machine::State_machine(const string &title,
         make_pair(WAIT,
             make_unique<State_wait>(window, game, font))
         );
-    states.insert(make_pair(PAUSE, make_unique<State_pause>(window, game, font)));
-    states.insert(make_pair(END, make_unique<State_end>(window, game, font, settings["end"])));
+    states.insert(
+        make_pair(PAUSE,
+            make_unique<State_pause>(window, game, font)));
+    states.insert(
+        make_pair(END,
+            make_unique<State_end>(window, game, font, settings["end"])));
 
     //set initial state
     current_state = MENU;
@@ -89,11 +95,24 @@ void State_machine::load_settings(const string & settings_file)
     }
 }
 
+void State_machine::load_entity(const string & entity_file)
+{
+    ifstream ifs{entity_file};
+    if (ifs.is_open())
+    {
+        ifs >> entity;
+        ifs.close();
+    }
+    else
+    {
+        throw invalid_argument("Could not open " + entity_file);
+    }
+}
+
 void State_machine::throttle(const float fps, sf::Clock & clock)
 {
     auto const target{sf::milliseconds(1000.0/fps)};
     auto wait_time{target - clock.getElapsedTime()};
-    // cout << (wait_time/target) * 100 << "%" << endl;
     sleep(wait_time);
     clock.restart();
 }
@@ -135,6 +154,5 @@ float State_machine::get_fps()
 
 void State_machine::quit()
 {
-    // what more?
     window->close();
 }

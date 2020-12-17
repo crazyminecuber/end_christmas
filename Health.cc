@@ -1,7 +1,5 @@
 #include "Health.h"
-#include <iostream>
 #include <string>
-#include <sstream>
 #include <algorithm> // std::max
 
 void Health::init()
@@ -16,11 +14,7 @@ void Health::init()
                           size_heart / size_original.y);
 
     /* text */
-    if ( !font->loadFromFile("resources/fonts/font.ttf") )
-    {
-     std::cout << "Kunde inte ladda font" << std::endl;
-    }
-    text_health.setFont((*font));
+    text_health.setFont(font);
     text_health.setFillColor(sf::Color::White);
     text_health.setPosition(size_heart * 1.2, 2);
     text_health.setCharacterSize(size_heart * 0.8);
@@ -39,7 +33,6 @@ void Health::init()
     background.setPosition(background.getOutlineThickness(),
                            background.getOutlineThickness());
     background.setOutlineColor(sf::Color::Black);
-
 }
 
 void Health::render()

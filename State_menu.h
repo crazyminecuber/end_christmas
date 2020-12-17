@@ -1,30 +1,34 @@
 #ifndef STATE_MENU_H
 #define STATE_MENU_H
+
+#include <SFML/Graphics.hpp>
+#include <string>
 #include <memory> // shared_ptr
 #include "State.h"
 #include "Game.h"
-#include <SFML/Graphics.hpp>
-#include <string>
 #include "json.hpp"
 
 class State_menu : public State
 {
 public:
     State_menu(std::shared_ptr<sf::RenderWindow> _window,
-        std::shared_ptr<Game> _game, 
-        const sf::Font &_font,
-        nlohmann::json &settings_menu);
+               std::shared_ptr<Game> _game,
+               const sf::Font &_font,
+               nlohmann::json &entity,
+               nlohmann::json &settings);
 
     void handle_input(sf::Event & event) override;
     void update_logic()                  override;
     void render()                        override;
 
-    int get_next_state() override;
+    int get_next_state()                 override;
 
 private:
+    nlohmann::json const& entity;
+    nlohmann::json const& settings;
+
     void handle_click(sf::Vector2f mouse_pos);
     void check_hover();
-    // void window_calculations1();
     void on_resize();
 
     bool start_game{false};

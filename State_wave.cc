@@ -2,17 +2,16 @@
 #include "State_machine.h"
 #include <memory> // shared_ptr
 #include <iostream> // debugg
+
 using namespace std;
 
-State_wave::State_wave(std::shared_ptr<sf::RenderWindow> _window,
-        std::shared_ptr<Game> _game,
-    const sf::Font & _font)
-: State(_window, _game, _font)
-{}
-
 void State_wave::handle_input(sf::Event & event)
+/* handles both general game input and specific state input */
 {
+    // game input
     game->handle_input(event);
+
+    // state input
     if ( event.type == sf::Event::KeyPressed )
     {
         if ( event.key.code == sf::Keyboard::Escape )
@@ -21,6 +20,7 @@ void State_wave::handle_input(sf::Event & event)
         }
         else if ( event.key.code == sf::Keyboard::F )
         {
+            // toggle between 3 different game speeds
             if ( State_machine::get_fps() < 60.1 )
                 State_machine::set_fps(120.f);
             else if ( State_machine::get_fps() < 120.1 )
@@ -30,7 +30,10 @@ void State_wave::handle_input(sf::Event & event)
         }
         else if ( event.key.code == sf::Keyboard::R )
         {
-            game->set_render_tower_radii( !(game->get_render_tower_radii()) );
+            // toggle showing tower_radii
+            game->set_render_tower_radii(
+                                         !(game->get_render_tower_radii())
+                                        );
         }
     }
 
@@ -52,24 +55,25 @@ void State_wave::render()
 
 int State_wave::get_next_state()
 {
-    int return_value{WAVE};
+    int next_state{WAVE};
     if ( game->get_health() <= 0)
     {
-        return_value = END;
+        next_state = END;
     }
     else if ( pause_game )
     {
-        return_value = PAUSE;
+        next_state = PAUSE;
     }
     else if (game->player_has_won())
     {
-        return_value = END;
+        next_state = END;
     }
     else if ( game->wave_complete() )
     {
-        return_value = WAIT;
+        next_state = WAIT;
     }
+
     /* reset variables */
     pause_game = false;
-    return return_value;
+    return next_state;
 }

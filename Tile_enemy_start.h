@@ -2,6 +2,7 @@
 #define TILE_ENEMY_START_H
 
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "Tile_enemy.h"
 #include "Enemy.h"
 
@@ -9,7 +10,7 @@ class Tile_enemy_start : public Tile_enemy
 {
 public:
     Tile_enemy_start(std::string texture_file,
-               sf::Vector2i index_pos)
+                     sf::Vector2i index_pos)
     : Tile_enemy(texture_file, index_pos)
     {}
 

@@ -2,7 +2,7 @@
 using namespace std;
 
 /*
- * Takes cash from wallet and call callback to update ui
+ * Takes cash from wallet if it has enough and calls callback to update ui
  */
 bool Wallet::take(int price)
 {
@@ -14,6 +14,8 @@ bool Wallet::take(int price)
     update_ui();
     return true;
 }
+
+
 /*
  * Adds cash to wallet and call callback to update ui
  */
@@ -24,10 +26,12 @@ void Wallet::add(int income)
 
 }
 
+
 int Wallet::getCash()
 {
     return cash;
 }
+
 
 void Wallet::update_ui()
 {

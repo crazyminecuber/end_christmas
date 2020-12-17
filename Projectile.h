@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <iostream>
 
 class Projectile : public Entity
 {
@@ -29,12 +28,15 @@ protected:
   float rotation_offset{};
 };
 
+/* ---------------------------------------------------------------------------*/
 class Projectile_basic : public Projectile
 {
 public:
   Projectile_basic(std::string texture_file, sf::Vector2f position,
-       sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage, float rotation_offset):
-       Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage, rotation_offset){}
+       sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd,
+       int arg_damage, float rotation_offset)
+       : Projectile(texture_file, position, size, hit_rad, dir, mov_spd,
+                  arg_damage, rotation_offset){}
   Projectile_basic(sf::Vector2f position, sf::Vector2f direction);
   ~Projectile_basic() = default;
 
@@ -48,14 +50,15 @@ public:
   static entity_properties prop;
 };
 
+/*----------------------------------------------------------------------------*/
 class Projectile_pierce : public Projectile
 {
 public:
   Projectile_pierce(std::string texture_file, sf::Vector2f position,
         sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd,
         int arg_damage, float rotation_offset, int nr_pier):
-        Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage, rotation_offset),
-        nr_pierce{nr_pier}{}
+        Projectile(texture_file, position, size, hit_rad, dir, mov_spd,
+                   arg_damage, rotation_offset), nr_pierce{nr_pier}{}
   Projectile_pierce(sf::Vector2f position,sf::Vector2f direction);
   ~Projectile_pierce() = default;
 
@@ -75,6 +78,7 @@ protected:
   int nr_enemies_killed{0};
 };
 
+/*---------------------------------------------------------------------------*/
 class Projectile_bomb_blast : public Projectile
 {
 public:
@@ -93,6 +97,7 @@ public:
   static entity_properties prop;
 };
 
+/*----------------------------------------------------------------------------*/
 class Projectile_bomb : public Projectile
 {
 public:
@@ -103,7 +108,7 @@ public:
                    arg_damage, rotation_offset), blast{}
   {}
   Projectile_bomb(sf::Vector2f position, sf::Vector2f direction);
-  ~Projectile_bomb()= default;
+  ~Projectile_bomb()=default;
 
   Projectile_bomb(Projectile_bomb const& other); //Copy-constructor
   void clone(sf::Vector2f dir, sf::Vector2f pos);

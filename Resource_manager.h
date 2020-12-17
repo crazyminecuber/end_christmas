@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <string>
+#include <iostream>
 
 class Resource_manager{
     public:
@@ -15,8 +16,14 @@ class Resource_manager{
         auto it{resources.find(file)};
         if(it == end(resources)){
           sf::Texture texture{};
-          texture.loadFromFile(file);
-          resources.insert({file, texture});
+          if ( texture.loadFromFile(file) )
+          {
+            resources.insert({file, texture});
+          }
+          else 
+          {
+            std::cout << "Error: Could not load " + file << std::endl;
+          }
         }
         return resources[file];
     }
@@ -24,8 +31,14 @@ class Resource_manager{
         auto it{fonts.find(file)};
         if(it == end(fonts)){
           sf::Font font{};
-          font.loadFromFile(file);
-          fonts.insert({file, font});
+          if ( font.loadFromFile(file) )
+          {
+            fonts.insert({file, font});
+          }
+          else 
+          {
+            std::cout << "Error: Could not load " + file << std::endl;
+          }
         }
         return fonts[file];
     }

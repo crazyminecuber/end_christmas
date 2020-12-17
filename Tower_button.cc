@@ -83,7 +83,8 @@ Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
 sf::Text Tower_button::make_pricetag(Tower * tw, std::string const & font_name)
 {
     string cost {to_string(tw->cost)};
-    return Text{cost, Resource_manager::load_font(font_name)}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
+    // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
+    return Text{cost, Resource_manager::load_font(font_name)};
 }
 
 
@@ -94,7 +95,8 @@ sf::Text Tower_button::make_pricetag(Tower * tw, std::string const & font_name)
 sf::Sprite Tower_button::make_tower_pic(Tower * tw)
 {
     std::string texture_file{tw->get_texture_file()};
-    return Sprite{Resource_manager::load(texture_file)}; // Again hoping for move construction
+    // Again hoping for move construction
+    return Sprite{Resource_manager::load(texture_file)};
 }
 
 
