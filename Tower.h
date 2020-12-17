@@ -19,7 +19,7 @@ class Tower : public Entity
 public:
     Tower(std::string texture_file,
         sf::Vector2f size, float hit_rad,
-        int _cost, Projectile * proj, int f_period)
+        int _cost, std::shared_ptr<Projectile> proj, int f_period)
     :Entity(texture_file, sf::Vector2f{0,0},
             size, hit_rad,
             sf::Vector2f{1,0}, 0),
@@ -64,7 +64,7 @@ protected:
     int fire_period;
     int fire_angle;
 
-    Projectile * projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren? (Abstrakt klass går ej att instansiera, bästa jag vet är att använda unique_ptr, men kräver en del jobb)
+    std::shared_ptr<Projectile> projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren? (Abstrakt klass går ej att instansiera, bästa jag vet är att använda unique_ptr, men kräver en del jobb)
 
 private:
     unsigned int sort_by{0};
@@ -79,7 +79,7 @@ class Tower_basic : public Tower
 public:
   Tower_basic(std::string texture_file,
       sf::Vector2f size, float hit_rad,
-      int cost, Projectile * proj, int f_period)
+      int cost, std::shared_ptr<Projectile> proj, int f_period)
   : Tower(texture_file, size, hit_rad, cost, proj, f_period)
   {}
 
@@ -97,7 +97,7 @@ class Tower_ring : public Tower
 public:
   Tower_ring(std::string texture_file,
       sf::Vector2f size, float hit_rad,
-      int cost, Projectile * proj, int f_period, int num_proj)
+      int cost, std::shared_ptr<Projectile> proj, int f_period, int num_proj)
   : Tower(texture_file, size, hit_rad, cost, proj, f_period), num_of_projectile{num_proj}{}
 
   Tower_ring(Tower_ring const & other);
