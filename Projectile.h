@@ -33,8 +33,11 @@ class Projectile_basic : public Projectile
 {
 public:
   Projectile_basic(std::string texture_file, sf::Vector2f position,
-       sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd, int arg_damage, float rotation_offset):
-       Projectile(texture_file, position, size, hit_rad, dir, mov_spd, arg_damage, rotation_offset){}
+       sf::Vector2f size, float hit_rad, sf::Vector2f dir, float mov_spd,
+       int arg_damage, float rotation_offset)
+       : Projectile(texture_file, position, size, hit_rad, dir, mov_spd,
+            arg_damage, rotation_offset)
+  {}
   Projectile_basic(sf::Vector2f position, sf::Vector2f direction);
   ~Projectile_basic() = default;
 
