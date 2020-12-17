@@ -33,13 +33,30 @@ void Tower::init_circle_hit_rad()
 void Tower::collision(Enemy* object, float distance)
 {
     float tile_number = Tile::get_tile_by_coord(object->getPosition())->get_tile_number();
-    shootable_enemies.emplace( make_pair(sf::Vector2f{distance, tile_number}, object) );
+    shootable_enemies.emplace( 
+      make_pair( 
+        Multikey<float, 2>{ std::array<float,2>{distance, tile_number}, sort_by }, 
+        object ) );
 }
 
 //Creating ptojectiles
 void Tower::make_projectile(sf::Vector2f dir, sf::Vector2f pos)
 {
     projectile->clone(dir,pos);
+}
+
+void Tower::on_click()
+{
+    switch (sort_by)
+    {
+    case SORT_BY_DISTANCE:
+      sort_by = SORT_BY_TILE;
+      break;
+
+    default:
+      sort_by = SORT_BY_DISTANCE;
+      break;
+    }
 }
 
 /*---------------------------------------------------------------------*/
@@ -66,8 +83,9 @@ void Tower_basic::shoot()
   {
     if (Game::get_frame() - frame_last_shot > fire_period)
     {
-      pair<sf::Vector2f, Entity *> target = select_target();
-      sf::Vector2f aim_dir = aim_direction(target);
+      pair<Multikey<float,2>, Entity *> target = select_target();
+      sf::Vector2f aim_dir = aim_direction(target.first.keys.at(0),
+                                           target.second);
       make_projectile(aim_dir, getPosition());
       frame_last_shot = Game::get_frame();
       shootable_enemies.clear();
@@ -76,7 +94,7 @@ void Tower_basic::shoot()
 }
 
 //Selecting enemy to shoot at
-pair<sf::Vector2f, Entity *> Tower_basic::select_target()
+pair<Multikey<float, 2>, Entity *> Tower_basic::select_target()
 {
   if (!shootable_enemies.empty())
   {
@@ -93,13 +111,14 @@ pair<sf::Vector2f, Entity *> Tower_basic::select_target()
 // }
 
 //Selecting direction for projectile
-sf::Vector2f Tower_basic::aim_direction(pair<sf::Vector2f, Entity *> target_enemy)
+sf::Vector2f Tower_basic::aim_direction(const float & sq_distance, 
+  Entity *target_enemy)
 {
-  sf::Vector2f aim = (target_enemy.second->getPosition());
-  sf::Vector2f t_dir = (target_enemy.second->get_direction() );
-  float distance_to_enemy = sqrt(target_enemy.first.x);
+  sf::Vector2f aim = (target_enemy->getPosition());
+  sf::Vector2f t_dir = (target_enemy->get_direction() );
+  float distance_to_enemy = sqrt(sq_distance);
   float frames = distance_to_enemy / projectile->movement_speed;
-  sf::Vector2f target = aim + t_dir*target_enemy.second->movement_speed*frames ;
+  sf::Vector2f target = aim + t_dir*target_enemy->movement_speed*frames ;
   sf::Vector2f dir =  target - getPosition();
   float length {sqrt(dir.x * dir.x + dir.y * dir.y)};
   //Normalize vector
