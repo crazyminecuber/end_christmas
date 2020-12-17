@@ -4,7 +4,6 @@
 #include <functional>
 
 
-
 class Wallet
 {
 public:
@@ -12,15 +11,15 @@ public:
     Wallet(int starting_cash): cash{starting_cash}
     {
         std::cout << "Wallet created" << std::endl;
-
     }
 
     bool take(int price);
     void add(int income);
     int getCash();
     void update_ui();
-    std::function<void(Wallet & w)> ui_callback{};
+    void set_ui_callback(std::function<void(Wallet const & w)> const & f){ui_callback = f;}
 private:
+    std::function<void(Wallet const & w)> ui_callback{};
     int cash{};
 };
 

@@ -1,9 +1,11 @@
 #include "Wallet.h"
 using namespace std;
 
+/*
+ * Takes cash from wallet and call callback to update ui
+ */
 bool Wallet::take(int price)
 {
-    // cout << "Taking cash: " << price << endl;
     if (cash - price < 0)
     {
         return false;
@@ -12,10 +14,11 @@ bool Wallet::take(int price)
     update_ui();
     return true;
 }
-
+/*
+ * Adds cash to wallet and call callback to update ui
+ */
 void Wallet::add(int income)
 {
-    // cout << "Added to wallet : "<< income << endl;
     cash += income;
     update_ui();
 
