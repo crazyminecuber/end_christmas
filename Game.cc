@@ -777,11 +777,6 @@ void Game::handle_right_click(sf::Vector2f click)
 
 void Game::update_logic()
 {
-    // if(Enemy::enemies.size() == 0 && wave_manager.all_enemies_have_spawned())
-    // {
-        // cout << "next_wave" << endl;
-        // wave_manager.next_wave(frame, fps);
-    // }
     wave_manager.spawn_enemies(frame);
     enemy_update_direction();
     enemy_update_position();
@@ -790,9 +785,11 @@ void Game::update_logic()
     {
         projectile_update_position();
     }
+
     check_collision();
     check_collision_towers();
     fire_towers();
+    
     frame++;
 }
 
