@@ -4,9 +4,22 @@
 #include "Wave_group.h"
 #include "Enemy.h"
 #include "State_machine.h"
+#include <iostream> //Delete me
 
 
 //Public
+
+Wave_manager::~Wave_manager()
+{
+    //active_wave_groups is a subset of wave_group. So we only need to delete
+    //from wave_groups.
+    for (auto it{begin(wave_groups)}; it != end(wave_groups); ++it)
+    {
+        delete *it;
+    }
+    wave_groups.clear();
+    active_wave_groups.clear();
+}
 
 void Wave_manager::init_waves(int current_frame)
 {

@@ -8,8 +8,6 @@
 #include <string>
 #include "json.hpp"
 
-//TODO: Rensa alla fiender när spelet stängs ner. Annars klar
-
 class Enemy
 : public Entity
 {
