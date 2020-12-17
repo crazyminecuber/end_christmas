@@ -27,7 +27,8 @@ State_machine::State_machine(const string &settings_file,
                 window,
                 settings["game"]["health_font"],
                 settings["game"]["health_texture"],
-                settings["game"]["hp"] ) }
+                settings["game"]["hp"],
+                settings["game"]["wave_font"]) }
 {
     load_entity(entity_file);
     game->init_tiles(entity);

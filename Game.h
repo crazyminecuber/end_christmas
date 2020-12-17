@@ -20,11 +20,12 @@ public:
 	Game(std::shared_ptr<sf::RenderWindow> win,
 	 	 std::string const & file_health_font,
 		 std::string const & file_health_texture,
-		 int hp)
+		 int hp,
+	 	 std::string const & file_wave_manager_font)
 		 /*std::string const & shop_file,*/
 		 : window{win},
 		   health{win, file_health_font, file_health_texture, hp},
-		   wave_manager{win}/*, shop{shop_file}*/
+		   wave_manager{win, file_wave_manager_font}/*, shop{shop_file}*/
 		 {
 
 		 };
