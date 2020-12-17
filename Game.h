@@ -18,11 +18,12 @@ class Game final
 public:
 	Game() = delete;
 	Game(std::shared_ptr<sf::RenderWindow> win,
+	 	 std::string const & file_health_font,
 		 std::string const & file_health_texture,
 		 int hp)
 		 /*std::string const & shop_file,*/
 		 : window{win},
-		   health{win, file_health_texture, hp},
+		   health{win, file_health_font, file_health_texture, hp},
 		   wave_manager{win}/*, shop{shop_file}*/
 		 {
 

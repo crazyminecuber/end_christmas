@@ -25,6 +25,7 @@ State_machine::State_machine(const string &settings_file,
                )},
         game{make_shared<Game>(
                 window,
+                settings["game"]["health_font"],
                 settings["game"]["health_texture"],
                 settings["game"]["hp"] ) }
 {
