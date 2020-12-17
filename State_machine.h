@@ -17,7 +17,6 @@ class State_machine
 {
 public:
     State_machine(
-        const std::string &title,
         const std::string & settings_file,
         const std::string & entity_file
         );
@@ -31,8 +30,10 @@ public:
 
 private:
     void load_settings(const std::string & settings_file);
+    void load_entity(const std::string & entity_file);
 
     nlohmann::json settings;
+    nlohmann::json entity;
 
     float static fps;
 

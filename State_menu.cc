@@ -16,18 +16,21 @@ using json = nlohmann::json;
  * ____________________________________________________________
  */
 State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
-        std::shared_ptr<Game> _game, 
-        const sf::Font & _font,
-        json & settings_menu)
+                       std::shared_ptr<Game> _game,
+                       const sf::Font & _font,
+                       json & entity,
+                       json & settings)
     :   State(_window, _game, _font),
+        entity{entity},
+        settings{settings},
         background_texture{
             Resource_manager::load(
-                settings_menu["background"])}
+                settings["menu"]["background"])}
 {
     /* text */
-    string tmp_str{settings_menu["title"]};
+    string tmp_str{settings["menu"]["title"]};
     text_title = sf::Text{tmp_str, font, 100};
-    tmp_str = settings_menu["welcome_text"];
+    tmp_str = settings["menu"]["welcome_text"];
     text = sf::Text{tmp_str, font, 50};
 
 
@@ -47,7 +50,6 @@ State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
     background_sprite.setTexture(background_texture, false);
     on_resize();
 }
-
 
 void State_menu::handle_input(sf::Event & event)
 {
@@ -101,8 +103,8 @@ int State_menu::get_next_state()
     int return_value{MENU};
     if ( start_game )
     {
-        game->load_map("entity.json");
-        game->load_entities("entity.json");
+        game->load_map(entity, settings);
+        game->init_entities(entity);
         return_value = WAIT;
     }
     // reset variables

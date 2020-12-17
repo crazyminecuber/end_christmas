@@ -1,5 +1,6 @@
 {
     "font" : "resources/fonts/Christmas_Bell.otf",
+    "title" : "Kill Santa",
     "window" :
         {
             "width" : 1920,

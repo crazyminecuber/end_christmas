@@ -34,11 +34,11 @@ public:
 	void update_logic();
 	void render();
 
-	void load_map(std::string const & file_entity);
+	void load_map(nlohmann::json const& entity,
+				  nlohmann::json const& settings);
 	void determine_tile_directions();
 
-	float read_shop_width(std::string const & file_entity);
-	void load_entities(std::string const & file_entity);
+	void init_entities(nlohmann::json const& entity);
 	void check_collision();
 	void check_collision_towers();
 	void handle_click(sf::Vector2f click);
@@ -65,7 +65,8 @@ public:
 	void set_render_tower_radii(bool render);
 	bool get_render_tower_radii();
 
-	void init_tiles(std::string const & file_entity);
+	// void init_tiles(std::string const & file_entity);
+	void init_tiles(nlohmann::json const& entity);
 	std::map<std::string, std::map<std::string, std::string>> maps;
 
 private:

@@ -4,7 +4,7 @@ int main()
 {
     State_machine machine
     {
-        "Kill Santa", "resources/settings.json", "entity.json"
+        "resources/settings.json", "resources/entity.json"
     };
     machine.run();
     return 0;
