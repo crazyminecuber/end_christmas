@@ -10,8 +10,9 @@
 class Wave_manager
 {
 public:
-    Wave_manager(std::shared_ptr<sf::RenderWindow> win)
-    : window{win}, font{Resource_manager::load_font("resources/fonts/font.ttf")}
+    Wave_manager(std::shared_ptr<sf::RenderWindow> win,
+                 std::string file_wave_manager_font )
+    : window{win}, font{Resource_manager::load_font(file_wave_manager_font)}
     {
         init();
     }
@@ -27,10 +28,10 @@ public:
 
     void spawn_enemies(int frame);
     bool all_enemies_have_spawned() const;
-    
+
 private:
     int current_wave{1};
-    float fps{60};
+    float fps;
     int win_wave;
 
     std::vector<Wave_group*> wave_groups; //All groups defined in entity.json
@@ -47,8 +48,8 @@ private:
     void calculate_win_wave();
     void add_active_wave_groups();
     void remove_inactive_wave_groups();
-    
-    void update_text_waves();    
+
+    void update_text_waves();
 };
 
 

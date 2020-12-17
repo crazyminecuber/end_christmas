@@ -28,6 +28,7 @@ public:
 
 private:
     void on_resize();
+    void update_end_text();
 
     bool updated{false};
     /* graphics stuff below */
