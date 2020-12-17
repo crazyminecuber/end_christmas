@@ -2,6 +2,7 @@
 #define TILE_ENEMY_END_H
 
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "Tile_enemy.h"
 #include "Enemy.h"
 

@@ -1,4 +1,3 @@
-//TODO sätta destruktorer till default??
 #ifndef TOWER_H
 #define TOWER_H
 #include <iostream>
@@ -41,18 +40,6 @@ public:
     static std::vector<Tower*> towers;
     static std::vector<Tower*> factory_towers;
 
-  //  struct cmpV2f
-    /* sort Vector2f by row and then column *
-    {
-        bool operator()(const sf::Vector2f& a, const sf::Vector2f& b) const
-        {
-            if ( a.y == b.y )       // if on same tile
-                return a.x > b.x;   // return furthest to tower
-            else                    // if on different tile
-                return a.y < b.y;   // return closest to end
-        }
-    };
-*/
     std::multimap<Multikey<float, 2>, Enemy*> shootable_enemies;
 
     void init_circle_hit_rad();
@@ -64,7 +51,7 @@ protected:
     int fire_period;
     int fire_angle;
 
-    std::shared_ptr<Projectile> projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren? (Abstrakt klass går ej att instansiera, bästa jag vet är att använda unique_ptr, men kräver en del jobb)
+    std::shared_ptr<Projectile> projectile; 
 
 private:
     unsigned int sort_by{0};
@@ -73,6 +60,7 @@ public:
     int cost{};
 };
 
+/*---------------------------------------------------------------------------*/
 
 class Tower_basic : public Tower
 {
@@ -84,13 +72,15 @@ public:
   {}
 
   Tower_basic(Tower_basic const & other);
-  ~Tower_basic()=default;
+  ~Tower_basic() = default;
 
   void shoot() override;
   Tower * create_active(sf::Vector2f position) override;
   std::pair<Multikey<float, 2>, Entity *> select_target();
   sf::Vector2f aim_direction(const float & sq_distance, Entity *target_enemy);
 };
+
+/*---------------------------------------------------------------------------*/
 
 class Tower_ring : public Tower
 {
@@ -104,7 +94,7 @@ public:
   ~Tower_ring() = default;
 
   void shoot() override;
-  Tower * create_active(sf::Vector2f postion) override; //referens?
+  Tower * create_active(sf::Vector2f postion) override;
 
 protected:
   int num_of_projectile;

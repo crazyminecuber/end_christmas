@@ -2,6 +2,7 @@
 #define TILE_TOWER_H
 
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "Tile.h"
 
 class Tile_tower : public Tile
@@ -14,10 +15,10 @@ public:
         init();
     }
 
-    bool is_occupied();
-    bool on_click(Tower * tw) override;
-    void on_click(sf::Vector2f);
     void init();
+    bool on_click(Tower* tw) override;
+    void on_click(sf::Vector2f);
+    bool is_occupied();
 
 private:
     Tower* tower{nullptr};
