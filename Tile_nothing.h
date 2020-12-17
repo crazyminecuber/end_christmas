@@ -2,6 +2,7 @@
 #define TILE_NOTHING_H
 
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "Tile.h"
 
 class Tile_nothing : public Tile
@@ -11,8 +12,6 @@ public:
                  sf::Vector2i index_pos)
     : Tile(texture_file, index_pos)
     {}
-
-    //Tower* on_click() override;
 
 };
 

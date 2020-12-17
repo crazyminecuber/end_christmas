@@ -2,7 +2,7 @@
 #define TILE_H
 
 #include <SFML/Graphics.hpp>
-#include <unordered_map> // kanske ändra till unordered_map?
+#include <string>
 #include "Resource_manager.h"
 #include "Enemy.h"
 #include "Tower.h"
@@ -21,15 +21,14 @@ public:
         init();
     }
 
-    void init();
-    void update_side_length();
-    sf::Vector2i get_index_position();
-    virtual bool on_click(Tower * tw) {tw->getPosition();return false;};
-    virtual void set_direction(sf::Vector2f dir);
-    virtual float update_enemy(Enemy* enemy);
-    virtual void set_tile_number(int tile_num);
-    virtual int get_tile_number();
-
+    void          init();
+    void          update_side_length();
+    sf::Vector2i  get_index_position();
+    virtual bool  on_click(Tower*){return false;};
+    virtual void  set_direction(sf::Vector2f){};
+    virtual float update_enemy(Enemy*){return 0;};
+    virtual void  set_tile_number(int){};
+    virtual int   get_tile_number();
 
     /* static members and functions */
     static std::map<sf::Vector2i, Tile*, cmpTileByCoord> tiles;
@@ -38,15 +37,14 @@ public:
     static Tile* get_tile_by_index(sf::Vector2i index);
     static Tile* get_tile_enemy_start();
     static Tile* get_tile_enemy_end();
-    static bool is_tile_enemy(sf::Vector2i index);
-	static bool is_tile_enemy_start(sf::Vector2i index);
-	static bool is_tile_enemy_end(sf::Vector2i index);
+    static bool  is_tile_enemy(sf::Vector2i index);
+	static bool  is_tile_enemy_start(sf::Vector2i index);
+	static bool  is_tile_enemy_end(sf::Vector2i index);
 
 protected:
-    sf::Texture const& texture;
+    sf::Texture  const& texture;
     sf::Vector2f coord_position;
     sf::Vector2i index_position;
-
 };
 
 struct cmpTileByCoord

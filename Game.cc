@@ -55,28 +55,34 @@ Game::~Game()
         delete (*it).second;
     }
     Tile::tiles.clear();
+
+    for ( Tower *t : Tower::factory_towers )
+    {
+        delete t;
+    }
+    Tower::factory_towers.clear();
 }
 
 // Help function to determine init projectile for tower
-Projectile* Game::get_tower_projectile(std::string const & projectile)
+shared_ptr<Projectile> Game::get_tower_projectile(std::string const & projectile)
 {
 
     sf::Vector2f double0{0,0};
     if(projectile == "Projectile_basic")
     {
-       return new Projectile_basic(double0,double0);
+       return make_shared<Projectile_basic>(double0,double0);
     }
     else if(projectile == "Projectile_pierce")
     {
-        return new Projectile_pierce{double0,double0};
+        return make_shared<Projectile_pierce>(double0,double0);
     }
     else if(projectile == "Projectile_bomb")
     {
-        return new Projectile_bomb{double0,double0};
+        return make_shared<Projectile_bomb>(double0,double0);
     }
     else
     {
-        __throw_bad_function_call();
+        throw invalid_argument("No projectile with name " + projectile);
     }
 }
 /* Help function to determine if object1 and object2 have collided.
@@ -100,7 +106,8 @@ bool Game::collided_bb(Entity const *object1, Entity const *object2)
     return (object1->getGlobalBounds().intersects(object2->getGlobalBounds()));
 }
 
-void Game::load_map(string const & file_entity)
+void Game::load_map(nlohmann::json const& entity,
+                    nlohmann::json const& settings)
 {
     /* prepare variables needed for reading from file */
     std::ifstream infile{maps[selected_map]["file_name"]};
@@ -156,8 +163,7 @@ void Game::load_map(string const & file_entity)
     infile.close();
 
     /* update side_length */
-    // calculate Tile::side_length and change all tiles
-    float shop_sizeX = read_shop_width(file_entity);
+    float shop_sizeX = entity["Shop"]["shop_width"];
 
     int tiles_per_col = tile_index_pos.x + (1 - 2);
     int tiles_per_row = tile_index_pos.y + (1 - 2);
@@ -177,7 +183,11 @@ void Game::load_map(string const & file_entity)
     /* update window size */
     unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
     unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
-    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
+    string new_title = settings["title"];
+
+
+
+    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, new_title, sf::Style::Close);
 
     /* set direction of tiles */
     determine_tile_directions();
@@ -375,60 +385,19 @@ int Game::get_current_wave() const
     return wave_manager.get_current_wave();
 }
 
-float Game::read_shop_width(string const & file_entity)
-/* window needs shop_width and shop needs window size.
-   This function gets around the circular dependency */
+void Game::init_entities(nlohmann::json const& entity)
 {
-    float shop_sizeX;
-
-    ifstream ifs(file_entity);
-    if (ifs.is_open())
-    {
-        json j_data;
-        ifs >> j_data;
-        shop_sizeX = j_data["Shop"]["shop_size"][0];
-        ifs.close();
-    }
-    else
-    {
-        throw invalid_argument("Could not open " + file_entity);
-    }
-
-    return shop_sizeX;
+    init_projectiles(entity["Projectile"]);
+    init_towers(entity["Tower"]);
+    init_shop(entity["Shop"]);
+    init_waves(entity["Waves"], entity["Enemy"]);
 }
 
-void Game::load_entities(string const & file_entity)
-{
-    ifstream ifs(file_entity);
-    if (ifs.is_open())
-    {
-        json j_data;
-        ifs >> j_data;
-        init_projectiles(j_data["Projectile"]);
-        init_towers(j_data["Tower"]);
-        init_shop(j_data["Shop"]);
-        init_waves(j_data["Waves"], j_data["Enemy"]);
-        ifs.close();
-    }
-    else
-    {
-        throw invalid_argument("Could not open " + file_entity);
-    }
-}
+// void Game::init_tiles(string const & file_entity)
+void Game::init_tiles(nlohmann::json const& entity)
 
-void Game::init_tiles(string const & file_entity)
 {
-    // read from file and save data in maps and map_tiles
-    ifstream ifs(file_entity);
-    json json_obj;
-    if (ifs.is_open())
-    {
-        json j_data;
-        ifs >> j_data;
-        json_obj = j_data["Maps"];
-    }
-    ifs.close();
-
+    json json_maps = entity["Maps"];
     string map_name;
     map<string, string> inner_map;
 
@@ -436,7 +405,7 @@ void Game::init_tiles(string const & file_entity)
     string file_name;
     string display_name;
     string difficulty;
-    for (const auto& map : json_obj.items())
+    for (const auto& map : json_maps.items())
     {
         map_name = map.key();
         file_name = map.value()["file_name"];
@@ -457,7 +426,7 @@ void Game::init_tiles(string const & file_entity)
     string two;
     string three;
     string four;
-    for (const auto& map : json_obj.items())
+    for (const auto& map : json_maps.items())
     {
         map_name = map.key();
         zero = map.value()["tiles"]["0"];
@@ -585,8 +554,7 @@ void Game::init_shop(json const & j_shop)
     float window_sizeY = window->getSize().y;
     wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
-    sf::Vector2f shop_size{j_shop["shop_size"][0], window_sizeY};
-    // sf::Vector2f shop_size{j_shop["shop_size"][0], j_shop["shop_size"][1]};
+    sf::Vector2f shop_size{j_shop["shop_width"], window_sizeY};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     string texture_file{j_shop["texture_file"]}; // gets changed in Game::load_map
@@ -754,12 +722,29 @@ void Game::handle_input(sf::Event & event)
     if ( event.type == sf::Event::MouseButtonPressed )
     {
         auto mouse { event.mouseButton };
+        float mouseX = mouse.x;
+        float mouseY = mouse.y;
         // Is it the left mouse button?
         if ( mouse.button == sf::Mouse::Button::Left )
         {
-            float mouseX = mouse.x;
-            float mouseY = mouse.y;
             handle_click(sf::Vector2f{mouseX, mouseY});
+        }
+        else if ( mouse.button == sf::Mouse::Button::Right)
+        {
+            handle_right_click(sf::Vector2f{mouseX, mouseY});
+        }
+    }
+}
+
+void Game::handle_right_click(sf::Vector2f click)
+{
+    if(!shop.getGlobalBounds().contains(click))
+    {
+        Tile *tile = Tile::get_tile_by_coord(click);
+        Tile_tower *tile_t;
+        if ( (tile_t = dynamic_cast<Tile_tower*>(tile)) )
+        {
+            tile_t->on_click(click);
         }
     }
 }

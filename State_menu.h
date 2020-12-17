@@ -11,9 +11,10 @@ class State_menu : public State
 {
 public:
     State_menu(std::shared_ptr<sf::RenderWindow> _window,
-        std::shared_ptr<Game> _game, 
-        const sf::Font &_font,
-        nlohmann::json &settings_menu);
+               std::shared_ptr<Game> _game,
+               const sf::Font &_font,
+               nlohmann::json &entity,
+               nlohmann::json &settings);
 
     void handle_input(sf::Event & event) override;
     void update_logic()                  override;
@@ -22,6 +23,9 @@ public:
     int get_next_state() override;
 
 private:
+    nlohmann::json const& entity;
+    nlohmann::json const& settings;
+
     void handle_click(sf::Vector2f mouse_pos);
     void check_hover();
     // void window_calculations1();

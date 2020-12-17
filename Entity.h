@@ -1,10 +1,10 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <SFML/Graphics.hpp>
-#include <string>
 #include "Resource_manager.h"
+#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
 
 class Entity : public sf::Sprite
 {
@@ -12,20 +12,7 @@ public:
     Entity(std::string _texture_file,
            sf::Vector2f position, sf::Vector2f size,
            float hit_rad, sf::Vector2f dir, float mov_spd);
-    //Entity(Entity const & other) = default;
-    //{
-    //   std::cout << "movement_speed in Entity" << other.movement_speed <<std::endl;
-    //   texture_file = other.texture_file;
-    //   texture = other.texture;
-    //   size = other.size;
-    //   scale_moving_right = other.scale_moving_right;
-    //   hitbox_radius = other.hitbox_radius;
-    //   direction = other.direction;
-    //   movement_speed = other.movement_speed;
-    //
-    // }
     virtual ~Entity()=default;
-
 
     void init(sf::Vector2f position);
 
@@ -41,7 +28,7 @@ public:
 protected:
     std::string texture_file;
     sf::Texture texture;
-    sf::Vector2f size; //Ska den vara Vector2u och inte Vector2f?
+    sf::Vector2f size;
     sf::Vector2f scale_moving_right; // used when flipping to remember which direction is right
     float hitbox_radius;
 public:

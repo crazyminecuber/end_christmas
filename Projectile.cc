@@ -1,12 +1,9 @@
 #include "Projectile.h"
-//#include <iostream>
-#include <string>
-#include <vector>
 #include "Game.h"
 #include "Entity.h"
 #include <SFML/Graphics.hpp>
-#include <iostream>
-
+#include <string>
+#include <vector>
 using namespace std;
 
 //Projectile
@@ -72,7 +69,6 @@ Projectile_basic::Projectile_basic(Projectile_basic const& other)
 }
 
 //clone and add direction void clone(sf::Vector2f direction, sf::Vector2f position)
-
 void Projectile_basic::clone(sf::Vector2f dir, sf::Vector2f pos)
 {
   Projectile_basic* p = new Projectile_basic{*this};
@@ -184,6 +180,7 @@ Projectile_bomb::Projectile_bomb
       ),
       blast{}
   {}
+
 
 //copy-constructor, copy blast and sets frame_to_die
 Projectile_bomb::Projectile_bomb(Projectile_bomb const& other)

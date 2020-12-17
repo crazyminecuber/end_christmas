@@ -21,4 +21,5 @@ private:
     int cash{};
 };
 
-#endif //ENTITY_H
+#endif
+//ENTITY_H

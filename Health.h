@@ -12,8 +12,11 @@ class Health
 public:
     Health() = delete;
 
-    Health(std::shared_ptr<sf::RenderWindow> win, std::string texture_file, int hp)
-    : window{win}, font{new sf::Font},
+    Health(std::shared_ptr<sf::RenderWindow> win,
+           std::string texture_file,
+           int hp)
+    : window{win},
+      font{Resource_manager::load_font("resources/fonts/font.ttf")},
       texture_heart{Resource_manager::load(texture_file)},
       health{hp}
     {
@@ -30,11 +33,10 @@ private:
     void update_text_health();
 
     std::shared_ptr<sf::RenderWindow> window;
-    sf::Font* font;
+    sf::Font & font;
     sf::Texture const& texture_heart;
     sf::Sprite sprite_heart;
     sf::RectangleShape background;
-
     int health;
     sf::Text text_health;
 };
