@@ -59,7 +59,11 @@ void State_end::on_resize()
 
 void State_end::update_logic()
 {
-    ;
+    if ( !updated )
+    {
+        updated = true;
+        on_resize();
+    }
 }
 
 void State_end::render()
