@@ -1,5 +1,4 @@
 #include <list>
-#include <algorithm>
 #include <SFML/Graphics.hpp>
 #include "Wave_manager.h"
 #include "Wave_group.h"
@@ -54,11 +53,10 @@ void Wave_manager::spawn_enemies(int frame)
 {
     for (auto it{begin(active_wave_groups)}; it != end(active_wave_groups); ++it)
     {
-        if((*it)->spawn_frames.size()>0)
+        if(!(*it)->all_enemies_have_spawned())
         {
             (*it)->spawn_enemies(frame);
         }
-
     }
 }
 
