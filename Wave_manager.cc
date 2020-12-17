@@ -1,7 +1,6 @@
 #include <list>
 #include <algorithm>
 #include <SFML/Graphics.hpp>
-#include <iostream> //debug
 #include "Wave_manager.h"
 #include "Wave_group.h"
 #include "Enemy.h"
@@ -13,7 +12,11 @@ void Wave_manager::init_waves(int current_frame)
 {
     generate_wave(current_frame);
     calculate_win_wave();
-    // std::cout << win_wave << std::endl;
+}
+
+void Wave_manager::add_wave(Wave_group* wave_group)
+{
+    wave_groups.push_back(wave_group);
 }
 
 void Wave_manager::next_wave(int current_frame)
@@ -21,32 +24,60 @@ void Wave_manager::next_wave(int current_frame)
     if(wave_is_finished())
     {
         ++current_wave;
-        std::cout << "next wave: " << current_wave << std::endl;
         update_text_waves();
         generate_wave(current_frame);
     }
 }
 
-bool Wave_manager::wave_is_finished()
+bool Wave_manager::wave_is_finished() const
 {
     return (Enemy::enemies.size() == 0 && all_enemies_have_spawned());
 }
 
-bool Wave_manager::player_has_won()
+int Wave_manager::get_current_wave() const
+{
+    return current_wave;
+}
+
+bool Wave_manager::player_has_won() const
 {
     return ((current_wave == win_wave) && wave_is_finished());
 }
 
-void Wave_manager::render()
+void Wave_manager::render() const
 {
     window->draw(background);
     window->draw(text_wave);
 }
 
+void Wave_manager::spawn_enemies(int frame)
+{
+    for (auto it{begin(active_wave_groups)}; it != end(active_wave_groups); ++it)
+    {
+        if((*it)->spawn_frames.size()>0)
+        {
+            (*it)->spawn_enemies(frame);
+        }
+
+    }
+}
+
+bool Wave_manager::all_enemies_have_spawned() const
+{
+    bool all_have_spawned{true};
+    for (auto it{begin(active_wave_groups)}; it != end(active_wave_groups); ++it)
+    {
+        if(!(*it)->all_enemies_have_spawned())
+        {
+            all_have_spawned = false;
+        }
+    }
+    return all_have_spawned;
+}
+
 //Private
 void Wave_manager::init()
 {
-    /* text */
     sf::Vector2f text_pos{0,50};
     float text_size{50};
     text_wave.setFont((font));
@@ -67,7 +98,6 @@ void Wave_manager::init()
 
 void Wave_manager::generate_wave(int current_frame)
 {
-    // std::cout << "generate wave" << std::endl;
     add_active_wave_groups();
     remove_inactive_wave_groups();
     for (auto it{begin(active_wave_groups)}; it != end(active_wave_groups); ++it)
@@ -89,23 +119,12 @@ void Wave_manager::calculate_win_wave()
     win_wave = last_wave;
 }
 
-void Wave_manager::add_wave(Wave_group* wave_group)
-{
-    wave_groups.push_back(wave_group);
-}
-
-void Wave_manager::update_text_waves()
-{
-    text_wave.setString("Wave:" + std::to_string(current_wave));
-}
-
 void Wave_manager::add_active_wave_groups()
 {
     for (auto it{begin(wave_groups)}; it != end(wave_groups); ++it)
     {
         if(current_wave == (*it)->get_start_wave())
         {
-            // std::cout << "Add wave: " << (*it)->get_start_wave() << std::endl;
             active_wave_groups.push_back((*it));
         }
     }
@@ -117,38 +136,12 @@ void Wave_manager::remove_inactive_wave_groups()
     {
         if(current_wave == (*it)->get_end_wave() + 1)
         {
-            // std::cout << "Erase wave" << std::endl;
             active_wave_groups.erase(it);
         }
     }
 }
 
-void Wave_manager::spawn_enemies(int frame)
+void Wave_manager::update_text_waves()
 {
-    for (auto it{begin(active_wave_groups)}; it != end(active_wave_groups); ++it)
-    {
-        if((*it)->spawn_frames.size()>0)
-        {
-            (*it)->spawn_enemies(frame);
-        }
-
-    }
-}
-
-bool Wave_manager::all_enemies_have_spawned()
-{
-    bool all_have_spawned{true};
-    for (auto it{begin(active_wave_groups)}; it != end(active_wave_groups); ++it)
-    {
-        if(!(*it)->all_enemies_have_spawned())
-        {
-            all_have_spawned = false;
-        }
-    }
-    return all_have_spawned;
-}
-
-int Wave_manager::get_current_wave() const
-{
-    return current_wave;
+    text_wave.setString("Wave:" + std::to_string(current_wave));
 }

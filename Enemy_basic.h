@@ -21,7 +21,7 @@ public:
     ~Enemy_basic();
     
     Enemy* clone() const override;
-    bool collision(Projectile* object) override;
+    bool   collision(Projectile* object) override;
 
 };
 
