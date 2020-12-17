@@ -47,7 +47,8 @@ void Tower::make_projectile(sf::Vector2f dir, sf::Vector2f pos)
     projectile->clone(dir,pos);
 }
 
-void Tower::on_click()
+// Change which key in shootable_enemies to order by.
+void Tower::on_right_click()
 {
     switch (sort_by)
     {

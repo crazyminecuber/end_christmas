@@ -42,7 +42,7 @@ public:
 	void init_entities(nlohmann::json const& entity);
 	void check_collision();
 	void check_collision_towers();
-	void handle_click(sf::Vector2f click);
+	void handle_left_click(sf::Vector2f click);
 	void handle_right_click(sf::Vector2f click);
 
 	void enemy_update_direction();

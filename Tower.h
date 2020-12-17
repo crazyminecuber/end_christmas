@@ -35,7 +35,7 @@ public:
     virtual void shoot()=0;
     virtual Tower * create_active(sf::Vector2f position) = 0;
     void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
-    void on_click();
+    void on_right_click();
 
     static std::vector<Tower*> towers;
     static std::vector<Tower*> factory_towers;

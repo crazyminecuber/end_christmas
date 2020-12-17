@@ -21,9 +21,12 @@ bool Tile_tower::on_click(Tower* tw)
     return occupied;
 }
 
-void Tile_tower::on_click(sf::Vector2f)
+void Tile_tower::on_right_click(sf::Vector2f)
 {
-    tower->on_click();
+    if (tower)
+    {
+        tower->on_right_click();
+    }
 }
 
 bool Tile_tower::is_occupied()
