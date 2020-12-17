@@ -17,6 +17,8 @@ public:
         init();
     }
 
+    ~Wave_manager();
+
     void init_waves(int current_frame);
     void add_wave(Wave_group* wave_group);
     void next_wave(int current_frame);
