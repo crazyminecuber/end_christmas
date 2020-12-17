@@ -5,8 +5,22 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-Enemy* Enemy::get_new_enemy(nlohmann::json const & enemies, std::string chosen_enemy, sf::Vector2f position_init)
+int Enemy::get_damage() const
 {
+    return life;
+}
+
+int Enemy::get_reward() const
+{
+    return kill_reward;
+}
+
+Enemy* Enemy::get_new_enemy(nlohmann::json const & enemies, 
+                            std::string chosen_enemy, 
+                            sf::Vector2f position_init)
+{
+    //Makes a new enemy from the information provided in the 
+    //enemies JSON object and choice set by chosen_enemy
     Enemy* enemy;
     nlohmann::json enemy_props = enemies[chosen_enemy];
     if(enemy_props["type"] == "Enemy_basic")
@@ -32,6 +46,7 @@ Enemy* Enemy::get_new_enemy_basic(nlohmann::json const & enemy_props, sf::Vector
     float mov_spd_init = enemy_props["mov_spd"];
     int life_init = enemy_props["life_init"];
     int reward_init = enemy_props["reward_init"];
+    
     Enemy_basic* e = new Enemy_basic{
         texture_init, //Texture
         position_init, //Poistion
@@ -86,11 +101,6 @@ void Enemy::delete_all_enemies()
         delete p;
     }
     Enemy::enemies.clear();
-}
-
-int Enemy::get_damage()
-{
-    return life;
 }
 
 std::vector<Enemy*> Enemy::enemies;
