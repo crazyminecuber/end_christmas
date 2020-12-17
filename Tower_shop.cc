@@ -30,8 +30,6 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
     int nr_columns{2};
     sf::IntRect area{int(getPosition().x),int(getPosition().y) + 130, int(siz.x), 400};
     generate_shop_grid(nr_columns, area, btn_color, btn_select_color, btn_no_cash_color, font_name);
-
-    cout << "Shop created" << endl;
 }
 
 // Make a button for every tower

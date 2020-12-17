@@ -154,7 +154,6 @@ void Game::load_map(string const & file_entity)
         tile_index_pos.y++;
     }
     infile.close();
-    cout << "Laddat in kartan" << endl;
 
     /* update side_length */
     // calculate Tile::side_length and change all tiles
@@ -178,7 +177,7 @@ void Game::load_map(string const & file_entity)
     /* update window size */
     unsigned new_window_sizeX = tiles_per_col*Tile::side_length + shop_sizeX;
     unsigned new_window_sizeY = tiles_per_row*Tile::side_length;
-    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "title", sf::Style::Close);
+    window->create(sf::VideoMode{new_window_sizeX, new_window_sizeY}, "Kill santa", sf::Style::Close);
 
     /* set direction of tiles */
     determine_tile_directions();
@@ -755,12 +754,29 @@ void Game::handle_input(sf::Event & event)
     if ( event.type == sf::Event::MouseButtonPressed )
     {
         auto mouse { event.mouseButton };
+        float mouseX = mouse.x;
+        float mouseY = mouse.y;
         // Is it the left mouse button?
         if ( mouse.button == sf::Mouse::Button::Left )
         {
-            float mouseX = mouse.x;
-            float mouseY = mouse.y;
             handle_click(sf::Vector2f{mouseX, mouseY});
+        }
+        else if ( mouse.button == sf::Mouse::Button::Right)
+        {
+            handle_right_click(sf::Vector2f{mouseX, mouseY});
+        }
+    }
+}
+
+void Game::handle_right_click(sf::Vector2f click)
+{
+    if(!shop.getGlobalBounds().contains(click))
+    {
+        Tile *tile = Tile::get_tile_by_coord(click);
+        Tile_tower *tile_t;
+        if ( (tile_t = dynamic_cast<Tile_tower*>(tile)) )
+        {
+            tile_t->on_click(click);
         }
     }
 }

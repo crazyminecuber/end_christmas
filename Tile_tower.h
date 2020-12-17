@@ -17,6 +17,7 @@ public:
 
     void init();
     bool on_click(Tower* tw) override;
+    void on_click(sf::Vector2f);
     bool is_occupied();
 
 private:

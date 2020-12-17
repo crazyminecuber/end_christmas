@@ -30,15 +30,14 @@ Entity::Entity(std::string _texture_file,
     init(position);
 }
 
-//void Entity::init(sf::Vector2f position)
 void Entity::init(sf::Vector2f position)
 {
-    /* sätt utseende */
+    /* Sets texture */
     setTexture(texture, false);
 
     setOrigin(getGlobalBounds().width / 2.f, getGlobalBounds().height / 2.f);
 
-    // ge rätt storlek
+    // fixs size
     sf::Vector2u size_original;
     size_original = texture.getSize();
     setScale(size.x / size_original.x, size.y / size_original.y);
