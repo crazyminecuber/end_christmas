@@ -1,9 +1,8 @@
 #include "Tile_enemy.h"
 #include "Tile.h"
-// #include "Entity.h"
 #include "Enemy.h"
+#include <SFML/Graphics.hpp>
 #include <iostream> //debugg
-//#include "Enemy.h"
 
 void Tile_enemy::set_direction(sf::Vector2f dir)
 {

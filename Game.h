@@ -66,7 +66,6 @@ public:
 	void set_render_tower_radii(bool render);
 	bool get_render_tower_radii();
 
-	// void init_tiles(std::string const & file_entity);
 	void init_tiles(nlohmann::json const& entity);
 	std::map<std::string, std::map<std::string, std::string>> maps;
 
