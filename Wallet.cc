@@ -27,7 +27,7 @@ void Wallet::add(int income)
 }
 
 
-int Wallet::getCash()
+int Wallet::getCash() const
 {
     return cash;
 }

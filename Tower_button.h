@@ -21,22 +21,22 @@ public:
             sf::Color const & btn_color, sf::Color const & btn_select_color, sf::Color const & btn_no_cash_color,
             sf::Color const & font_color, std::string const & font_name);
 
-    Tower * on_click(sf::Vector2f click, Wallet & wallet);
+    Tower * on_click(sf::Vector2f const & click, Wallet & wallet);
     void render_button(sf::RenderWindow & window);
-    void render_selected_tower(sf::RenderWindow & window);
-    void update_ui(Wallet wallet);
+    void update_ui(Wallet const & wallet);
 
 private:
     void select();
     void unselect();
     void not_enough_cash();
+    sf::Text make_pricetag(Tower * tw, std::string const & font_name);
+    sf::Sprite make_tower_pic(Tower * tw);
+    void render_selected_tower(sf::RenderWindow & window);
 
     bool selected{false};
     Tower * tower{};
     sf::Text pricetag{};
     sf::Sprite tower_pic{};
-    sf::Text make_pricetag(Tower * tw, std::string const & font_name);
-    sf::Sprite make_tower_pic(Tower * tw);
     sf::Color color{};
     sf::Color select_color{};
     sf::Color no_cash_color{};

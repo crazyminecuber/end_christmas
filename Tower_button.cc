@@ -57,15 +57,15 @@ Tower_button::Tower_button(Tower * tw, Vector2f const & btn_size, Vector2f const
  * Returns tower in the button when called givent, enough money.
  */
 
-Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
+Tower * Tower_button::on_click(sf::Vector2f const & click, Wallet & wallet)
 {
     Tower* returned_tower{nullptr};
 
-    if ( wallet.getCash() < tower->cost )
+    if (wallet.getCash() < tower->cost)
     {
        not_enough_cash();
     }
-    else if ( !getGlobalBounds().contains(click) || selected )
+    else if (!getGlobalBounds().contains(click) || selected)
     {
        unselect();
     }
@@ -134,7 +134,7 @@ void Tower_button::render_selected_tower(sf::RenderWindow & window)
  * that it reflekt current conditions. Should only be called when the amount of
  * cash has changed
  */
-void Tower_button::update_ui(Wallet wallet)
+void Tower_button::update_ui(Wallet const & wallet)
 {
     if (wallet.getCash() < tower->cost)
     {

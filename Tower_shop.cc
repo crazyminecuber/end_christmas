@@ -20,7 +20,8 @@ Tower_shop::Tower_shop(std::vector<Tower *> const & passive_towers, Vector2f con
     // Heading
     heading.setCharacterSize(60);
     heading.setFillColor(font_color);
-    heading.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y + getGlobalBounds().height * 0.092);
+    heading.setPosition(getPosition().x + getGlobalBounds().width / 2,
+            getPosition().y + getGlobalBounds().height * 0.092);
     // Origion is geometrical center
     Vector2f head_orig{};
     FloatRect head_rec = heading.getLocalBounds();
@@ -29,17 +30,19 @@ Tower_shop::Tower_shop(std::vector<Tower *> const & passive_towers, Vector2f con
     heading.setOrigin(head_orig);
 
     //Wallet
-    wallet_text.setPosition(getPosition().x + getGlobalBounds().width / 2, getPosition().y + getGlobalBounds().height * 0.13);
+    wallet_text.setPosition(getPosition().x + getGlobalBounds().width / 2,
+            getPosition().y + getGlobalBounds().height * 0.13);
     wallet_text.setCharacterSize(50);
     wallet_text.setFillColor(font_color);
 
-    // The picture that we ended up going for is 2340 pixles high and we will
-    // use the buttom four shelves for displaying the towers. The area to be
-    // used in regular pixel coordinates will therefore be from 447 and be 1770
-    // high.
-    //
-    // This could be done more dynamically but is a quick way to get it to look
-    // nice.
+    /* The picture that we ended up going for is 2340 pixles high and we will
+     * use the buttom four shelves for displaying the towers. The area to be
+     * used in regular pixel coordinates will therefore be from 447 and be 1770
+     * high.
+     *
+     * This could be done more dynamically but is a quick way to get it to look
+     * nice.
+     */
 
     int nr_columns{2};
     float area_top_ratio{447.0f / 2340.0f};
@@ -50,6 +53,25 @@ Tower_shop::Tower_shop(std::vector<Tower *> const & passive_towers, Vector2f con
             btn_no_cash_color, font_color, font_btn_name, passive_towers, btn_size);
 }
 
+/*
+ * Helper for intialization list
+ */
+Text Tower_shop::make_text(string const & font_name)
+{
+    //Move constructor should get called if it exists.
+    return Text{"Tower Shop", Resource_manager::load_font(font_name)};
+}
+
+void Tower_shop::set_chosen_tower(Tower * tw)
+{
+    chosen_tower = tw;
+}
+
+
+Tower * Tower_shop::get_chosen_tower() const
+{
+    return chosen_tower;
+}
 
 /*
  * Creates buttons in a grid. Calculates correct spacing in both the horizontal and
@@ -87,13 +109,6 @@ void Tower_shop::generate_shop_grid(int nr_columns, int nr_rows, IntRect const &
 }
 
 
-/*
- * Helper for intialization list
- */
-Text Tower_shop::make_text(string font_name)
-{
-    return Text{"Tower Shop", Resource_manager::load_font(font_name)};
-}
 
 
 /*
@@ -118,7 +133,7 @@ void Tower_shop::render(RenderWindow & window)
  * Restore cheosen_tower and call on_click for every button and update
  * chosen_tower accordingly.
  */
-void Tower_shop::on_click(Vector2f click, Wallet & wallet)
+void Tower_shop::on_click(Vector2f const & click, Wallet & wallet)
 {
     // Restore chosen tower to nullptr first on every click. It might be set
     // again later in this function.
@@ -139,7 +154,7 @@ void Tower_shop::on_click(Vector2f click, Wallet & wallet)
  * Updates user interface of shop. Only needs to be called when money in wallet
  * has changed.
  */
-void Tower_shop::update_shop_ui(Wallet wallet)
+void Tower_shop::update_shop_ui(Wallet const & wallet)
 {
     //Re-center text.
     wallet_text.setString("$" + to_string(wallet.getCash()));
@@ -156,14 +171,3 @@ void Tower_shop::update_shop_ui(Wallet wallet)
     }
 }
 
-
-void Tower_shop::set_chosen_tower(Tower * tw)
-{
-    chosen_tower = tw;
-}
-
-
-Tower * Tower_shop::get_chosen_tower()
-{
-    return chosen_tower;
-}
