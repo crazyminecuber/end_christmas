@@ -9,7 +9,6 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
         sf::Color btn_color, sf::Color btn_select_color,  sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name, std::string texture_file)
     : RectangleShape(siz), passive_towers{pt}, font_color{font_color}, button_size{btn_size},
     heading{make_text(font_name)}, wallet_text{make_text(font_name)}
-// Lagra position och size i sfml:objectet.
 {
     set_chosen_tower(nullptr);
     setPosition(pos);
@@ -33,8 +32,9 @@ Tower_shop::Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
 }
 
 // Make a button for every tower
-void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color,
-        sf::Color btn_select_color, sf::Color btn_no_cash_color, string font_name) // Genera knappar med textur genom att kalla på tower_button många gånger.
+void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, 
+    sf::Color btn_color, sf::Color btn_select_color, 
+    sf::Color btn_no_cash_color, string font_name) 
 {
 
     /*
@@ -67,12 +67,12 @@ void Tower_shop::generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color 
 
 sf::Text Tower_shop::make_text(string font_name)
 {
-    return sf::Text{"Tower Shop", Resource_manager::load_font(font_name)}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
+    return sf::Text{"Tower Shop", Resource_manager::load_font(font_name)}; 
 }
 
 void Tower_shop::render(sf::RenderWindow & window)
 {
-    // chose to render selected tower behind shop but maybe put in front?
+    // chose to render selected tower behind shop
     for (auto it = buttons.begin(); it != buttons.end(); it++)
     {
         it->render_selected_tower(window);
@@ -91,7 +91,6 @@ void Tower_shop::render(sf::RenderWindow & window)
 // Can probably be done way more efficiently
 void Tower_shop::on_click(sf::Vector2f click, Wallet & wallet)
 {
-    // cout << "nullptr"<<endl;
     set_chosen_tower(nullptr);
     Tower * tw{};
     for (auto b = buttons.begin(); b != buttons.end(); b++)
@@ -106,12 +105,10 @@ void Tower_shop::on_click(sf::Vector2f click, Wallet & wallet)
 
 void Tower_shop::set_chosen_tower(Tower * tw)
 {
-    // cout << "set chosen_tower to: " << tw << endl;
     chosen_tower = tw;
 }
 Tower * Tower_shop::get_chosen_tower()
 {
-    // cout << "returning chosen tower: " << chosen_tower << endl;
     return chosen_tower;
 }
 

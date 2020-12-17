@@ -13,14 +13,12 @@ Tower_button::Tower_button(Tower * tw, Vector2f btn_size,
     // background color
 
     //Set background.
-    setFillColor(btn_color); // hard coded color, should change
+    setFillColor(btn_color); 
     setOrigin(getLocalBounds().width / 2, getLocalBounds().height / 2); // Center
     setPosition(position);
 
-    pricetag.setPosition(getPosition()); // Make some smart calculatoins here
+    pricetag.setPosition(getPosition()); 
 
-    // Set origin to middle of text is uggly, because localbounds is offset for
-    // some reason.
     pricetag.setCharacterSize(70);
     Vector2f price_orig{};
     sf::FloatRect price_rec = pricetag.getLocalBounds();
@@ -70,13 +68,15 @@ Tower * Tower_button::on_click(sf::Vector2f click, Wallet & wallet)
 sf::Text Tower_button::make_pricetag(Tower * tw, std::string font_name)
 {
     string cost {to_string(tw->cost)};
-    return Text{cost, Resource_manager::load_font(font_name)}; // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
+    // Lite oeffektivt, men förhoppningvis så finns en flyttningkonstrutor.
+    return Text{cost, Resource_manager::load_font(font_name)}; 
 }
 
 sf::Sprite Tower_button::make_tower_pic(Tower * tw)
 {
     std::string texture_file{tw->get_texture_file()};
-    return Sprite{Resource_manager::load(texture_file)}; // Again hoping for move construction
+    // Again hoping for move construction
+    return Sprite{Resource_manager::load(texture_file)}; 
 }
 
 void Tower_button::render_button(sf::RenderWindow & window)
@@ -116,7 +116,7 @@ void Tower_button::not_enough_cash()
 {
     setFillColor(no_cash_color);
     inactive = true;
-    selected = false; // line should not be needed but maybe?
+    selected = false; 
 }
 
 void Tower_button::update_ui(Wallet wallet)
