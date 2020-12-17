@@ -13,10 +13,11 @@ public:
     Health() = delete;
 
     Health(std::shared_ptr<sf::RenderWindow> win,
+           std::string font_file,
            std::string texture_file,
            int hp)
     : window{win},
-      font{Resource_manager::load_font("resources/fonts/font.ttf")},
+      font{Resource_manager::load_font(font_file)},
       texture_heart{Resource_manager::load(texture_file)},
       health{hp}
     {

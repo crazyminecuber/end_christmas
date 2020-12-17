@@ -9,16 +9,17 @@
 class State_wave : public State
 {
 public:
-    State_wave(std::shared_ptr<sf::RenderWindow> _window, 
-        std::shared_ptr<Game> _game, 
-        const sf::Font & _font);
-
-    void init();
+    State_wave(std::shared_ptr<sf::RenderWindow> _window,
+               std::shared_ptr<Game> _game,
+               const sf::Font & _font)
+    : State(_window, _game, _font)
+    {}
 
     void handle_input(sf::Event & event) override;
     void update_logic()                  override;
     void render()                        override;
-    int get_next_state();
+
+    int  get_next_state()                override;
 
 private:
     bool pause_game{false};

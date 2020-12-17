@@ -1,31 +1,23 @@
 #include "State_menu.h"
 #include <memory> // shared_ptr
+#include <iostream> // debugg
 #include "Resource_manager.h"
 #include "json.hpp"
-#include <iostream> // debugg
 
 using namespace std;
 using json = nlohmann::json;
 
-/* expects json object settings_menu to have the following:
- * ____________________________________________________________
- * key:                     | value type:   | value:
- * "background"             | string        | source to image
- * "title"                  | string        | title of game
- * "welcome_text"           | string        | message to player
- * ____________________________________________________________
- */
 State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
                        std::shared_ptr<Game> _game,
                        const sf::Font & _font,
                        json & entity,
                        json & settings)
-    :   State(_window, _game, _font),
-        entity{entity},
-        settings{settings},
-        background_texture{
-            Resource_manager::load(
-                settings["menu"]["background"])}
+                       : State(_window, _game, _font),
+                       entity{entity},
+                       settings{settings},
+                       background_texture{
+                           Resource_manager::load(
+                               settings["menu"]["background"])}
 {
     /* text */
     string tmp_str{settings["menu"]["title"]};
@@ -33,7 +25,7 @@ State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
     tmp_str = settings["menu"]["welcome_text"];
     text = sf::Text{tmp_str, font, 50};
 
-
+    /* map names */
     std::map<string, map<string, string>>::iterator it = game->maps.begin();
     text_map_1 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
     map1 = (*it).first;
@@ -47,6 +39,7 @@ State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
     text_map_4 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
     map4 = (*it).first;
 
+    /* visuals */
     background_sprite.setTexture(background_texture, false);
     on_resize();
 }
@@ -74,7 +67,6 @@ void State_menu::render()
 {
     window->clear();
 
-    /* put stuff to render here */
     window->draw(background_sprite);
 
     window->draw(text_title);
@@ -93,24 +85,23 @@ void State_menu::render()
     window->draw(text_map_2);
     window->draw(text_map_3);
     window->draw(text_map_4);
-    /*                          */
 
     window->display();
 }
 
 int State_menu::get_next_state()
 {
-    int return_value{MENU};
+    int next_state{MENU};
     if ( start_game )
     {
         game->load_map(entity, settings);
         game->init_entities(entity);
-        return_value = WAIT;
+        next_state = WAIT;
     }
-    // reset variables
-    start_game = false;
 
-    return return_value;
+    /* reset variables */
+    start_game = false;
+    return next_state;
 }
 
 void State_menu::handle_click(sf::Vector2f mouse_pos)
@@ -157,22 +148,26 @@ void State_menu::check_hover()
 
 void State_menu::on_resize()
 {
+    sf::Vector2u  window_size{window->getSize()};
+
     /* text */
     sf::FloatRect bb_title{text_title.getGlobalBounds()};
-    sf::FloatRect bb_text{text.getGlobalBounds()};
-    sf::Vector2u window_size{window->getSize()};
-    text_title.setOrigin(bb_title.width  / 2.f, bb_title.height / 2.f);
-    text.setOrigin(      bb_text.width   / 2.f, bb_text.height  / 2.f);
-
+    text_title.setOrigin(bb_title.width / 2.f, bb_title.height / 2.f);
     text_title.setPosition(window_size.x / 2.f, window_size.y / 6.f);
+
+    sf::FloatRect bb_text{text.getGlobalBounds()};
+    text.setOrigin(bb_text.width / 2.f, bb_text.height / 2.f);
     text.setPosition(window_size.x / 2.f, window_size.y / 2.5);
 
     /* background */
     sf::Vector2f size{background_sprite.getGlobalBounds().width,
                       background_sprite.getGlobalBounds().height};
     background_sprite.setOrigin(size.x / 2, size.y / 2);
-    background_sprite.setScale(((-(window->getSize().x * 1.0) / size.x) * background_sprite.getScale().x),
-                               ((  window->getSize().y * 1.0) / size.y) * background_sprite.getScale().y);
+    background_sprite.setScale((
+                    (-(window->getSize().x * 1.0) / size.x)
+                    * background_sprite.getScale().x),
+                    ( (window->getSize().y * 1.0) / size.y)
+                    * background_sprite.getScale().y);
     background_sprite.setPosition(window->getSize().x / 2.f,
                                   window->getSize().y / 2.f);
 
@@ -180,7 +175,9 @@ void State_menu::on_resize()
     float button_side_length = 250;
     float gap = (window_size.x - (4 * button_side_length)) / 5;
 
-    button_map_1.setSize(sf::Vector2f{button_side_length, (button_side_length / 4)});
+    // button 1
+    button_map_1.setSize(sf::Vector2f{ button_side_length,
+                                      (button_side_length / 4)});
     button_map_1.setFillColor(sf::Color::Transparent);
     button_map_1.setOutlineThickness(4);
     button_map_1.setOutlineColor(sf::Color::Black);
@@ -188,11 +185,16 @@ void State_menu::on_resize()
                              window_size.y - (button_side_length / 4) - gap);
     sf::FloatRect bb_text_map_1{text_map_1.getGlobalBounds()};
     text_map_1.setFillColor(sf::Color::Black);
-    text_map_1.setOrigin(bb_text_map_1.width / 2.f, bb_text_map_1.height / 2.f);
-    text_map_1.setPosition(button_map_1.getPosition().x + button_side_length / 2.f,
-                           button_map_1.getPosition().y + button_side_length / 8.f - 12);
+    text_map_1.setOrigin(bb_text_map_1.width  / 2.f,
+                         bb_text_map_1.height / 2.f);
+    text_map_1.setPosition(  button_map_1.getPosition().x
+                           + button_side_length / 2.f,
+                             button_map_1.getPosition().y
+                           + button_side_length / 8.f - 12);
 
-    button_map_2.setSize(sf::Vector2f{button_side_length, (button_side_length / 4)});
+    // button 2
+    button_map_2.setSize(sf::Vector2f{ button_side_length,
+                                      (button_side_length / 4)});
     button_map_2.setFillColor(sf::Color::Transparent);
     button_map_2.setOutlineThickness(4);
     button_map_2.setOutlineColor(sf::Color::Black);
@@ -200,11 +202,16 @@ void State_menu::on_resize()
                              window_size.y - (button_side_length / 4) - gap);
     sf::FloatRect bb_text_map_2{text_map_2.getGlobalBounds()};
     text_map_2.setFillColor(sf::Color::Black);
-    text_map_2.setOrigin(bb_text_map_2.width / 2.f, bb_text_map_2.height / 2.f);
-    text_map_2.setPosition(button_map_2.getPosition().x + button_side_length / 2.f,
-                           button_map_2.getPosition().y + button_side_length / 8.f - 12);
+    text_map_2.setOrigin(bb_text_map_2.width  / 2.f,
+                         bb_text_map_2.height / 2.f);
+    text_map_2.setPosition(  button_map_2.getPosition().x
+                           + button_side_length / 2.f,
+                             button_map_2.getPosition().y
+                           + button_side_length / 8.f - 12);
 
-    button_map_3.setSize(sf::Vector2f{button_side_length, (button_side_length / 4)});
+    // button 3
+    button_map_3.setSize(sf::Vector2f{ button_side_length,
+                                      (button_side_length / 4)});
     button_map_3.setFillColor(sf::Color::Transparent);
     button_map_3.setOutlineThickness(4);
     button_map_3.setOutlineColor(sf::Color::Black);
@@ -212,11 +219,16 @@ void State_menu::on_resize()
                              window_size.y - (button_side_length / 4) - gap);
     sf::FloatRect bb_text_map_3{text_map_3.getGlobalBounds()};
     text_map_3.setFillColor(sf::Color::Black);
-    text_map_3.setOrigin(bb_text_map_3.width / 2.f, bb_text_map_3.height / 2.f);
-    text_map_3.setPosition(button_map_3.getPosition().x + button_side_length / 2.f,
-                           button_map_3.getPosition().y + button_side_length / 8.f - 12);
+    text_map_3.setOrigin(bb_text_map_3.width  / 2.f,
+                         bb_text_map_3.height / 2.f);
+    text_map_3.setPosition(  button_map_3.getPosition().x
+                           + button_side_length / 2.f,
+                             button_map_3.getPosition().y
+                           + button_side_length / 8.f - 12);
 
-    button_map_4.setSize(sf::Vector2f{button_side_length, (button_side_length / 4)});
+    // button 4
+    button_map_4.setSize(sf::Vector2f{ button_side_length,
+                                      (button_side_length / 4)});
     button_map_4.setFillColor(sf::Color::Transparent);
     button_map_4.setOutlineThickness(4);
     button_map_4.setOutlineColor(sf::Color::Black);
@@ -224,7 +236,10 @@ void State_menu::on_resize()
                              window_size.y - (button_side_length / 4) - gap);
     sf::FloatRect bb_text_map_4{text_map_4.getGlobalBounds()};
     text_map_4.setFillColor(sf::Color::Black);
-    text_map_4.setOrigin(bb_text_map_4.width / 2.f, bb_text_map_4.height / 2.f);
-    text_map_4.setPosition(button_map_4.getPosition().x + button_side_length / 2.f,
-                           button_map_4.getPosition().y + button_side_length / 8.f - 12);
+    text_map_4.setOrigin(bb_text_map_4.width / 2.f,
+                         bb_text_map_4.height / 2.f);
+    text_map_4.setPosition(  button_map_4.getPosition().x
+                           + button_side_length / 2.f,
+                             button_map_4.getPosition().y
+                           + button_side_length / 8.f - 12);
 }
