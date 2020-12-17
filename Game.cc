@@ -154,7 +154,6 @@ void Game::load_map(string const & file_entity)
         tile_index_pos.y++;
     }
     infile.close();
-    cout << "Laddat in kartan" << endl;
 
     /* update side_length */
     // calculate Tile::side_length and change all tiles

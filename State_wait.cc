@@ -72,9 +72,10 @@ void State_wait::on_resize()
     {
         throw invalid_argument("Unable to load " + file);
     }
-    text_wait = sf::Text{"(Press P To Start Next Wave)", font, 60};
+    text_wait = sf::Text{"(Press P To Start Next Wave)", font, 45};
     sf::FloatRect bb_wait{text_wait.getGlobalBounds()};
     text_wait.setOrigin(bb_wait.width  / 2.f, bb_wait.height / 2.f);
     text_wait.setPosition(window->getSize().x * 0.5f,
                           window->getSize().y *0.01f);
+    text_wait.setFillColor(sf::Color::Black);
 }

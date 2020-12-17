@@ -34,8 +34,8 @@
             "santa" :
                 {
                     "type": "Enemy_basic",
-                    "life_init" : 25,
-                    "reward_init" : 0,
+                    "life_init" : 40,
+                    "reward_init" : 10,
                     "texture" : "resources/textures/Santa.png",
                     "size": [1,1],
                     "hit_rad": 0.025,
@@ -45,9 +45,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa",
-                    "num_of_children": 1,
-                    "life_init" : 75,
-                    "reward_init" : 0,
+                    "num_of_children": 5,
+                    "life_init" : 40,
+                    "reward_init" : 10,
                     "texture" : "resources/textures/Santa.png",
                     "size": [1.5,1.5],
                     "hit_rad": 0.025,
@@ -57,9 +57,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa",
-                    "num_of_children": 1,
+                    "num_of_children": 5,
                     "life_init" : 150,
-                    "reward_init" : 0,
+                    "reward_init" : 50,
                     "texture" : "resources/textures/Santa.png",
                     "size": [2,2],
                     "hit_rad": 0.025,
@@ -71,7 +71,7 @@
                     "child": "elf",
                     "num_of_children": 40,
                     "life_init" : 50,
-                    "reward_init" : 250,
+                    "reward_init" : 100,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -83,7 +83,7 @@
                     "child": "reindeer_expert",
                     "num_of_children": 50,
                     "life_init" : 10,
-                    "reward_init" : 250,
+                    "reward_init" : 70,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -93,9 +93,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa_big",
-                    "num_of_children": 50,
+                    "num_of_children": 100,
                     "life_init" : 10,
-                    "reward_init" : 250,
+                    "reward_init" : 70,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -138,7 +138,7 @@
                 "spawn_delay": 1,
                 "spawn_rate" : 5,
                 "num_in_group": 2,
-                "num_in_group_inc": 4,
+                "num_in_group_inc": 2,
                 "group_spawn_interval": 5,
                 "num_of_groups": 4,
                 "num_of_groups_inc": 0
@@ -257,8 +257,8 @@
                 },
             "Projectile_bomb_blast" :
                 {
-                    "frames_to_live" : 1,
-                    "damage_init" : 25,
+                    "frames_to_live" : 5,
+                    "damage_init" : 3,
                     "texture" : "resources/textures/Bang.png",
                     "size" : [3,3],
                     "hit_rad" : 0.5,
@@ -310,9 +310,9 @@
 				{
                     "sprite_init" : "resources/textures/tower_ring_green.png",
                     "projectile_init" : "Projectile_basic",
-                    "cost_init" : 50,
+                    "cost_init" : 40,
                     "detection_radius_init" : 0,
-                    "fire_period_init" : 50,
+                    "fire_period_init" : 25,
                     "size": [1,1],
                     "num_projectile_init": 6
                 },
@@ -339,24 +339,25 @@
     "Shop" :
         {
             "start_cash" : 100,
-            "font_name" : "resources/fonts/best_font.ttf",
-            "texture_file" : "resources/textures/Santa.png",
+
+            "texture_file" : "resources/textures/Shelf1.png",
+            "font_name" : "resources/fonts/Christmas_Bell.otf",
             "font_color" :
-            {
-                "r": 255,
-                "g": 255,
-                "b": 255
-            },
-            "background_color":
             {
                 "r": 0,
                 "g": 0,
-                "b": 100
+                "b": 0
+            },
+            "background_color":
+            {
+                "r": 179,
+                "g": 218,
+                "b": 241
             },
             "btn_color":
             {
                 "r": 0,
-                "g": 100,
+                "g": 50,
                 "b": 0
             },
             "btn_select_color":
@@ -367,16 +368,16 @@
             },
             "btn_no_cash_color":
             {
-                "r": 100,
+                "r": 179,
                 "g": 0,
-                "b": 0
+                "b": 12
             },
             "shop_size": [300,800],
-            "btn_size": [100,100]
+            "btn_size": [90,90]
         },
     "Maps" :
     {
-        "map_dev" :
+        "9map_dev" :
         {
             "file_name" : "resources/maps/map_dev.csv",
             "display_name" : "Dev",
@@ -390,10 +391,10 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_beginner" :
+        "1map_beginner" :
         {
-            "file_name" : "resources/maps/map_beginner.csv",
-            "display_name" : "Beginner",
+            "file_name" : "resources/maps/map_winterland.csv",
+            "display_name" : "Winterland",
             "difficulty" : "Easy",
             "tiles" :
             {
@@ -404,7 +405,7 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_spiral" :
+        "4map_spiral" :
         {
             "file_name" : "resources/maps/map_spiral.csv",
             "display_name" : "Spiral",
@@ -418,7 +419,7 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_corson" :
+        "3map_corson" :
         {
             "file_name" : "resources/maps/map_corson.csv",
             "display_name" : "Corson",
@@ -432,7 +433,7 @@
                 "4" : "resources/textures/dirt.jpg"
             }
         },
-        "map_boat" :
+        "2map_boat" :
         {
             "file_name" : "resources/maps/map_boat.csv",
             "display_name" : "Boat",
