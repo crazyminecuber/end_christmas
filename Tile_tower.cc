@@ -20,8 +20,14 @@ bool Tile_tower::on_click(Tower * tw)
     return false;
 }
 
+void Tile_tower::on_click(sf::Vector2f)
+{
+    tower->on_click();
+}
+
 bool Tile_tower::is_occupied()
 {
     // cout << "Tower in tile" << tower << endl;
     return !(tower == nullptr);
 }
+

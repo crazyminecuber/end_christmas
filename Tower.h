@@ -8,7 +8,10 @@
 #include "Entity.h"
 #include "Enemy.h"
 #include "Projectile.h"
+#include "Multikey.h"
 
+const unsigned int SORT_BY_DISTANCE{0};
+const unsigned int SORT_BY_TILE{1};
 
 
 class Tower : public Entity
@@ -33,12 +36,13 @@ public:
     virtual void shoot()=0;
     virtual Tower * create_active(sf::Vector2f position) = 0;
     void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
+    void on_click();
 
     static std::vector<Tower*> towers;
     static std::vector<Tower*> factory_towers;
 
-    struct cmpV2f
-    /* sort Vector2f by row and then column */
+  //  struct cmpV2f
+    /* sort Vector2f by row and then column *
     {
         bool operator()(const sf::Vector2f& a, const sf::Vector2f& b) const
         {
@@ -48,18 +52,22 @@ public:
                 return a.y < b.y;   // return closest to end
         }
     };
-    std::map<sf::Vector2f, Enemy*, cmpV2f> shootable_enemies;
+*/
+    std::multimap<Multikey<float, 2>, Enemy*> shootable_enemies;
 
     void init_circle_hit_rad();
     sf::CircleShape circle_hit_rad;
 protected:
 
-    std::pair<sf::Vector2f, Entity*> target_enemy;
+    std::pair<Multikey<float, 2>, Entity*> target_enemy;
     int frame_last_shot{0};
     int fire_period;
     int fire_angle;
 
     Projectile * projectile; // Borde inte det vara så att tower bör äga sin passiva projektil? Så varför inte ta bort pekaren? (Abstrakt klass går ej att instansiera, bästa jag vet är att använda unique_ptr, men kräver en del jobb)
+
+private:
+    unsigned int sort_by{0};
 
 public:
     int cost{};
@@ -80,8 +88,8 @@ public:
 
   void shoot() override;
   Tower * create_active(sf::Vector2f position) override;
-  std::pair<sf::Vector2f, Entity *> select_target();
-  sf::Vector2f aim_direction(std::pair<sf::Vector2f, Entity *> target_enemy);
+  std::pair<Multikey<float, 2>, Entity *> select_target();
+  sf::Vector2f aim_direction(const float & sq_distance, Entity *target_enemy);
 };
 
 class Tower_ring : public Tower
