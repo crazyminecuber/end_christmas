@@ -774,7 +774,7 @@ void Game::handle_right_click(sf::Vector2f click)
     {
         Tile *tile = Tile::get_tile_by_coord(click);
         Tile_tower *tile_t;
-        if ( tile_t = dynamic_cast<Tile_tower*>(tile) );
+        if ( (tile_t = dynamic_cast<Tile_tower*>(tile)) )
         {
             tile_t->on_click(click);
         }
