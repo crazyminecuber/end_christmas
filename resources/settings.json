@@ -10,7 +10,6 @@
     "game" :
         {
             "hp" : 100,
-            "coins" : 100,
             "health_texture" : "resources/textures/heart.png",
             "health_font" : "resources/fonts/font.ttf",
             "wave_font" : "resources/fonts/font.ttf"
@@ -23,6 +22,6 @@
         },
     "end" :
         {
-            "background" : "resources/textures/Snowman_won.jpeg"
+            "background" : "resources/textures/background_end.jpg"
         }
 }

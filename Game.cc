@@ -83,6 +83,7 @@ shared_ptr<Projectile> Game::get_tower_projectile(std::string const & projectile
         throw invalid_argument("No projectile with name " + projectile);
     }
 }
+
 /* Help function to determine if object1 and object2 have collided.
  * "returns" the squared distance in sq_distance.
  */
@@ -274,13 +275,13 @@ void Game::render()
     // render enemies
     for (auto it{begin(Enemy::enemies)}; it != end(Enemy::enemies); ++it)
     {
-        window->draw(*(*it)); 
+        window->draw(*(*it));
     }
 
     // render towers
     for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
     {
-        window->draw(*(*it)); 
+        window->draw(*(*it));
     }
 
     // render tower radii
@@ -545,12 +546,11 @@ void Game::init_shop(json const & j_shop)
     float window_sizeY = window->getSize().y;
     wallet = Wallet{j_shop["start_cash"]};
     string font_name{j_shop["font_name"]};
+    string font_btn_name{j_shop["font_button_name"]};
     sf::Vector2f shop_size{j_shop["shop_width"], window_sizeY};
     sf::Vector2f btn_size{j_shop["btn_size"][0], j_shop["btn_size"][1]};
     sf::Vector2f shop_pos{window->getSize().x - shop_size.x, 0}; // gets changed in Game::load_map
     string texture_file{j_shop["texture_file"]}; // gets changed in Game::load_map
-    json back_color = j_shop["background_color"];
-    sf::Color color{back_color["r"], back_color["g"], back_color["b"]};
     json btn_color = j_shop["btn_color"];
     sf::Color button_color{btn_color["r"], btn_color["g"], btn_color["b"]};
     json btn_select_color = j_shop["btn_select_color"];
@@ -559,8 +559,8 @@ void Game::init_shop(json const & j_shop)
     sf::Color button_no_cash_color{bcc["r"], bcc["g"], bcc["b"]};
     json fc = j_shop["font_color"];
     sf::Color font_color{fc["r"], fc["g"], fc["b"]};
-    shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, color,button_color,button_select_color, button_no_cash_color, font_color, font_name, texture_file};
-    wallet.ui_callback = [&](Wallet w){shop.update_shop_ui(w);};
+    shop = Tower_shop{Tower::factory_towers, shop_pos, shop_size,btn_size, button_color,button_select_color, button_no_cash_color, font_color, font_name, font_btn_name, texture_file};
+    wallet.set_ui_callback([&](Wallet const & w){shop.update_shop_ui(w);});
     shop.update_shop_ui(wallet);
 }
 
@@ -766,13 +766,13 @@ void Game::update_logic()
     wave_manager.spawn_enemies(frame);
     enemy_update_direction();
     enemy_update_position();
-    
+
     projectile_update_position();
 
     check_collision();
     check_collision_towers();
     fire_towers();
-    
+
     frame++;
 }
 

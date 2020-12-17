@@ -1,3 +1,6 @@
+//TODO ta bort
+//TODO funkar const ref på passive towers?
+//TODO Hur skall vi hantera chosen_tower pekaren?
 #ifndef TOWER_SHOP_H
 #define TOWER_SHOP_H
 
@@ -14,27 +17,30 @@ class Tower_shop : public sf::RectangleShape
 {
 public:
     Tower_shop(){};
-    Tower_shop(std::vector<Tower *> pt, sf::Vector2f pos,
-            sf::Vector2f siz, sf::Vector2f btn_size, sf::Color color,
-            sf::Color btn_color,sf::Color btn_select_color, sf::Color btn_no_cash_color, sf::Color font_color, std::string font_name, std::string texture_file);
+    Tower_shop(std::vector<Tower *> const & passive_towers,
+        sf::Vector2f const & pos, sf::Vector2f const & siz, sf::Vector2f const & btn_size,
+        sf::Color const & btn_color, sf::Color const & btn_select_color,
+        sf::Color const & btn_no_cash_color, sf::Color const & font_color,
+        std::string const & font_name, std::string const & font_btn_name,
+        std::string const & texture_file);
     void render(sf::RenderWindow & window);
     void on_click(sf::Vector2f click, Wallet & wallet);
     void set_chosen_tower(Tower * tw);
     Tower * get_chosen_tower();
     void update_shop_ui(Wallet wallet);
 
-
 private:
-    std::vector<Tower *> passive_towers;
-    sf::Color font_color{};
-    sf::Vector2f button_size;
     sf::Text heading{};
     sf::Text wallet_text{};
     std::vector<Tower_button> buttons{};
-    Tower* chosen_tower;
+    Tower* chosen_tower{nullptr};
 
     sf::Text make_text(std::string font_name);
-    void generate_shop_grid(int nr_columns, sf::IntRect area, sf::Color btn_color, sf::Color btn_select_color, sf::Color btn_no_cash_color, std::string font_name); // Genera knappar med textur genom att kalla på tower_button många gånger.
+    void generate_shop_grid(int nr_columns, int nr_rows, sf::IntRect const & area,
+        sf::Color const & btn_color,sf::Color const & btn_select_color,
+        sf::Color const & btn_no_cash_color, sf::Color const & font_color,
+        std::string const & font_name, std::vector<Tower*> const & passive_towers,
+        sf::Vector2f const & btn_size);
 
 };
 

@@ -297,7 +297,6 @@
                 {
                     "sprite_init" : "resources/textures/tower_basic_pink.png",
                     "projectile_init" : "Projectile_basic",
-                    "shop_sprite_init" : "resources/textures/tower_basic_basic.png",
                     "cost_init" : 250,
                     "detection_radius_init" : 2,
                     "fire_period_init" : 5,
@@ -344,22 +343,17 @@
             "btn_size": [90,90],
             "texture_file" : "resources/textures/Shelf1.png",
             "font_name" : "resources/fonts/Christmas_Bell.otf",
+            "font_button_name" : "resources/fonts/Christmas_Bell.otf",
             "font_color" :
             {
                 "r": 0,
                 "g": 0,
                 "b": 0
             },
-            "background_color":
-            {
-                "r": 179,
-                "g": 218,
-                "b": 241
-            },
             "btn_color":
             {
                 "r": 0,
-                "g": 50,
+                "g": 100,
                 "b": 0
             },
             "btn_select_color":

@@ -1,8 +1,9 @@
 #include "Wallet.h"
 using namespace std;
 
-//Calculate income and expenditure and "stores" the money left. 
-
+/*
+ * Takes cash from wallet if it has enough and calls callback to update ui
+ */
 bool Wallet::take(int price)
 {
     if (cash - price < 0)
@@ -14,6 +15,10 @@ bool Wallet::take(int price)
     return true;
 }
 
+
+/*
+ * Adds cash to wallet and call callback to update ui
+ */
 void Wallet::add(int income)
 {
     cash += income;
@@ -21,10 +26,12 @@ void Wallet::add(int income)
 
 }
 
+
 int Wallet::getCash()
 {
     return cash;
 }
+
 
 void Wallet::update_ui()
 {
