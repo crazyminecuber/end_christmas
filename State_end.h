@@ -29,6 +29,7 @@ public:
 private:
     void on_resize();
 
+    bool updated{false};
     /* graphics stuff below */
     sf::Texture background_texture;
     sf::Sprite  background_sprite;

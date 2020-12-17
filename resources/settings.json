@@ -22,6 +22,6 @@
         },
     "end" :
         {
-            "background" : "resources/textures/background_start_menu.png"
+            "background" : "resources/textures/Snowman_won.jpeg"
         }
 }
