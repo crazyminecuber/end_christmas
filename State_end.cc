@@ -26,7 +26,12 @@ void State_end::on_resize()
     background_sprite.setPosition(window->getSize().x / 2.f,
                                   window->getSize().y / 2.f);
 
-    /* text */
+    update_end_text();
+
+}
+
+void State_end::update_end_text()
+{
     sf::Vector2u window_size{window->getSize()};
 
     string str1{""};
@@ -61,8 +66,8 @@ void State_end::update_logic()
 {
     if ( !updated )
     {
+        update_end_text();
         updated = true;
-        on_resize();
     }
 }
 

@@ -40,15 +40,10 @@ class Multikey
             {
                 return keys.at(_sort_by) < right.keys.at(right._sort_by);
             }
-            else if ( !( right.keys.empty() ) ) // *this is empty
+            else
             {
-                return false;
+                return !( right.keys.empty() );
             }
-            else // both are empty
-            {
-                return true;
-            }
-            
         };
 
         bool operator==(const Multikey<Tp, Nm> &right)
@@ -59,7 +54,7 @@ class Multikey
     protected:
         size_t _sort_by{0};
 };
-/*
+
 template <class Tp>
 class Dualkey : public Multikey<Tp,2>
 {
@@ -76,5 +71,5 @@ class Multikeyf : public Multikey<float, Nm>
     Multikeyf(std::array<float, Nm> _keys, size_t _sort_by)
         : Multikey<float,Nm>(_keys, _sort_by) {};
 };
-*/
+
 #endif
