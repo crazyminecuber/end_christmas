@@ -42,9 +42,21 @@ class Resource_manager{
         }
         return fonts[file];
     }
+
+    static sf::Font& get_standard_font()
+    {
+      return load_font(standard_font);
+    }
+
+    static void set_standard_font(std::string file)
+    {
+      standard_font = file;
+    }
+
   private:
     static std::map<std::string, sf::Texture> resources;
     static std::map<std::string, sf::Font> fonts;
+    static std::string standard_font;
 
 };
 
