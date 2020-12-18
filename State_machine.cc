@@ -30,6 +30,7 @@ State_machine::State_machine(const string &settings_file,
                 settings["game"]["hp"],
                 settings["game"]["wave_font"]) }
 {
+    Resource_manager::set_standard_font(settings["font"]);
     load_entity(entity_file);
     game->init_tiles(entity);
     sf::Font font{Resource_manager::load_font(settings["font"])};

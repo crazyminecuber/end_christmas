@@ -278,12 +278,6 @@ void Game::render()
         window->draw(*(*it));
     }
 
-    // render towers
-    for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
-    {
-        window->draw(*(*it));
-    }
-
     // render tower radii
     if ( render_tower_radii )
     {
@@ -303,6 +297,12 @@ void Game::render()
 
     // render shop
     shop.render(*window);
+
+    // render towers
+    for (auto it{begin(Tower::towers)}; it != end(Tower::towers); ++it)
+    {
+        (*it)->render(*window);
+    }
 
     // render health
     health.render();

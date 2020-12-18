@@ -9,8 +9,6 @@
 #include "Projectile.h"
 #include "Multikey.h"
 
-const unsigned int SORT_BY_DISTANCE{0};
-const unsigned int SORT_BY_TILE{1};
 
 
 class Tower : public Entity
@@ -22,11 +20,12 @@ public:
     :Entity(texture_file, sf::Vector2f{0,0},
             size, hit_rad,
             sf::Vector2f{1,0}, 0),
-            fire_period{f_period},
-            projectile{proj},
-            cost{_cost}
-    {
-        init_circle_hit_rad(); // create circle_hit_rad for factory_towers to use when placing towers
+        fire_period{f_period},
+        projectile{proj},
+        cost{_cost}
+    { 
+        // create circle_hit_rad for factory_towers to use when placing towers
+        init_circle_hit_rad();
     }
 
     Tower(Tower const & other);
@@ -35,26 +34,37 @@ public:
     virtual void shoot()=0;
     virtual Tower * create_active(sf::Vector2f position) = 0;
     void make_projectile(sf::Vector2f dir, sf::Vector2f pos);
-    void on_right_click();
+    virtual void on_right_click();
 
     static std::vector<Tower*> towers;
     static std::vector<Tower*> factory_towers;
 
-    std::multimap<Multikey<float, 2>, Enemy*> shootable_enemies;
+    std::multimap<Multikey<float, 5>, Enemy*> shootable_enemies;
 
     void init_circle_hit_rad();
     sf::CircleShape circle_hit_rad;
+    sf::Text target_method;
+
+    virtual void render(sf::RenderWindow &window);
+
 protected:
 
-    std::pair<Multikey<float, 2>, Entity*> target_enemy;
+    std::pair<float, Enemy*> target_enemy;
     int frame_last_shot{0};
     int fire_period;
     int fire_angle;
 
     std::shared_ptr<Projectile> projectile; 
-
-private:
+    static const unsigned int SORT_BY_DISTANCE;
+    static const unsigned int SORT_BY_TILE;
+    static const unsigned int SORT_BY_TILE_REVERSE;
+    static const unsigned int SORT_BY_LIFE;
+    static const unsigned int SORT_BY_REWARD;
+    static const std::string target_method_base_string;
+    void init_text();
     unsigned int sort_by{0};
+    unsigned int target_method_render_frame{0};
+    bool first_render{true};
 
 public:
     int cost{};
@@ -76,7 +86,7 @@ public:
 
   void shoot() override;
   Tower * create_active(sf::Vector2f position) override;
-  std::pair<Multikey<float, 2>, Entity *> select_target();
+  std::pair<float, Enemy *> select_target();
   sf::Vector2f aim_direction(const float & sq_distance, Entity *target_enemy);
 };
 
@@ -95,6 +105,8 @@ public:
 
   void shoot() override;
   Tower * create_active(sf::Vector2f postion) override;
+  void render(sf::RenderWindow &window) override;
+  void on_right_click() override;
 
 protected:
   int num_of_projectile;

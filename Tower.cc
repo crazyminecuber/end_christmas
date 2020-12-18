@@ -5,10 +5,19 @@
 #include <vector>
 #include "Game.h"
 #include "Tile.h"
+#include "State_machine.h"
 using namespace std;
 //Init static variables
 std::vector<Tower*> Tower::towers{};
 std::vector<Tower*> Tower::factory_towers{};
+
+const unsigned int Tower::SORT_BY_DISTANCE{0};
+const unsigned int Tower::SORT_BY_TILE{1};
+const unsigned int Tower::SORT_BY_TILE_REVERSE{2};
+const unsigned int Tower::SORT_BY_LIFE{3};
+const unsigned int Tower::SORT_BY_REWARD{4};
+const string Tower::target_method_base_string{"Selected targeting \n method: "};
+
 
 /*---------------------------------------------------------------------------*/
 //Functions for the class Tower
@@ -37,7 +46,10 @@ void Tower::collision(Enemy* object, float distance)
     float tile_number = Tile::get_tile_by_coord(object->getPosition())->get_tile_number();
     shootable_enemies.emplace( 
       make_pair( 
-        Multikey<float, 2>{ std::array<float,2>{distance, tile_number}, sort_by }, 
+        Multikey<float, 5>{ std::array<float,5>{distance, tile_number, 
+                -tile_number, -static_cast<float>(object->get_damage()),
+                -static_cast<float>(object->get_reward()) },
+            sort_by }, 
         object ) );
 }
 
@@ -50,16 +62,65 @@ void Tower::make_projectile(sf::Vector2f dir, sf::Vector2f pos)
 // Change which key in shootable_enemies to order by.
 void Tower::on_right_click()
 {
+  for ( Tower *t : Tower::towers )
+  {
+    t->target_method_render_frame = 0U;
+  } target_method_render_frame = static_cast<unsigned int>(
+        Game::get_frame() + State_machine::get_fps() * 3);
     switch (sort_by)
     {
-    case SORT_BY_DISTANCE:
-      sort_by = SORT_BY_TILE;
-      break;
+        case SORT_BY_DISTANCE:
+            sort_by = SORT_BY_TILE;
+            target_method.setString(target_method_base_string + "First on map");
+            break;
 
-    default:
-      sort_by = SORT_BY_DISTANCE;
-      break;
+        case SORT_BY_TILE:
+            sort_by = SORT_BY_TILE_REVERSE;
+            target_method.setString(target_method_base_string + "Last on map");
+
+            break;
+
+        case SORT_BY_TILE_REVERSE:
+            sort_by = SORT_BY_LIFE;
+            target_method.setString(target_method_base_string + "Highest HP");
+            break;
+        
+        case SORT_BY_LIFE:
+            sort_by = SORT_BY_REWARD;
+            target_method.setString(target_method_base_string + "Biggest reward");
+            break;
+
+        default:
+            sort_by = SORT_BY_DISTANCE;
+            target_method.setString(target_method_base_string + "Closest");
+            break;
     }
+}
+
+void Tower::render(sf::RenderWindow &window)
+{
+  window.draw(*this);
+  if ( target_method_render_frame && target_method_render_frame
+      >= static_cast<unsigned int>(Game::get_frame()) )
+  {
+    if (first_render)
+    {
+      first_render = false;
+      init_text();
+    }
+    window.draw(target_method);
+  }
+}
+
+void Tower::init_text()
+{
+  target_method = sf::Text{target_method_base_string + "Closest",
+                          Resource_manager::get_standard_font(),
+                            40};
+  target_method.setOrigin(0.f, 
+    target_method.getGlobalBounds().height / 2.f);
+  target_method.setPosition(getPosition().x + size.x, getPosition().y);
+  target_method.setFillColor(sf::Color{0,0,0});
 }
 
 /*---------------------------------------------------------------------*/
@@ -87,8 +148,8 @@ void Tower_basic::shoot()
   {
     if (Game::get_frame() - frame_last_shot > fire_period)
     {
-      pair<Multikey<float,2>, Entity *> target = select_target();
-      sf::Vector2f aim_dir = aim_direction(target.first.keys.at(0),
+      pair<float, Entity *> target = select_target();
+      sf::Vector2f aim_dir = aim_direction(target.first,
                                            target.second);
       make_projectile(aim_dir, getPosition());
       frame_last_shot = Game::get_frame();
@@ -98,11 +159,13 @@ void Tower_basic::shoot()
 }
 
 //Selecting enemy to shoot at
-pair<Multikey<float, 2>, Entity *> Tower_basic::select_target()
+pair<float, Enemy*> Tower_basic::select_target()
 {
   if (!shootable_enemies.empty())
   {
-    target_enemy = *shootable_enemies.begin();
+    target_enemy = make_pair(
+        (*shootable_enemies.begin()).first.keys.at(0),
+        (*shootable_enemies.begin()).second);
   }
   return target_enemy;
 }
@@ -162,4 +225,14 @@ void Tower_ring::shoot()
       num_projectile_shoot=0;
     }
   }
+}
+
+void Tower_ring::render(sf::RenderWindow &window)
+{
+  window.draw(*this);
+}
+
+void Tower_ring::on_right_click()
+{
+  ;
 }
