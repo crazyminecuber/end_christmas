@@ -21,22 +21,30 @@ State_menu::State_menu(std::shared_ptr<sf::RenderWindow> _window,
 {
     /* text */
     string tmp_str{settings["menu"]["title"]};
-    text_title = sf::Text{tmp_str, font, 100};
+    text_title = sf::Text{tmp_str, font, window->getSize().y / 10};
     tmp_str = settings["menu"]["welcome_text"];
-    text = sf::Text{tmp_str, font, 50};
+    text = sf::Text{tmp_str, font, window->getSize().y / 20};
+    tmp_str = settings["menu"]["keybindings_header"];
+    keybindings_header = sf::Text{tmp_str, font, window->getSize().y / 20};
+    tmp_str = settings["menu"]["keybindings"];
+    keybindings = sf::Text{tmp_str, font, window->getSize().y / 30};
 
     /* map names */
     std::map<string, map<string, string>>::iterator it = game->maps.begin();
-    text_map_1 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
+    text_map_1 = sf::Text{game->maps[(*it).first]["display_name"], font, 
+        window->getSize().y / 20};
     map1 = (*it).first;
     it++;
-    text_map_2 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
+    text_map_2 = sf::Text{game->maps[(*it).first]["display_name"], font, 
+        window->getSize().y / 20};
     map2 = (*it).first;
     it++;
-    text_map_3 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
+    text_map_3 = sf::Text{game->maps[(*it).first]["display_name"], font, 
+        window->getSize().y / 20};
     map3 = (*it).first;
     it++;
-    text_map_4 = sf::Text{game->maps[(*it).first]["display_name"], font, 50};
+    text_map_4 = sf::Text{game->maps[(*it).first]["display_name"], font, 
+        window->getSize().y / 20};
     map4 = (*it).first;
 
     /* visuals */
@@ -71,6 +79,8 @@ void State_menu::render()
 
     window->draw(text_title);
     window->draw(text);
+    window->draw(keybindings_header);
+    window->draw(keybindings);
 
     if ( hovering_map_1 )
         window->draw(button_map_1);
@@ -158,6 +168,14 @@ void State_menu::on_resize()
     sf::FloatRect bb_text{text.getGlobalBounds()};
     text.setOrigin(bb_text.width / 2.f, bb_text.height / 2.f);
     text.setPosition(window_size.x / 2.f, window_size.y / 2.5);
+    
+    sf::FloatRect bb_keybindings_header{keybindings_header.getGlobalBounds()};
+    keybindings_header.setPosition(window_size.x / 10.f, window_size.y / 10.f);
+
+    sf::FloatRect bb_keybindings{keybindings.getGlobalBounds()};
+    keybindings.setPosition(keybindings_header.getPosition().x,
+        keybindings_header.getPosition().y 
+        + keybindings_header.getGlobalBounds().height);
 
     /* background */
     sf::Vector2f size{background_sprite.getGlobalBounds().width,

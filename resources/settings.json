@@ -3,8 +3,8 @@
     "title" : "Kill Santa",
     "window" :
         {
-            "width" : 1920,
-            "height" : 1020,
+            "width" : 1480,
+            "height" : 720,
             "fullscren" : false
         },
     "game" :
@@ -18,7 +18,9 @@
         {
             "background" : "resources/textures/background_start_menu.png",
             "welcome_text" : "Select map to start game",
-            "title" : "(Kill Santa)"
+            "title" : "(Kill Santa)",
+            "keybindings_header" : "Key bindings",
+            "keybindings" : "ESC - Pause \nF - Fast forwad \nR - Toggle tower radius \nLeft mouse button - Select tower in shop/\n                         Select placement for tower \nRight mouse button - Change tower aim method"
         },
     "end" :
         {

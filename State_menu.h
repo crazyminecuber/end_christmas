@@ -57,6 +57,8 @@ private:
 
     sf::Text text_title;
     sf::Text text;
+    sf::Text keybindings_header;
+    sf::Text keybindings;
 };
 
 #endif // STATE_MENU_H
