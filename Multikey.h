@@ -21,6 +21,11 @@ class Multikey
 
         std::array<Tp,Nm> keys{};
 
+        Tp at(size_t i)
+        {
+            return keys.at(i);
+        }
+
         /* Sets the key that will be used for comparison to the i'th key */
         void sort_by(size_t i)
         {
