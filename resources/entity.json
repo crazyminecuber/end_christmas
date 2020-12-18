@@ -35,7 +35,7 @@
                 {
                     "type": "Enemy_basic",
                     "life_init" : 40,
-                    "reward_init" : 10,
+                    "reward_init" : 0,
                     "texture" : "resources/textures/Santa.png",
                     "size": [1,1],
                     "hit_rad": 0.025,
@@ -45,9 +45,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa",
-                    "num_of_children": 5,
+                    "num_of_children": 1,
                     "life_init" : 40,
-                    "reward_init" : 10,
+                    "reward_init" : 0,
                     "texture" : "resources/textures/Santa.png",
                     "size": [1.5,1.5],
                     "hit_rad": 0.025,
@@ -57,7 +57,7 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa",
-                    "num_of_children": 5,
+                    "num_of_children": 3,
                     "life_init" : 150,
                     "reward_init" : 50,
                     "texture" : "resources/textures/Santa.png",
@@ -81,9 +81,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "reindeer_expert",
-                    "num_of_children": 50,
+                    "num_of_children": 40,
                     "life_init" : 10,
-                    "reward_init" : 70,
+                    "reward_init" : 100,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -93,9 +93,9 @@
                 {
                     "type": "Enemy_boss",
                     "child": "santa_big",
-                    "num_of_children": 100,
+                    "num_of_children": 5,
                     "life_init" : 10,
-                    "reward_init" : 70,
+                    "reward_init" : 100,
                     "texture" : "resources/textures/santaandsled.png",
                     "size": [3,1.5],
                     "hit_rad": 0.125,
@@ -241,7 +241,7 @@
                     "texture" : "resources/textures/icicle1.png",
                     "size" : [0.5,0.5],
                     "hit_rad" : 0.25,
-                    "mov_spd" : 0.06,
+                    "mov_spd" : 0.1,
                     "rotation_offset" : -90,
                     "nr_pierce_init" : 6
                 },
@@ -282,15 +282,15 @@
                     "projectile_init" : "Projectile_pierce",
                     "cost_init" : 125,
                     "detection_radius_init" : 6,
-                    "fire_period_init" : 200,
+                    "fire_period_init" : 175,
                     "size": [1,1]
                 },
                 {
                     "sprite_init" : "resources/textures/tower_basic_orange.png",
                     "projectile_init" : "Projectile_bomb",
-                    "cost_init" : 250,
+                    "cost_init" : 350,
                     "detection_radius_init" : 2,
-                    "fire_period_init" : 200,
+                    "fire_period_init" : 250,
                     "size": [1,1]
                 }
                 ,
@@ -309,7 +309,7 @@
 				{
                     "sprite_init" : "resources/textures/tower_ring_green.png",
                     "projectile_init" : "Projectile_basic",
-                    "cost_init" : 40,
+                    "cost_init" : 50,
                     "detection_radius_init" : 0,
                     "fire_period_init" : 25,
                     "size": [1,1],
@@ -327,9 +327,9 @@
                 {
                     "sprite_init" : "resources/textures/tower_ring_red.png",
                     "projectile_init" : "Projectile_bomb",
-                    "cost_init" : 150,
+                    "cost_init" : 350,
                     "detection_radius_init" : 0,
-                    "fire_period_init" : 30,
+                    "fire_period_init" : 250,
                     "size": [1,1],
                     "num_projectile_init": 8
                 }
