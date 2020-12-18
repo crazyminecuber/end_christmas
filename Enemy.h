@@ -19,8 +19,8 @@ public:
     :Entity(texture_file, position,
             size, hit_rad,
             dir, mov_spd),
-            life{arg_life}, kill_reward{reward}
-            {}
+        life{arg_life}, kill_reward{reward}
+        {}
 
     virtual Enemy*  clone() const = 0;
     virtual bool    collision(Projectile* object) = 0;
