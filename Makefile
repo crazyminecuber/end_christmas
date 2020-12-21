@@ -1,45 +1,93 @@
+.DELETE_ON_ERROR:# Deletes target file if recipie fails
+
+TARGET_EXEC = play
+BUILD_DIR = .build
+SRC_DIRS = src
+
 CCC=g++
-CFLAGS=-std=c++17 -g -Wall -Wextra -pedantic -fmax-errors=5
+RM=rm
+#Linker flags
 LDFLAGS = -L${SFML_ROOT}/lib -I${SFML_ROOT}/include -lsfml-window -lsfml-graphics -lsfml-system
+# MMD Generate .d files as part of compilation.
+# MP Generate phony targets for all dependencys. Solves som problems if files are delted
+# MT Target name for the make-rule,
+# MF Filename for the to-be generated dependency file
+DEPFLAGS=-MMD -MP -MT $@
+# Allows for multiple src directorys
+SRCS = $(shell find $(SRC_DIRS) -name *.cc)
+SRCS := $(filter-out %test_main.cc, $(SRCS))
+SRCS := $(filter-out %tests.cc, $(SRCS))
+# will result in uggly .cc.o extension?
+OBJS = $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS = $(OBJS:.o=.d)
 
+# Adds the multiple src directorys to the compiler options
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-# Lägg till o-filer som ni vill ska skapas i denna listan!
-#OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Wallet.o Tower_shop.o Tower.o
-#OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile.o Wallet.o Tower_shop.o Game.o Tile.o Tile_nothing.o Tile_tower.o Tile_enemy.o Tile_enemy_start.o Tile_enemy_end.o Health.o
-OBJS = Resource_manager.o Entity.o Enemy.o Enemy_boss.o Enemy_basic.o Projectile.o Wallet.o Tower_shop.o Game.o Tile.o Tile_nothing.o Tile_tower.o Tile_enemy.o Tile_enemy_start.o Tile_enemy_end.o Health.o Tower.o Tower_button.o State_machine.o State_menu.o State_wave.o State_pause.o State_end.o State_wait.o Wave_manager.o Wave_group.o
-#OBJS = Projectile.o Game.o Entity.o Tile.o Tile_nothing.o Tile_tower.o Tile_enemy.o Tile_enemy_start.o Tile_enemy_end.o Resource_manager.o Health.o Enemy.o Enemy_basic.o Enemy_boss.o
-
-
-#SRCS := $(wildcard *.cc)
-#HEADERS := $(SRCS:%.cc=%.h)
-#OBJS
+# std=c++17 use C++17 standard
+# -g, generate information to be used in for example valgrind
+# -Wall, inlcude all warnings
+# -pedantic, gives more warnings
+CFLAGS= $(INC_FLAGS) -std=c++17 -g -Wall -Wextra -pedantic -fmax-errors=5
+#.PHONY targets, declares that target is not associated with file and will always
+# be run if it is a dependency
 .PHONY: clean, test, p
 
-play: $(OBJS)
-	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o play
+
+# Compiles main target from all .o files.
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CCC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 p: play
+
 	./play
 
 all: $(OBJS)
-	$(CCC) $(CFLAGS) main.cc $^ $(LDFLAGS) -o game
+	@echo "objects $(OBJS)"
 
-test: $(OBJS) test_main.o tests.cc
+test: all test_main.o tests.cc
 	$(CCC) $(CFLAGS) -o test tests.cc $(OBJS) $(LDFLAGS)
 	./test
 
 test_main.o: test_main.cc
 	$(CCC) $(CFLAGS) -c test_main.cc
 
-%.o: %.cc %.h
-	$(CCC) $(CFLAGS) -c $< $(LDFLAGS)
+# Creates o-files from cc-files. $* becomes what % is in the pattern. Make will
+# automatically add all dependencys from in here from the -dfiles in the include
+# statement. The .d files are regenerated with this command as well so that the
+# dependency files always reflect the last compiled version. And since the
+# comilation process only was dependent on the files listed in the .d file, it
+# should be impossible to modify files in any way and have it not be correctly
+# recompiled when any of the dependent files change.
+$(BUILD_DIR)/%.cc.o: %.cc | $(BUILD_DIR)/src
+	$(CCC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
+
+# Makes directory
+$(BUILD_DIR)/src:
+	mkdir -p $@
+
+
+# This is here to do nothing if the .d file does not exist.
+$(DEPS):
 
 dox:
 	doxygen doxyconf
 
 clean:
-	rm -f *.o
-	rm -f *.h.gch
-	rm -f test
-	rm -f game
-	rm -f play
+	$(RM) -r $(BUILD_DIR)
+
+debug:
+	@echo "$(SRCS)"
+
+# Appends dependencys to all existing rules. Will be the dependencys at the last
+# compilation time, but will be utdated immediatetlly after compilation is done.
+# This is not a problem since it does only looks at the dependency files to
+# figure out if enough has changed inorder to require recompilation of a certain
+# file.
+include $(DEPS)
+
+
+
+
+
